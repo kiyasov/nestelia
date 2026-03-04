@@ -8,6 +8,10 @@
     "url": "https://github.com/kiyasov"
   },
   "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/kiyasov/elysia-nest"
+  },
   "main": "./dist/cjs/index.js",
   "module": "./dist/esm/index.js",
   "types": "./dist/types/index.d.ts",
