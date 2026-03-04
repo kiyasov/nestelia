@@ -1,0 +1,30 @@
+{
+  "entryPoints": [
+    "./index.ts",
+    "./packages/scheduler/src/index.ts",
+    "./packages/microservices/index.ts",
+    "./packages/apollo/src/index.ts",
+    "./packages/passport/src/index.ts",
+    "./packages/testing/src/index.ts",
+    "./packages/cache/src/index.ts",
+    "./packages/rabbitmq/src/index.ts",
+    "./packages/graphql-pubsub/src/index.ts"
+  ],
+  "entryPointStrategy": "resolve",
+  "out": "./docs/api-reference",
+  "plugin": ["typedoc-plugin-markdown"],
+  "readme": "none",
+  "outputFileStrategy": "members",
+  "fileExtension": ".mdx",
+  "indexFormat": "table",
+  "parametersFormat": "table",
+  "propertiesFormat": "table",
+  "typeDeclarationFormat": "table",
+  "hidePageHeader": true,
+  "hideBreadcrumbs": true,
+  "useCodeBlocks": true,
+  "expandObjects": true,
+  "groupOrder": ["Classes", "Functions", "Interfaces", "Type Aliases", "Enumerations", "Variables"],
+  "skipErrorChecking": true,
+  "gitRevision": "main"
+}

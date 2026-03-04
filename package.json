@@ -1,0 +1,187 @@
+{
+  "name": "@kiyasov/elysia-nest",
+  "version": "1.0.0",
+  "description": "Modular framework with decorators, dependency injection, modules and lifecycle hooks for Elysia",
+  "type": "module",
+  "author": {
+    "name": "Islam Kiasov",
+    "url": "https://github.com/kiyasov"
+  },
+  "license": "MIT",
+  "main": "./dist/cjs/index.js",
+  "module": "./dist/esm/index.js",
+  "types": "./dist/types/index.d.ts",
+  "exports": {
+    ".": {
+      "import": "./dist/esm/index.js",
+      "require": "./dist/cjs/index.js",
+      "types": "./dist/types/index.d.ts"
+    },
+    "./scheduler": {
+      "import": "./dist/esm/packages/scheduler/src/index.js",
+      "require": "./dist/cjs/packages/scheduler/src/index.js",
+      "types": "./dist/types/packages/scheduler/src/index.d.ts"
+    },
+    "./microservices": {
+      "import": "./dist/esm/packages/microservices/index.js",
+      "require": "./dist/cjs/packages/microservices/index.js",
+      "types": "./dist/types/packages/microservices/index.d.ts"
+    },
+    "./apollo": {
+      "import": "./dist/esm/packages/apollo/src/index.js",
+      "require": "./dist/cjs/packages/apollo/src/index.js",
+      "types": "./dist/types/packages/apollo/src/index.d.ts"
+    },
+    "./passport": {
+      "import": "./dist/esm/packages/passport/src/index.js",
+      "require": "./dist/cjs/packages/passport/src/index.js",
+      "types": "./dist/types/packages/passport/src/index.d.ts"
+    },
+    "./testing": {
+      "import": "./dist/esm/packages/testing/src/index.js",
+      "require": "./dist/cjs/packages/testing/src/index.js",
+      "types": "./dist/types/packages/testing/src/index.d.ts"
+    },
+    "./cache": {
+      "import": "./dist/esm/packages/cache/src/index.js",
+      "require": "./dist/cjs/packages/cache/src/index.js",
+      "types": "./dist/types/packages/cache/src/index.d.ts"
+    },
+    "./rabbitmq": {
+      "import": "./dist/esm/packages/rabbitmq/src/index.js",
+      "require": "./dist/cjs/packages/rabbitmq/src/index.js",
+      "types": "./dist/types/packages/rabbitmq/src/index.d.ts"
+    },
+    "./graphql-pubsub": {
+      "import": "./dist/esm/packages/graphql-pubsub/src/index.js",
+      "require": "./dist/cjs/packages/graphql-pubsub/src/index.js",
+      "types": "./dist/types/packages/graphql-pubsub/src/index.d.ts"
+    }
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "scripts": {
+    "build": "bun run scripts/build.ts",
+    "test": "bun test",
+    "typecheck": "bunx tsc --noEmit",
+    "lint": "oxlint .",
+    "lint:fix": "oxlint --fix .",
+    "format": "oxfmt --write .",
+    "format:check": "oxfmt --check .",
+    "prepublishOnly": "bun run test && bun run typecheck && bun run build",
+    "release:patch": "npm version patch && git push --follow-tags",
+    "release:minor": "npm version minor && git push --follow-tags",
+    "release:major": "npm version major && git push --follow-tags",
+    "docs:dev": "cd docs && bunx mintlify dev",
+    "docs:validate": "cd docs && bunx mintlify validate",
+    "docs:links": "cd docs && bunx mintlify broken-links",
+    "docs:api": "bunx typedoc"
+  },
+  "dependencies": {
+    "@sinclair/typebox": "^0.34.48",
+    "cron": "^4.0.0"
+  },
+  "peerDependencies": {
+    "elysia": "^1.0.0",
+    "reflect-metadata": "^0.2.0",
+    "class-validator": "^0.14.0",
+    "class-transformer": "^0.5.0",
+    "@apollo/server": "^5.0.0",
+    "@graphql-tools/schema": "^10.0.0",
+    "graphql": "^16.0.0",
+    "graphql-ws": "^5.0.0",
+    "cache-manager": "^7.0.0",
+    "cacheable": "^2.0.0",
+    "keyv": "^5.0.0",
+    "ioredis": "^5.0.0",
+    "rxjs": "^7.0.0",
+    "passport": "^0.7.0",
+    "amqplib": "^0.10.0"
+  },
+  "peerDependenciesMeta": {
+    "class-validator": {
+      "optional": true
+    },
+    "class-transformer": {
+      "optional": true
+    },
+    "@apollo/server": {
+      "optional": true
+    },
+    "@graphql-tools/schema": {
+      "optional": true
+    },
+    "graphql": {
+      "optional": true
+    },
+    "graphql-ws": {
+      "optional": true
+    },
+    "cache-manager": {
+      "optional": true
+    },
+    "cacheable": {
+      "optional": true
+    },
+    "keyv": {
+      "optional": true
+    },
+    "ioredis": {
+      "optional": true
+    },
+    "rxjs": {
+      "optional": true
+    },
+    "passport": {
+      "optional": true
+    },
+    "amqplib": {
+      "optional": true
+    },
+    "elysia": {
+      "optional": false
+    },
+    "reflect-metadata": {
+      "optional": false
+    }
+  },
+  "devDependencies": {
+    "elysia": "^1.4.27",
+    "reflect-metadata": "^0.2.0",
+    "@apollo/server": "^5.0.0",
+    "@graphql-tools/schema": "^10.0.0",
+    "@types/amqplib": "^0.10.8",
+    "@types/bun": "^1.3.10",
+    "@types/passport": "^1.0.17",
+    "amqplib": "^0.10.0",
+    "passport": "^0.7.0",
+    "rxjs": "^7.0.0",
+    "cache-manager": "^7.2.8",
+    "cacheable": "^2.3.3",
+    "graphql": "^16.13.0",
+    "graphql-ws": "^5.0.0",
+    "oxfmt": "^0.36.0",
+    "oxlint": "^1.51.0",
+    "typedoc": "^0.28.17",
+    "typedoc-plugin-markdown": "^4.10.0",
+    "class-transformer": "^0.5.1",
+    "class-validator": "^0.14.1",
+    "ioredis": "^5.0.0",
+    "keyv": "^5.0.0",
+    "typescript": "^5.9.3"
+  },
+  "keywords": [
+    "elysia",
+    "decorators",
+    "dependency-injection",
+    "bun",
+    "typescript",
+    "controllers",
+    "modules",
+    "guards",
+    "interceptors",
+    "pipes",
+    "middleware"
+  ]
+}

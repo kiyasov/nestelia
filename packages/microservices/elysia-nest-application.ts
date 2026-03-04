@@ -1,0 +1,676 @@
+import type { Elysia } from "elysia";
+
+import { addGlobalExceptionFilter } from "../core/src/core/elysia-plugin.factory";
+import { DIContainer, type Type } from "../core/src/di";
+import type { ExceptionFilter } from "../core/src/exceptions";
+import { getLifecycleManager } from "../core/src/lifecycle";
+import {
+  CATCH_EXCEPTIONS_METADATA,
+  EVENT_PATTERN_METADATA,
+  MESSAGE_DATA_METADATA,
+  MESSAGE_PATTERN_CTX_METADATA,
+  MESSAGE_PATTERN_METADATA,
+} from "./constants";
+import { Transport } from "./enums";
+import type {
+  CustomTransportStrategy,
+  MicroserviceConfiguration,
+  MicroserviceOptions,
+  Server,
+} from "./interfaces";
+import { packageLogger } from "./logger";
+import { BaseServer } from "./transports";
+import { ServerFactory } from "./transports";
+
+// ─── Types ────────────────────────────────────────────────────────────────────
+
+/**
+ * Contextual information passed to exception filters when an error occurs
+ * inside a microservice message or event handler.
+ */
+export interface MicroserviceExceptionContext {
+  pattern: string | Record<string, unknown>;
+  transport: string;
+  data: unknown;
+  request?: unknown;
+  response?: unknown;
+  set?: unknown;
+  path?: string;
+  method?: string;
+}
+
+/** Metadata stored per connected microservice. */
+export interface MicroserviceServerInfo {
+  server: Server | CustomTransportStrategy;
+  config: MicroserviceConfiguration;
+  options: MicroserviceOptions;
+}
+
+// ─── Application ──────────────────────────────────────────────────────────────
+
+/**
+ * Top-level application class that ties together an Elysia HTTP server and
+ * one or more microservice transport servers.
+ *
+ * Typical usage:
+ * ```typescript
+ * const app = createElysiaNestApplication(new Elysia());
+ * app
+ *   .connectMicroservice({ transport: Transport.REDIS, options: { host: 'localhost' } })
+ *   .useGlobalFilters(new HttpExceptionFilter());
+ *
+ * await app.startAllMicroservices();
+ * await app.listen(3000);
+ * ```
+ */
+export class ElysiaNestApplication {
+  private readonly microservices: MicroserviceServerInfo[] = [];
+  private httpServer?: Elysia;
+  private controllers: Type[] = [];
+  private isListening = false;
+  private readonly globalFilters: Array<
+    Type<ExceptionFilter> | ExceptionFilter
+  > = [];
+
+  /** Prevents duplicate `onError` / `onAfterHandle` hooks from being registered. */
+  private errorHooksRegistered = false;
+
+  private listenPort?: number;
+  private listenHostname?: string;
+
+  constructor(httpServer?: Elysia) {
+    this.httpServer = httpServer;
+  }
+
+  // ─── Microservice lifecycle ────────────────────────────────────────────────
+
+  /**
+   * Registers a new microservice transport.  Supports both built-in transports
+   * (Redis, RabbitMQ, TCP) and custom transport strategies.
+   *
+   * @param options - Transport configuration or a custom strategy instance.
+   * @returns `this` for chaining.
+   *
+   * @example
+   * ```typescript
+   * app.connectMicroservice({
+   *   transport: Transport.REDIS,
+   *   options: { host: 'localhost', port: 6379 },
+   * });
+   * ```
+   */
+  public connectMicroservice(options: MicroserviceOptions): this {
+    const server = ServerFactory.create(options);
+    const config = isCustomStrategy(options)
+      ? ({ transport: Transport.TCP, options: {} } as MicroserviceConfiguration)
+      : (options as MicroserviceConfiguration);
+
+    this.microservices.push({ server, config, options });
+    return this;
+  }
+
+  /**
+   * Starts all registered microservice transports and registers their pattern
+   * handlers.
+   */
+  public async startAllMicroservices(): Promise<void> {
+    for (const microservice of this.microservices) {
+      await this.startMicroservice(microservice);
+    }
+    packageLogger.log("[NestMicroservice] Nest microservice successfully started");
+  }
+
+  private async startMicroservice(
+    microservice: MicroserviceServerInfo,
+  ): Promise<void> {
+    const { server } = microservice;
+
+    // Register pattern handlers from controllers into the transport server.
+    if ("addHandler" in server) {
+      this.registerPatternHandlers(server as Server);
+    }
+
+    return new Promise((resolve, reject) => {
+      (server as Server).listen((err) => {
+        if (err) reject(err);
+        else resolve();
+      });
+    });
+  }
+
+  // ─── Pattern handler registration ─────────────────────────────────────────
+
+  /**
+   * Iterates all registered controllers, reflects their decorator metadata,
+   * and registers the corresponding handlers on `server`.
+   *
+   * - `@MessagePattern` → registered as request-response handler.
+   * - `@EventPattern`   → registered as fire-and-forget event handler.
+   */
+  private registerPatternHandlers(server: Server): void {
+    for (const controller of this.controllers) {
+      const prototype = controller.prototype as object;
+
+      for (const methodName of Object.getOwnPropertyNames(prototype)) {
+        if (methodName === "constructor") continue;
+
+        const descriptor = Object.getOwnPropertyDescriptor(
+          prototype,
+          methodName,
+        );
+        if (!descriptor || typeof descriptor.value !== "function") continue;
+
+        const messageMetadata = Reflect.getMetadata(
+          MESSAGE_PATTERN_METADATA,
+          prototype,
+          methodName,
+        ) as { pattern: string | Record<string, unknown> } | undefined;
+
+        if (messageMetadata) {
+          const pattern = serializePattern(messageMetadata.pattern);
+          const handler = this.createHandler(controller, methodName, pattern);
+
+          if (server instanceof BaseServer) {
+            server.addMessageHandler(pattern, handler);
+          } else {
+            server.addHandler(pattern, handler);
+          }
+        }
+
+        const eventMetadata = Reflect.getMetadata(
+          EVENT_PATTERN_METADATA,
+          prototype,
+          methodName,
+        ) as { pattern: string | Record<string, unknown> } | undefined;
+
+        if (eventMetadata) {
+          const pattern = serializePattern(eventMetadata.pattern);
+          const handler = this.createEventHandler(
+            controller,
+            methodName,
+            pattern,
+          );
+
+          if (server instanceof BaseServer) {
+            server.addEventHandler(pattern, handler);
+          } else {
+            server.addHandler(pattern, handler);
+          }
+        }
+      }
+    }
+  }
+
+  /**
+   * Creates a request-response handler function for a controller method.
+   * Exceptions are passed through global filters when registered.
+   */
+  private createHandler(
+    controller: Type,
+    methodName: string,
+    pattern: string,
+  ) {
+    return async (
+      data: unknown,
+      ctx: Record<string, unknown>,
+    ): Promise<unknown> => {
+      try {
+        return await this.invokeControllerMethod(controller, methodName, data, ctx);
+      } catch (error) {
+        const exception =
+          error instanceof Error ? error : new Error(String(error));
+        if (this.globalFilters.length > 0) {
+          return this.dispatchToFilters(exception, {
+            pattern,
+            transport: ctx.transport as string,
+            data,
+          });
+        }
+        throw exception;
+      }
+    };
+  }
+
+  /**
+   * Creates a fire-and-forget event handler function for a controller method.
+   * Exceptions are logged but not re-thrown to avoid breaking the transport.
+   */
+  private createEventHandler(
+    controller: Type,
+    methodName: string,
+    pattern: string,
+  ) {
+    return async (
+      data: unknown,
+      ctx: Record<string, unknown>,
+    ): Promise<void> => {
+      try {
+        await this.invokeControllerMethod(controller, methodName, data, ctx);
+      } catch (error) {
+        const exception =
+          error instanceof Error ? error : new Error(String(error));
+
+        if (this.globalFilters.length > 0) {
+          try {
+            await this.dispatchToFilters(exception, {
+              pattern,
+              transport: ctx.transport as string,
+              data,
+            });
+          } catch (filterError) {
+            packageLogger.error(
+              `Unhandled error in event handler "${pattern}":`,
+              filterError,
+            );
+          }
+        } else {
+          packageLogger.error(
+            `Unhandled error in event handler "${pattern}":`,
+            exception,
+          );
+        }
+      }
+    };
+  }
+
+  /**
+   * Resolves controller method parameters (honouring `@Payload` and
+   * `@MessageCtx` decorators) and calls the method.
+   */
+  private async invokeControllerMethod(
+    controller: Type,
+    methodName: string,
+    data: unknown,
+    ctx: Record<string, unknown>,
+  ): Promise<unknown> {
+    const instance = await DIContainer.get(controller);
+    if (!instance) {
+      throw new Error(`Controller not found in DI container: ${controller.name}`);
+    }
+
+    const method = (instance as Record<string, unknown>)[methodName];
+    if (typeof method !== "function") {
+      throw new Error(
+        `Method "${methodName}" not found on ${controller.name}`,
+      );
+    }
+
+    const params = this.resolveMethodParams(controller, methodName, data, ctx);
+    return (method as (...args: unknown[]) => unknown).apply(instance, params);
+  }
+
+  /**
+   * Builds the positional argument list for a controller method by reading
+   * `@Payload` and `@MessageCtx` metadata.
+   *
+   * Falls back to passing `data` as the first argument when no decorators are
+   * present.
+   */
+  private resolveMethodParams(
+    controller: Type,
+    methodName: string,
+    data: unknown,
+    ctx: Record<string, unknown>,
+  ): unknown[] {
+    const paramTypes: unknown[] =
+      Reflect.getMetadata(
+        "design:paramtypes",
+        controller.prototype as object,
+        methodName,
+      ) ?? [];
+
+    const params: unknown[] = new Array(paramTypes.length).fill(undefined);
+
+    const payloadMeta: Array<{ index: number; property?: string }> =
+      Reflect.getMetadata(
+        MESSAGE_DATA_METADATA,
+        controller.prototype as object,
+        methodName,
+      ) ?? [];
+
+    for (const { index, property } of payloadMeta) {
+      params[index] = property
+        ? (data as Record<string, unknown>)?.[property]
+        : data;
+    }
+
+    const ctxMeta: Array<{ index: number }> =
+      Reflect.getMetadata(
+        MESSAGE_PATTERN_CTX_METADATA,
+        controller.prototype as object,
+        methodName,
+      ) ?? [];
+
+    for (const { index } of ctxMeta) {
+      params[index] = ctx;
+    }
+
+    // No decorators → pass data as the first parameter.
+    if (payloadMeta.length === 0 && ctxMeta.length === 0 && paramTypes.length > 0) {
+      params[0] = data;
+    }
+
+    return params;
+  }
+
+  // ─── HTTP server / filters ─────────────────────────────────────────────────
+
+  /**
+   * Sets (or replaces) the Elysia HTTP server instance.
+   * Applies any already-registered global filters to the new server.
+   */
+  public setHttpServer(server: Elysia): void {
+    this.httpServer = server;
+    if (this.globalFilters.length > 0) {
+      this.applyHttpErrorHooks();
+    }
+  }
+
+  /**
+   * Registers controllers whose methods will be scanned for `@MessagePattern`
+   * and `@EventPattern` decorators.
+   */
+  public setControllers(controllers: Type[]): void {
+    this.controllers = controllers;
+  }
+
+  /**
+   * Registers one or more global exception filters.
+   *
+   * Filters are applied to:
+   * 1. Microservice message / event handlers.
+   * 2. The Elysia HTTP server (via `onError` and `onAfterHandle` hooks).
+   *
+   * @param filters - Filter class constructors or pre-constructed instances.
+   * @returns `this` for chaining.
+   *
+   * @example
+   * ```typescript
+   * app.useGlobalFilters(new HttpExceptionFilter(), ValidationFilter);
+   * ```
+   */
+  public useGlobalFilters(
+    ...filters: Array<Type<ExceptionFilter> | ExceptionFilter>
+  ): this {
+    for (const filter of filters) {
+      this.globalFilters.push(filter);
+
+      const instance =
+        typeof filter === "function"
+          ? new (filter as Type<ExceptionFilter>)()
+          : filter;
+      addGlobalExceptionFilter(instance);
+    }
+
+    if (this.httpServer) {
+      this.applyHttpErrorHooks();
+    }
+    return this;
+  }
+
+  /**
+   * Registers `onError` and `onAfterHandle` hooks on the HTTP server that
+   * route exceptions through the registered global filters.
+   *
+   * Idempotent: hooks are only registered once regardless of how many times
+   * this method is called.
+   */
+  private applyHttpErrorHooks(): void {
+    if (!this.httpServer || this.errorHooksRegistered) return;
+
+    this.httpServer.onError(async (rawCtx) => {
+      const ctx = rawCtx as ElysiaErrorCtx;
+      if (!ctx.error) return;
+      const exception =
+        ctx.error instanceof Error ? ctx.error : new Error(String(ctx.error));
+
+      return this.runFiltersForHttp(exception, buildHttpContext(ctx));
+    });
+
+    this.httpServer.onAfterHandle(async (rawCtx) => {
+      const ctx = rawCtx as ElysiaAfterHandleCtx;
+      if (ctx.response !== "NOT_FOUND") return;
+
+      const notFound = Object.assign(new Error("NOT_FOUND"), { status: 404 });
+      const result = await this.runFiltersForHttp(notFound, buildHttpContext(ctx));
+
+      ctx.set.status = 404;
+      return result !== undefined ? result : "NOT_FOUND";
+    });
+
+    this.errorHooksRegistered = true;
+  }
+
+  /**
+   * Runs registered filters against `exception` for an HTTP context.
+   * Returns the first non-undefined value produced by a matching filter.
+   */
+  private async runFiltersForHttp(
+    exception: Error,
+    context: import("../core/src/exceptions").ExceptionContext,
+  ): Promise<unknown> {
+    for (const filter of this.globalFilters) {
+      const filterInstance = await resolveFilterInstance(filter);
+      if (!filterInstance) continue;
+
+      if (filterCatches(filterInstance, exception)) {
+        const result = await filterInstance.catch(exception, context);
+        if (result !== undefined) return result;
+      }
+    }
+    return undefined;
+  }
+
+  /**
+   * Dispatches `exception` to the first matching global filter for a
+   * microservice context.  Re-throws if no filter handles it.
+   */
+  private async dispatchToFilters(
+    exception: Error,
+    ctx: MicroserviceExceptionContext,
+  ): Promise<unknown> {
+    for (const filter of this.globalFilters) {
+      const filterInstance = await resolveFilterInstance(filter);
+      if (!filterInstance) continue;
+
+      if (filterCatches(filterInstance, exception)) {
+        return filterInstance.catch(
+          exception,
+          ctx as unknown as import("../core/src/exceptions").ExceptionContext,
+        );
+      }
+    }
+    throw exception;
+  }
+
+  /**
+   * Ensures HTTP error hooks are registered.
+   * Called internally by {@link useGlobalFilters} and externally by the core
+   * application factory after all filters have been set up.
+   *
+   * @returns `this` for chaining.
+   */
+  public initGlobalFilters(): this {
+    this.applyHttpErrorHooks();
+    return this;
+  }
+
+  // ─── HTTP server start ─────────────────────────────────────────────────────
+
+  /**
+   * Starts the Elysia HTTP server.
+   *
+   * @param port     - Port to listen on.
+   * @param callback - Optional callback invoked once the server is ready.
+   */
+  public async listen(port: number, callback?: () => void): Promise<void>;
+  /**
+   * @param port     - Port to listen on.
+   * @param hostname - Network interface to bind to.
+   * @param callback - Optional callback invoked once the server is ready.
+   */
+  public async listen(
+    port: number,
+    hostname: string,
+    callback?: () => void,
+  ): Promise<void>;
+  public async listen(
+    port: number,
+    hostnameOrCallback?: string | (() => void),
+    callback?: () => void,
+  ): Promise<void> {
+    if (!this.httpServer) {
+      throw new Error(
+        "HTTP server is not set. Pass an Elysia instance to the constructor " +
+          "or call setHttpServer() before listen().",
+      );
+    }
+
+    const hostname =
+      typeof hostnameOrCallback === "string" ? hostnameOrCallback : undefined;
+    const cb =
+      typeof hostnameOrCallback === "function" ? hostnameOrCallback : callback;
+
+    this.listenPort = port;
+    this.listenHostname = hostname;
+
+    getLifecycleManager().triggerOnApplicationBootstrap();
+
+    packageLogger.log("[NestApplication] Nest application successfully started");
+
+    if (hostname) {
+      this.httpServer.listen({ port, hostname }, cb);
+    } else {
+      this.httpServer.listen(port, cb);
+    }
+
+    this.isListening = true;
+  }
+
+  // ─── Accessors ────────────────────────────────────────────────────────────
+
+  /** Returns the underlying Elysia HTTP server instance. */
+  public getHttpServer(): Elysia {
+    if (!this.httpServer) {
+      throw new Error("HTTP server is not set");
+    }
+    return this.httpServer;
+  }
+
+  /** Returns all registered microservice descriptors. */
+  public getMicroservices(): MicroserviceServerInfo[] {
+    return this.microservices;
+  }
+
+  /**
+   * Returns the base URL of the HTTP server.
+   * Only meaningful after {@link listen} has been called.
+   */
+  public getUrl(): string {
+    const host = this.listenHostname ?? "localhost";
+    const port = this.listenPort;
+    return port !== undefined ? `http://${host}:${port}` : `http://${host}`;
+  }
+
+  // ─── Shutdown ─────────────────────────────────────────────────────────────
+
+  /**
+   * Gracefully shuts down all microservice transports and the HTTP server,
+   * triggering the corresponding lifecycle hooks.
+   */
+  public async close(): Promise<void> {
+    getLifecycleManager().triggerBeforeApplicationShutdown();
+
+    for (const { server } of this.microservices) {
+      if ("close" in server && typeof server.close === "function") {
+        server.close();
+      }
+    }
+
+    this.httpServer?.stop();
+
+    getLifecycleManager().triggerOnApplicationShutdown();
+
+    this.isListening = false;
+  }
+}
+
+// ─── Local Elysia context shapes ──────────────────────────────────────────────
+// We define minimal structural types instead of importing Elysia's complex
+// generic types, which would force us to specify all generic parameters.
+
+interface ElysiaErrorCtx {
+  error: unknown;
+  request: Request;
+  response?: unknown;
+  set: { status?: number | string; headers?: Record<string, string> };
+  path: string;
+}
+
+interface ElysiaAfterHandleCtx {
+  response: unknown;
+  request: Request;
+  set: { status?: number | string; headers?: Record<string, string> };
+  path: string;
+}
+
+// ─── Helpers ──────────────────────────────────────────────────────────────────
+
+/** Serializes a pattern to a stable string key. */
+function serializePattern(
+  pattern: string | Record<string, unknown>,
+): string {
+  return typeof pattern === "string" ? pattern : JSON.stringify(pattern);
+}
+
+/** Returns `true` when `options` is a custom transport strategy. */
+function isCustomStrategy(
+  options: MicroserviceOptions,
+): options is CustomTransportStrategy {
+  return (
+    "listen" in options &&
+    typeof (options as CustomTransportStrategy).listen === "function"
+  );
+}
+
+/**
+ * Resolves a filter entry (class or instance) to a concrete
+ * {@link ExceptionFilter} instance.
+ */
+async function resolveFilterInstance(
+  filter: Type<ExceptionFilter> | ExceptionFilter,
+): Promise<ExceptionFilter | undefined> {
+  if (typeof filter === "function") {
+    return (await DIContainer.get(filter)) as ExceptionFilter | undefined;
+  }
+  return filter;
+}
+
+/**
+ * Returns `true` when `filterInstance` should handle `exception`.
+ * A filter with no registered exception types catches everything.
+ */
+function filterCatches(
+  filterInstance: ExceptionFilter,
+  exception: Error,
+): boolean {
+  const types = Reflect.getMetadata(
+    CATCH_EXCEPTIONS_METADATA,
+    filterInstance.constructor,
+  ) as Array<new (...args: unknown[]) => Error> | undefined;
+
+  return !types || types.length === 0 || types.some((T) => exception instanceof T);
+}
+
+/** Builds an {@link ExceptionContext} from an Elysia HTTP context. */
+function buildHttpContext(
+  ctx: ElysiaErrorCtx | ElysiaAfterHandleCtx,
+): import("../core/src/exceptions").ExceptionContext {
+  return {
+    request: ctx.request,
+    response: ctx.response,
+    set: ctx.set,
+    path: ctx.path,
+    method: ctx.request.method,
+  };
+}

@@ -1,0 +1,35 @@
+# Source & tests
+packages/
+index.ts
+examples/
+scripts/
+
+# Test files
+**/*.test.ts
+**/*.spec.ts
+
+# Config & tooling
+tsconfig*.json
+oxlint.config.ts
+.oxfmtrc.json
+typedoc.json
+bunfig.toml
+bun.lock
+.gitignore
+
+# Docs source
+docs/
+
+# CI/CD
+.github/
+
+# IDE
+.vscode/
+.idea/
+
+# Claude Code
+.claude/
+
+# Misc
+*.log
+*.tgz

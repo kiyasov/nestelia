@@ -1,0 +1,23 @@
+{
+  "extends": "./tsconfig.json",
+  "compilerOptions": {
+    "noEmit": false,
+    "declaration": true,
+    "declarationMap": true,
+    "emitDeclarationOnly": true,
+    "noEmitOnError": false,
+    "outDir": "./dist/types",
+    "paths": {
+      "@kiyasov/elysia-nest": ["./index.ts"],
+      "~": ["./packages/core"],
+      "~/*": ["./packages/core/*"]
+    }
+  },
+  "exclude": [
+    "node_modules",
+    "dist",
+    "examples",
+    "**/*.spec.ts",
+    "**/*.test.ts"
+  ]
+}

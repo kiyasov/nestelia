@@ -1,0 +1,18 @@
+export type {
+  ConnectionInitOptions,
+  MessageHandlerErrorBehavior,
+  RabbitMQChannelConfig,
+  RabbitMQConfig,
+  RabbitMQConnectionConfig,
+  RabbitMQDeserializer,
+  RabbitMQExchangeConfig,
+  RabbitMQExchangeType,
+  RabbitMQMessage,
+  RabbitMQPublishOptions,
+  RabbitMQQueueBinding,
+  RabbitMQQueueConfig,
+  RabbitMQSerializer,
+  RabbitRPCOptions,
+  RabbitSubscribeOptions,
+  RequestOptions,
+} from "./rabbitmq.interface";

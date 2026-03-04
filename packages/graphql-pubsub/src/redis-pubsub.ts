@@ -1,0 +1,360 @@
+import type { Redis } from "ioredis";
+
+import {
+  type MessageHandler,
+  type PubSubEngine,
+  type RedisPubSubOptions,
+  type SubscriptionMap,
+  type SubscriptionOptions,
+  type SubsRefsMap,
+} from "./interfaces";
+import { packageLogger } from "./logger";
+import { PubSubAsyncIterator } from "./pubsub-async-iterator";
+
+/**
+ * Redis-backed implementation of the {@link PubSubEngine} contract.
+ *
+ * Uses two separate ioredis connections — one for publishing (`PUBLISH`) and
+ * one dedicated to blocking subscribe commands (`SUBSCRIBE` / `PSUBSCRIBE`).
+ * This separation is required because a Redis client in subscribe mode can
+ * only issue subscribe/unsubscribe commands.
+ *
+ * Construct via {@link GraphQLPubSubModule.forRoot} or
+ * {@link GraphQLPubSubModule.forRootAsync} in module-based apps.
+ *
+ * @example
+ * ```typescript
+ * const pubsub = new RedisPubSub({ connection: { host: "localhost", port: 6379 } });
+ *
+ * // Publish
+ * await pubsub.publish("ORDER_CREATED", { id: 1 });
+ *
+ * // Subscribe
+ * const subId = await pubsub.subscribe("ORDER_CREATED", (payload) => {
+ *   console.log(payload);
+ * });
+ *
+ * // Later…
+ * pubsub.unsubscribe(subId);
+ * await pubsub.close();
+ * ```
+ */
+export class RedisPubSub implements PubSubEngine {
+  /** Dedicated Redis client for `PUBLISH` commands. */
+  private readonly redisPublisher: Redis;
+  /** Dedicated Redis client for `SUBSCRIBE` / `PSUBSCRIBE` commands. */
+  private readonly redisSubscriber: Redis;
+  /** Optional key prefix prepended to every channel name. */
+  private readonly keyPrefix: string;
+  /** Maps a trigger name to the Redis channel key. */
+  private readonly triggerTransform: (
+    trigger: string,
+    options: SubscriptionOptions,
+  ) => string;
+  /** Optional `JSON.parse` reviver (used when no custom `deserializer` is set). */
+  private readonly reviver?: (key: string, value: unknown) => unknown;
+  /** Custom serializer for outgoing payloads. Defaults to `JSON.stringify`. */
+  private readonly serializer?: (payload: unknown) => string;
+  /** Custom deserializer for incoming payloads. Defaults to `JSON.parse`. */
+  private readonly deserializer?: (payload: string) => unknown;
+
+  /** `subId → SubscriptionEvent` map. */
+  private readonly subscriptionMap: SubscriptionMap = new Map();
+  /** `channel → [subId, …]` map for fan-out dispatch. */
+  private readonly subsRefsMap: SubsRefsMap = new Map();
+  /** Monotonically increasing counter used to generate subscription IDs. */
+  private currentSubscriptionId = 0;
+
+  constructor(options: RedisPubSubOptions = {}) {
+    const {
+      triggerTransform,
+      connection,
+      connectionListener,
+      subscriber,
+      publisher,
+      reviver,
+      serializer,
+      deserializer,
+      keyPrefix = "",
+    } = options;
+
+    this.triggerTransform = triggerTransform ?? ((trigger) => trigger);
+    this.keyPrefix = keyPrefix;
+    this.reviver = reviver;
+    this.serializer = serializer;
+    this.deserializer = deserializer;
+
+    if (subscriber && publisher) {
+      this.redisSubscriber = subscriber;
+      this.redisPublisher = publisher;
+    } else {
+      let IORedis: new (opts?: unknown) => Redis;
+      try {
+        // eslint-disable-next-line @typescript-eslint/no-require-imports
+        ({ default: IORedis } = require("ioredis") as {
+          default: new (opts?: unknown) => Redis;
+        });
+      } catch {
+        throw new Error(
+          "No publisher/subscriber instances were provided and 'ioredis' is not installed. " +
+            "Install it with: bun add ioredis",
+        );
+      }
+
+      this.redisPublisher = new IORedis(connection);
+      this.redisSubscriber = new IORedis(connection);
+
+      if (connectionListener) {
+        this.redisPublisher
+          .on("connect", () => connectionListener(undefined))
+          .on("error", connectionListener);
+        this.redisSubscriber
+          .on("connect", () => connectionListener(undefined))
+          .on("error", connectionListener);
+      } else {
+        this.redisPublisher.on("error", (error) =>
+          packageLogger.error("[RedisPubSub] Publisher error:", error),
+        );
+        this.redisSubscriber.on("error", (error) =>
+          packageLogger.error("[RedisPubSub] Subscriber error:", error),
+        );
+      }
+    }
+
+    // Bind message handlers using explicit arrow functions for clarity.
+    this.redisSubscriber.on("pmessage", (pattern, channel, message) =>
+      this.onMessage(pattern, channel, message),
+    );
+    this.redisSubscriber.on("message", (channel, message) =>
+      this.onMessage(undefined, channel, message),
+    );
+  }
+
+  /**
+   * Publishes `payload` to the Redis channel derived from `trigger`.
+   *
+   * The payload is serialised with the custom {@link RedisPubSubOptions.serializer}
+   * when provided, otherwise `JSON.stringify`.
+   */
+  public async publish(trigger: string, payload: unknown): Promise<void> {
+    const channelName = `${this.keyPrefix}${trigger}`;
+    const message = this.serializer
+      ? this.serializer(payload)
+      : JSON.stringify(payload);
+    await this.redisPublisher.publish(channelName, message);
+  }
+
+  /**
+   * Subscribes to `trigger` and invokes `onMessage` for every incoming message.
+   *
+   * If another subscriber already holds a subscription for the same resolved
+   * channel, the existing Redis subscription is reused — no additional
+   * `SUBSCRIBE` command is issued.
+   *
+   * @returns A numeric subscription ID used with {@link unsubscribe}.
+   */
+  public async subscribe<T = unknown>(
+    trigger: string,
+    onMessage: MessageHandler<T>,
+    options: SubscriptionOptions = {},
+  ): Promise<number> {
+    const prefixed = `${this.keyPrefix}${trigger}`;
+    const triggerName = this.triggerTransform(prefixed, options);
+    const isPattern = options.pattern ?? false;
+    const id = this.currentSubscriptionId++;
+
+    this.subscriptionMap.set(id, {
+      id,
+      trigger: triggerName,
+      handler: onMessage as MessageHandler,
+      isPattern,
+    });
+
+    const refs = this.subsRefsMap.get(triggerName);
+
+    // Re-use existing Redis subscription when channel already has listeners.
+    if (refs && refs.length > 0) {
+      this.subsRefsMap.set(triggerName, [...refs, id]);
+      return id;
+    }
+
+    // Issue the Redis (P)SUBSCRIBE command asynchronously.
+    this.performSubscribe(triggerName, isPattern).catch((err: unknown) => {
+      packageLogger.error(
+        `[RedisPubSub] Failed to subscribe to "${triggerName}":`,
+        err,
+      );
+    });
+
+    this.subsRefsMap.set(triggerName, [id]);
+    return id;
+  }
+
+  /**
+   * Issues a `SUBSCRIBE` or `PSUBSCRIBE` command to Redis.
+   *
+   * Waits for the connection to be ready before issuing the command so callers
+   * don't need to worry about connection state.
+   */
+  private async performSubscribe(
+    triggerName: string,
+    pattern: boolean,
+  ): Promise<void> {
+    if (this.redisSubscriber.status !== "ready") {
+      await this.waitForReady();
+    }
+
+    if (pattern) {
+      await this.redisSubscriber.psubscribe(triggerName);
+    } else {
+      await this.redisSubscriber.subscribe(triggerName);
+    }
+  }
+
+  /** Resolves once the subscriber connection reaches the `ready` state. */
+  private waitForReady(): Promise<void> {
+    return new Promise<void>((resolve, reject) => {
+      const timer = setTimeout(() => {
+        reject(new Error("Timeout waiting for Redis subscriber to be ready"));
+      }, 10_000);
+
+      const onReady = () => {
+        clearTimeout(timer);
+        resolve();
+      };
+
+      const onError = (err: Error) => {
+        clearTimeout(timer);
+        reject(err);
+      };
+
+      this.redisSubscriber.once("ready", onReady);
+      this.redisSubscriber.once("error", onError);
+    });
+  }
+
+  /**
+   * Cancels the subscription identified by `subId`.
+   *
+   * When the cancelled subscription was the last one for its Redis channel,
+   * the corresponding `UNSUBSCRIBE` / `PUNSUBSCRIBE` command is issued.
+   *
+   * @throws {Error} If `subId` is not a known subscription.
+   */
+  public unsubscribe(subId: number): void {
+    const subscription = this.subscriptionMap.get(subId);
+
+    if (!subscription) {
+      throw new Error(`No subscription found with id "${subId}"`);
+    }
+
+    const { trigger: triggerName, isPattern } = subscription;
+    const refs = this.subsRefsMap.get(triggerName);
+
+    if (!refs) {
+      throw new Error(`No subscriptions found for trigger "${triggerName}"`);
+    }
+
+    if (refs.length === 1) {
+      // Last subscriber — release the Redis channel.
+      const unsubscribeCmd = isPattern
+        ? this.redisSubscriber.punsubscribe(triggerName)
+        : this.redisSubscriber.unsubscribe(triggerName);
+
+      unsubscribeCmd.catch((err: unknown) => {
+        packageLogger.error(
+          `[RedisPubSub] Failed to unsubscribe from "${triggerName}":`,
+          err,
+        );
+      });
+
+      this.subsRefsMap.delete(triggerName);
+    } else {
+      const index = refs.indexOf(subId);
+      if (index !== -1) refs.splice(index, 1);
+    }
+
+    this.subscriptionMap.delete(subId);
+  }
+
+  /**
+   * Creates an `AsyncIterator` over the given `triggers` for use in
+   * GraphQL subscription resolvers.
+   *
+   * @example
+   * ```typescript
+   * // In a GraphQL resolver:
+   * subscribe() {
+   *   return pubsub.asyncIterator<OrderCreatedEvent>("ORDER_CREATED");
+   * }
+   * ```
+   */
+  public asyncIterator<T>(triggers: string | string[]): AsyncIterator<T> {
+    const triggersArray = Array.isArray(triggers) ? triggers : [triggers];
+    return new PubSubAsyncIterator<T>(this, triggersArray);
+  }
+
+  /**
+   * Returns the underlying subscriber Redis client.
+   *
+   * @warning Do **not** issue regular Redis commands on this client — it is
+   *   in subscribe mode and only accepts `(P)SUBSCRIBE` / `(P)UNSUBSCRIBE`.
+   */
+  public getSubscriber(): Redis {
+    return this.redisSubscriber;
+  }
+
+  /** Returns the underlying publisher Redis client. */
+  public getPublisher(): Redis {
+    return this.redisPublisher;
+  }
+
+  /**
+   * Gracefully closes both Redis connections.
+   *
+   * Call this during application shutdown to allow open sockets to drain.
+   */
+  public async close(): Promise<void> {
+    await Promise.all([
+      this.redisPublisher.quit(),
+      this.redisSubscriber.quit(),
+    ]);
+  }
+
+  /**
+   * Handles an incoming message from the Redis subscriber.
+   *
+   * - `pmessage` events provide `(pattern, channel, message)`.
+   * - `message` events provide `(channel, message)`; `pattern` is `undefined`.
+   *
+   * The lookup key is the pattern (for `PSUBSCRIBE`) or the channel
+   * (for `SUBSCRIBE`).
+   */
+  private onMessage(
+    pattern: string | undefined,
+    channel: string,
+    message: string,
+  ): void {
+    const lookupKey = pattern ?? channel;
+    const subscribers = this.subsRefsMap.get(lookupKey);
+
+    if (!subscribers || subscribers.length === 0) return;
+
+    let parsedMessage: unknown;
+    try {
+      parsedMessage = this.deserializer
+        ? this.deserializer(message)
+        : JSON.parse(message, this.reviver);
+    } catch {
+      // Treat non-JSON payloads as raw strings.
+      parsedMessage = message;
+    }
+
+    for (const subId of subscribers) {
+      const subscription = this.subscriptionMap.get(subId);
+      if (subscription) {
+        subscription.handler(parsedMessage);
+      }
+    }
+  }
+}

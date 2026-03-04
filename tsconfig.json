@@ -1,0 +1,21 @@
+{
+  "compilerOptions": {
+    "target": "ESNext",
+    "module": "ESNext",
+    "moduleResolution": "bundler",
+    "lib": ["ESNext"],
+    "strict": true,
+    "experimentalDecorators": true,
+    "emitDecoratorMetadata": true,
+    "skipLibCheck": true,
+    "noEmit": true,
+    "types": ["bun", "reflect-metadata"],
+    "paths": {
+      "@kiyasov/elysia-nest": ["./index.ts"],
+      "~": ["./packages/core"],
+      "~/*": ["./packages/core/*"]
+    }
+  },
+  "include": ["index.ts", "packages/**/*"],
+  "exclude": ["node_modules", "dist", "packages/*/node_modules"]
+}
