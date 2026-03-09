@@ -11,8 +11,8 @@ The scheduler package provides decorators for running tasks on a schedule.
 Import `ScheduleModule` in your root module:
 
 ```typescript
-import { Module } from "@kiyasov/elysia-nest";
-import { ScheduleModule } from "@kiyasov/elysia-nest/scheduler";
+import { Module } from "nestelia";
+import { ScheduleModule } from "nestelia/scheduler";
 
 @Module({
   imports: [ScheduleModule.forRoot()],
@@ -27,8 +27,8 @@ class AppModule {}
 Run a method on a cron schedule:
 
 ```typescript
-import { Injectable } from "@kiyasov/elysia-nest";
-import { Cron } from "@kiyasov/elysia-nest/scheduler";
+import { Injectable } from "nestelia";
+import { Cron } from "nestelia/scheduler";
 
 @Injectable()
 class TasksService {
@@ -101,8 +101,8 @@ ScheduleModule.forRootWithOptions({
 Inject `SchedulerRegistry` to manage scheduled tasks programmatically:
 
 ```typescript
-import { Injectable, Inject } from "@kiyasov/elysia-nest";
-import { SchedulerRegistry, Scheduler } from "@kiyasov/elysia-nest/scheduler";
+import { Injectable, Inject } from "nestelia";
+import { SchedulerRegistry, Scheduler } from "nestelia/scheduler";
 
 @Injectable()
 class DynamicTaskService {

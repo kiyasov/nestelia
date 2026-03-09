@@ -1,6 +1,6 @@
 # Interface: LoggerService
 
-Defined in: [packages/core/src/logger/logger.interface.ts:12](https://github.com/kiyasov/elysia-nest/blob/main/packages/core/src/logger/logger.interface.ts#L12)
+Defined in: [packages/core/src/logger/logger.interface.ts:12](https://github.com/kiyasov/nestelia/blob/main/packages/core/src/logger/logger.interface.ts#L12)
 
 ## Methods
 
@@ -10,7 +10,7 @@ Defined in: [packages/core/src/logger/logger.interface.ts:12](https://github.com
 optional debug(message, ...optionalParams): void;
 ```
 
-Defined in: [packages/core/src/logger/logger.interface.ts:16](https://github.com/kiyasov/elysia-nest/blob/main/packages/core/src/logger/logger.interface.ts#L16)
+Defined in: [packages/core/src/logger/logger.interface.ts:16](https://github.com/kiyasov/nestelia/blob/main/packages/core/src/logger/logger.interface.ts#L16)
 
 #### Parameters
 
@@ -31,7 +31,7 @@ Defined in: [packages/core/src/logger/logger.interface.ts:16](https://github.com
 error(message, ...optionalParams): void;
 ```
 
-Defined in: [packages/core/src/logger/logger.interface.ts:14](https://github.com/kiyasov/elysia-nest/blob/main/packages/core/src/logger/logger.interface.ts#L14)
+Defined in: [packages/core/src/logger/logger.interface.ts:14](https://github.com/kiyasov/nestelia/blob/main/packages/core/src/logger/logger.interface.ts#L14)
 
 #### Parameters
 
@@ -52,7 +52,7 @@ Defined in: [packages/core/src/logger/logger.interface.ts:14](https://github.com
 optional fatal(message, ...optionalParams): void;
 ```
 
-Defined in: [packages/core/src/logger/logger.interface.ts:18](https://github.com/kiyasov/elysia-nest/blob/main/packages/core/src/logger/logger.interface.ts#L18)
+Defined in: [packages/core/src/logger/logger.interface.ts:18](https://github.com/kiyasov/nestelia/blob/main/packages/core/src/logger/logger.interface.ts#L18)
 
 #### Parameters
 
@@ -73,7 +73,7 @@ Defined in: [packages/core/src/logger/logger.interface.ts:18](https://github.com
 log(message, ...optionalParams): void;
 ```
 
-Defined in: [packages/core/src/logger/logger.interface.ts:13](https://github.com/kiyasov/elysia-nest/blob/main/packages/core/src/logger/logger.interface.ts#L13)
+Defined in: [packages/core/src/logger/logger.interface.ts:13](https://github.com/kiyasov/nestelia/blob/main/packages/core/src/logger/logger.interface.ts#L13)
 
 #### Parameters
 
@@ -94,7 +94,7 @@ Defined in: [packages/core/src/logger/logger.interface.ts:13](https://github.com
 optional setLogLevels(levels): void;
 ```
 
-Defined in: [packages/core/src/logger/logger.interface.ts:19](https://github.com/kiyasov/elysia-nest/blob/main/packages/core/src/logger/logger.interface.ts#L19)
+Defined in: [packages/core/src/logger/logger.interface.ts:19](https://github.com/kiyasov/nestelia/blob/main/packages/core/src/logger/logger.interface.ts#L19)
 
 #### Parameters
 
@@ -114,7 +114,7 @@ Defined in: [packages/core/src/logger/logger.interface.ts:19](https://github.com
 optional verbose(message, ...optionalParams): void;
 ```
 
-Defined in: [packages/core/src/logger/logger.interface.ts:17](https://github.com/kiyasov/elysia-nest/blob/main/packages/core/src/logger/logger.interface.ts#L17)
+Defined in: [packages/core/src/logger/logger.interface.ts:17](https://github.com/kiyasov/nestelia/blob/main/packages/core/src/logger/logger.interface.ts#L17)
 
 #### Parameters
 
@@ -135,7 +135,7 @@ Defined in: [packages/core/src/logger/logger.interface.ts:17](https://github.com
 warn(message, ...optionalParams): void;
 ```
 
-Defined in: [packages/core/src/logger/logger.interface.ts:15](https://github.com/kiyasov/elysia-nest/blob/main/packages/core/src/logger/logger.interface.ts#L15)
+Defined in: [packages/core/src/logger/logger.interface.ts:15](https://github.com/kiyasov/nestelia/blob/main/packages/core/src/logger/logger.interface.ts#L15)
 
 #### Parameters
 

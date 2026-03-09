@@ -1,6 +1,6 @@
 # Interface: NestInterceptor\<T, R\>
 
-Defined in: [packages/core/src/interceptors/interceptor.interface.ts:44](https://github.com/kiyasov/elysia-nest/blob/main/packages/core/src/interceptors/interceptor.interface.ts#L44)
+Defined in: [packages/core/src/interceptors/interceptor.interface.ts:44](https://github.com/kiyasov/nestelia/blob/main/packages/core/src/interceptors/interceptor.interface.ts#L44)
 
 Elysia-Nest interceptor interface
 
@@ -21,7 +21,7 @@ Elysia-Nest interceptor interface
 intercept(context, next): Observable<R> | Promise<Observable<R>>;
 ```
 
-Defined in: [packages/core/src/interceptors/interceptor.interface.ts:50](https://github.com/kiyasov/elysia-nest/blob/main/packages/core/src/interceptors/interceptor.interface.ts#L50)
+Defined in: [packages/core/src/interceptors/interceptor.interface.ts:50](https://github.com/kiyasov/nestelia/blob/main/packages/core/src/interceptors/interceptor.interface.ts#L50)
 
 Intercept the request/response stream
 

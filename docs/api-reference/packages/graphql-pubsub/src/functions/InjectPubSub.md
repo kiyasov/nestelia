@@ -4,7 +4,7 @@
 function InjectPubSub(): ParameterDecorator;
 ```
 
-Defined in: [packages/graphql-pubsub/src/decorators/inject-pubsub.decorator.ts:23](https://github.com/kiyasov/elysia-nest/blob/main/packages/graphql-pubsub/src/decorators/inject-pubsub.decorator.ts#L23)
+Defined in: [packages/graphql-pubsub/src/decorators/inject-pubsub.decorator.ts:23](https://github.com/kiyasov/nestelia/blob/main/packages/graphql-pubsub/src/decorators/inject-pubsub.decorator.ts#L23)
 
 Parameter decorator that injects the [RedisPubSub](../classes/RedisPubSub.md) instance
 registered under the [GRAPHQL\_PUBSUB](../variables/GRAPHQL_PUBSUB.md) token.

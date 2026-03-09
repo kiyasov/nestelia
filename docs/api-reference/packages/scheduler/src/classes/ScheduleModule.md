@@ -1,6 +1,6 @@
 # Class: ScheduleModule
 
-Defined in: [packages/scheduler/src/schedule.module.ts:33](https://github.com/kiyasov/elysia-nest/blob/main/packages/scheduler/src/schedule.module.ts#L33)
+Defined in: [packages/scheduler/src/schedule.module.ts:33](https://github.com/kiyasov/nestelia/blob/main/packages/scheduler/src/schedule.module.ts#L33)
 
 Module for scheduling tasks (cron, interval, timeout)
 
@@ -24,7 +24,7 @@ new ScheduleModule(): ScheduleModule;
 static forRoot(): DynamicModule;
 ```
 
-Defined in: [packages/scheduler/src/schedule.module.ts:37](https://github.com/kiyasov/elysia-nest/blob/main/packages/scheduler/src/schedule.module.ts#L37)
+Defined in: [packages/scheduler/src/schedule.module.ts:37](https://github.com/kiyasov/nestelia/blob/main/packages/scheduler/src/schedule.module.ts#L37)
 
 Configure the scheduling module with default options
 
@@ -40,7 +40,7 @@ Configure the scheduling module with default options
 static forRootWithOptions(options): DynamicModule;
 ```
 
-Defined in: [packages/scheduler/src/schedule.module.ts:44](https://github.com/kiyasov/elysia-nest/blob/main/packages/scheduler/src/schedule.module.ts#L44)
+Defined in: [packages/scheduler/src/schedule.module.ts:44](https://github.com/kiyasov/nestelia/blob/main/packages/scheduler/src/schedule.module.ts#L44)
 
 Configure the scheduling module with custom options
 

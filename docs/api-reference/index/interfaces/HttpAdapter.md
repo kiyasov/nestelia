@@ -1,6 +1,6 @@
 # Interface: HttpAdapter
 
-Defined in: [packages/core/src/core/http-adapter.ts:8](https://github.com/kiyasov/elysia-nest/blob/main/packages/core/src/core/http-adapter.ts#L8)
+Defined in: [packages/core/src/core/http-adapter.ts:8](https://github.com/kiyasov/nestelia/blob/main/packages/core/src/core/http-adapter.ts#L8)
 
 Interface for HTTP adapter - abstracts HTTP server operations
 
@@ -14,7 +14,7 @@ Interface for HTTP adapter - abstracts HTTP server operations
 getRequestMethod(request): string;
 ```
 
-Defined in: [packages/core/src/core/http-adapter.ts:9](https://github.com/kiyasov/elysia-nest/blob/main/packages/core/src/core/http-adapter.ts#L9)
+Defined in: [packages/core/src/core/http-adapter.ts:9](https://github.com/kiyasov/nestelia/blob/main/packages/core/src/core/http-adapter.ts#L9)
 
 #### Parameters
 
@@ -34,7 +34,7 @@ Defined in: [packages/core/src/core/http-adapter.ts:9](https://github.com/kiyaso
 getRequestUrl(request): string;
 ```
 
-Defined in: [packages/core/src/core/http-adapter.ts:10](https://github.com/kiyasov/elysia-nest/blob/main/packages/core/src/core/http-adapter.ts#L10)
+Defined in: [packages/core/src/core/http-adapter.ts:10](https://github.com/kiyasov/nestelia/blob/main/packages/core/src/core/http-adapter.ts#L10)
 
 #### Parameters
 
@@ -57,7 +57,7 @@ setHeader(
    value): void;
 ```
 
-Defined in: [packages/core/src/core/http-adapter.ts:11](https://github.com/kiyasov/elysia-nest/blob/main/packages/core/src/core/http-adapter.ts#L11)
+Defined in: [packages/core/src/core/http-adapter.ts:11](https://github.com/kiyasov/nestelia/blob/main/packages/core/src/core/http-adapter.ts#L11)
 
 #### Parameters
 

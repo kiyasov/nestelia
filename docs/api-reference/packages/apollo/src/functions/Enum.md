@@ -4,7 +4,7 @@
 function Enum(options?): ClassDecorator;
 ```
 
-Defined in: [packages/apollo/src/decorators/type.decorator.ts:208](https://github.com/kiyasov/elysia-nest/blob/main/packages/apollo/src/decorators/type.decorator.ts#L208)
+Defined in: [packages/apollo/src/decorators/type.decorator.ts:208](https://github.com/kiyasov/nestelia/blob/main/packages/apollo/src/decorators/type.decorator.ts#L208)
 
 Decorator for GraphQL Enum.
 

@@ -4,7 +4,7 @@
 function Header(name, value): MethodDecorator;
 ```
 
-Defined in: [packages/core/src/decorators/header.decorator.ts:28](https://github.com/kiyasov/elysia-nest/blob/main/packages/core/src/decorators/header.decorator.ts#L28)
+Defined in: [packages/core/src/decorators/header.decorator.ts:28](https://github.com/kiyasov/nestelia/blob/main/packages/core/src/decorators/header.decorator.ts#L28)
 
 Decorator that sets HTTP headers for the response.
 

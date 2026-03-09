@@ -1,4 +1,4 @@
-import { Controller, Get, UseGuards } from "@kiyasov/elysia-nest";
+import { Controller, Get, UseGuards } from "nestelia";
 
 import { AuthGuard } from "./auth.guard";
 import { RolesGuard } from "./roles.guard";

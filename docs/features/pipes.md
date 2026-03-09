@@ -28,7 +28,7 @@ interface PipeMetadata {
 ### Validation Pipe
 
 ```typescript
-import { Injectable, PipeTransform, BadRequestException } from "@kiyasov/elysia-nest";
+import { Injectable, PipeTransform, BadRequestException } from "nestelia";
 
 @Injectable()
 class ValidationPipe implements PipeTransform {

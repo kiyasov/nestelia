@@ -2,20 +2,20 @@
 layout: home
 
 hero:
-  name: "@kiyasov/elysia-nest"
+  name: "nestelia"
   text: "Modular framework for Elysia"
   tagline: Decorators, dependency injection, modules, and lifecycle hooks — built on top of Elysia and Bun.
   image:
     light: /logo/light.svg
     dark: /logo/dark.svg
-    alt: elysia-nest
+    alt: nestelia
   actions:
     - theme: brand
       text: Get Started
       link: /introduction
     - theme: alt
       text: View on GitHub
-      link: https://github.com/kiyasov/elysia-nest
+      link: https://github.com/kiyasov/nestelia
 
 features:
   - icon: 🎨

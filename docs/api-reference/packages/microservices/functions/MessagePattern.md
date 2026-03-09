@@ -4,7 +4,7 @@
 function MessagePattern(pattern, transport?): MethodDecorator;
 ```
 
-Defined in: [packages/microservices/decorators/message-pattern.decorator.ts:23](https://github.com/kiyasov/elysia-nest/blob/main/packages/microservices/decorators/message-pattern.decorator.ts#L23)
+Defined in: [packages/microservices/decorators/message-pattern.decorator.ts:23](https://github.com/kiyasov/nestelia/blob/main/packages/microservices/decorators/message-pattern.decorator.ts#L23)
 
 Marks a controller method as a **request-response** message handler.
 The method is called when a client sends a message matching `pattern`

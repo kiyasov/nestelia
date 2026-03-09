@@ -4,7 +4,7 @@
 function createElysiaNestApplicationWithControllers(server, controllers?): ElysiaNestApplication;
 ```
 
-Defined in: [packages/microservices/factory.ts:66](https://github.com/kiyasov/elysia-nest/blob/main/packages/microservices/factory.ts#L66)
+Defined in: [packages/microservices/factory.ts:66](https://github.com/kiyasov/nestelia/blob/main/packages/microservices/factory.ts#L66)
 
 Creates a new [ElysiaNestApplication](../classes/ElysiaNestApplication.md) with a set of controllers
 pre-registered for pattern handler scanning.

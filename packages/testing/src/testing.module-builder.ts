@@ -1,15 +1,15 @@
-import { Module } from "@kiyasov/elysia-nest";
-import type { ModuleOptions } from "@kiyasov/elysia-nest";
+import { Module } from "nestelia";
+import type { ModuleOptions } from "nestelia";
 import {
   Container,
   DIContainer,
   type Provider,
   type ProviderToken,
   STATIC_CONTEXT,
-} from "@kiyasov/elysia-nest";
-import { Injector } from "@kiyasov/elysia-nest";
+} from "nestelia";
+import { Injector } from "nestelia";
 import type { Module as ModuleType } from "../../core/src/di/module";
-import type { Type } from "@kiyasov/elysia-nest";
+import type { Type } from "nestelia";
 import type { OverridesMetadata } from "./interfaces/overrides-metadata.interface";
 
 /**

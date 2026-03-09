@@ -12,7 +12,7 @@
  * @example
  * Quick start:
  * ```typescript
- * import { CacheModule } from '@@kiyasov/elysia-nest/cache-manager';
+ * import { CacheModule } from '@nestelia/cache-manager';
  *
  * @Module({
  *   imports: [CacheModule.register()],

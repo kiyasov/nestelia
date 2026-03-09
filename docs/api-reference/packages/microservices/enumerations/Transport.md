@@ -1,6 +1,6 @@
 # Enumeration: Transport
 
-Defined in: [packages/microservices/enums/transport.enum.ts:2](https://github.com/kiyasov/elysia-nest/blob/main/packages/microservices/enums/transport.enum.ts#L2)
+Defined in: [packages/microservices/enums/transport.enum.ts:2](https://github.com/kiyasov/nestelia/blob/main/packages/microservices/enums/transport.enum.ts#L2)
 
 Available transport strategies for microservice connections.
 
@@ -12,7 +12,7 @@ Available transport strategies for microservice connections.
 GRPC: "GRPC";
 ```
 
-Defined in: [packages/microservices/enums/transport.enum.ts:6](https://github.com/kiyasov/elysia-nest/blob/main/packages/microservices/enums/transport.enum.ts#L6)
+Defined in: [packages/microservices/enums/transport.enum.ts:6](https://github.com/kiyasov/nestelia/blob/main/packages/microservices/enums/transport.enum.ts#L6)
 
 ***
 
@@ -22,7 +22,7 @@ Defined in: [packages/microservices/enums/transport.enum.ts:6](https://github.co
 KAFKA: "KAFKA";
 ```
 
-Defined in: [packages/microservices/enums/transport.enum.ts:7](https://github.com/kiyasov/elysia-nest/blob/main/packages/microservices/enums/transport.enum.ts#L7)
+Defined in: [packages/microservices/enums/transport.enum.ts:7](https://github.com/kiyasov/nestelia/blob/main/packages/microservices/enums/transport.enum.ts#L7)
 
 ***
 
@@ -32,7 +32,7 @@ Defined in: [packages/microservices/enums/transport.enum.ts:7](https://github.co
 MQTT: "MQTT";
 ```
 
-Defined in: [packages/microservices/enums/transport.enum.ts:8](https://github.com/kiyasov/elysia-nest/blob/main/packages/microservices/enums/transport.enum.ts#L8)
+Defined in: [packages/microservices/enums/transport.enum.ts:8](https://github.com/kiyasov/nestelia/blob/main/packages/microservices/enums/transport.enum.ts#L8)
 
 ***
 
@@ -42,7 +42,7 @@ Defined in: [packages/microservices/enums/transport.enum.ts:8](https://github.co
 NATS: "NATS";
 ```
 
-Defined in: [packages/microservices/enums/transport.enum.ts:9](https://github.com/kiyasov/elysia-nest/blob/main/packages/microservices/enums/transport.enum.ts#L9)
+Defined in: [packages/microservices/enums/transport.enum.ts:9](https://github.com/kiyasov/nestelia/blob/main/packages/microservices/enums/transport.enum.ts#L9)
 
 ***
 
@@ -52,7 +52,7 @@ Defined in: [packages/microservices/enums/transport.enum.ts:9](https://github.co
 RABBITMQ: "RABBITMQ";
 ```
 
-Defined in: [packages/microservices/enums/transport.enum.ts:4](https://github.com/kiyasov/elysia-nest/blob/main/packages/microservices/enums/transport.enum.ts#L4)
+Defined in: [packages/microservices/enums/transport.enum.ts:4](https://github.com/kiyasov/nestelia/blob/main/packages/microservices/enums/transport.enum.ts#L4)
 
 ***
 
@@ -62,7 +62,7 @@ Defined in: [packages/microservices/enums/transport.enum.ts:4](https://github.co
 REDIS: "REDIS";
 ```
 
-Defined in: [packages/microservices/enums/transport.enum.ts:3](https://github.com/kiyasov/elysia-nest/blob/main/packages/microservices/enums/transport.enum.ts#L3)
+Defined in: [packages/microservices/enums/transport.enum.ts:3](https://github.com/kiyasov/nestelia/blob/main/packages/microservices/enums/transport.enum.ts#L3)
 
 ***
 
@@ -72,4 +72,4 @@ Defined in: [packages/microservices/enums/transport.enum.ts:3](https://github.co
 TCP: "TCP";
 ```
 
-Defined in: [packages/microservices/enums/transport.enum.ts:5](https://github.com/kiyasov/elysia-nest/blob/main/packages/microservices/enums/transport.enum.ts#L5)
+Defined in: [packages/microservices/enums/transport.enum.ts:5](https://github.com/kiyasov/nestelia/blob/main/packages/microservices/enums/transport.enum.ts#L5)

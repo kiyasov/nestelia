@@ -1,6 +1,6 @@
 # Class: Container
 
-Defined in: [packages/core/src/di/container.ts:18](https://github.com/kiyasov/elysia-nest/blob/main/packages/core/src/di/container.ts#L18)
+Defined in: [packages/core/src/di/container.ts:18](https://github.com/kiyasov/nestelia/blob/main/packages/core/src/di/container.ts#L18)
 
 ## Accessors
 
@@ -12,7 +12,7 @@ Defined in: [packages/core/src/di/container.ts:18](https://github.com/kiyasov/el
 get static instance(): Container;
 ```
 
-Defined in: [packages/core/src/di/container.ts:30](https://github.com/kiyasov/elysia-nest/blob/main/packages/core/src/di/container.ts#L30)
+Defined in: [packages/core/src/di/container.ts:30](https://github.com/kiyasov/nestelia/blob/main/packages/core/src/di/container.ts#L30)
 
 ##### Returns
 
@@ -26,7 +26,7 @@ Defined in: [packages/core/src/di/container.ts:30](https://github.com/kiyasov/el
 addGlobalModule(module): void;
 ```
 
-Defined in: [packages/core/src/di/container.ts:68](https://github.com/kiyasov/elysia-nest/blob/main/packages/core/src/di/container.ts#L68)
+Defined in: [packages/core/src/di/container.ts:68](https://github.com/kiyasov/nestelia/blob/main/packages/core/src/di/container.ts#L68)
 
 #### Parameters
 
@@ -46,7 +46,7 @@ Defined in: [packages/core/src/di/container.ts:68](https://github.com/kiyasov/el
 addModule(metatype, token): Module;
 ```
 
-Defined in: [packages/core/src/di/container.ts:37](https://github.com/kiyasov/elysia-nest/blob/main/packages/core/src/di/container.ts#L37)
+Defined in: [packages/core/src/di/container.ts:37](https://github.com/kiyasov/nestelia/blob/main/packages/core/src/di/container.ts#L37)
 
 #### Parameters
 
@@ -67,7 +67,7 @@ Defined in: [packages/core/src/di/container.ts:37](https://github.com/kiyasov/el
 bindGlobalModuleToModule(target, globalModule): void;
 ```
 
-Defined in: [packages/core/src/di/container.ts:88](https://github.com/kiyasov/elysia-nest/blob/main/packages/core/src/di/container.ts#L88)
+Defined in: [packages/core/src/di/container.ts:88](https://github.com/kiyasov/nestelia/blob/main/packages/core/src/di/container.ts#L88)
 
 #### Parameters
 
@@ -88,7 +88,7 @@ Defined in: [packages/core/src/di/container.ts:88](https://github.com/kiyasov/el
 bindGlobalScope(): void;
 ```
 
-Defined in: [packages/core/src/di/container.ts:76](https://github.com/kiyasov/elysia-nest/blob/main/packages/core/src/di/container.ts#L76)
+Defined in: [packages/core/src/di/container.ts:76](https://github.com/kiyasov/nestelia/blob/main/packages/core/src/di/container.ts#L76)
 
 #### Returns
 
@@ -102,7 +102,7 @@ Defined in: [packages/core/src/di/container.ts:76](https://github.com/kiyasov/el
 bindGlobalsToImports(moduleRef): void;
 ```
 
-Defined in: [packages/core/src/di/container.ts:82](https://github.com/kiyasov/elysia-nest/blob/main/packages/core/src/di/container.ts#L82)
+Defined in: [packages/core/src/di/container.ts:82](https://github.com/kiyasov/nestelia/blob/main/packages/core/src/di/container.ts#L82)
 
 #### Parameters
 
@@ -122,7 +122,7 @@ Defined in: [packages/core/src/di/container.ts:82](https://github.com/kiyasov/el
 clear(): void;
 ```
 
-Defined in: [packages/core/src/di/container.ts:200](https://github.com/kiyasov/elysia-nest/blob/main/packages/core/src/di/container.ts#L200)
+Defined in: [packages/core/src/di/container.ts:200](https://github.com/kiyasov/nestelia/blob/main/packages/core/src/di/container.ts#L200)
 
 #### Returns
 
@@ -141,7 +141,7 @@ get<T>(
 contextId?): Promise<T | undefined>;
 ```
 
-Defined in: [packages/core/src/di/container.ts:95](https://github.com/kiyasov/elysia-nest/blob/main/packages/core/src/di/container.ts#L95)
+Defined in: [packages/core/src/di/container.ts:95](https://github.com/kiyasov/nestelia/blob/main/packages/core/src/di/container.ts#L95)
 
 ##### Type Parameters
 
@@ -170,7 +170,7 @@ get<T>(
 contextId?): Promise<T | undefined>;
 ```
 
-Defined in: [packages/core/src/di/container.ts:96](https://github.com/kiyasov/elysia-nest/blob/main/packages/core/src/di/container.ts#L96)
+Defined in: [packages/core/src/di/container.ts:96](https://github.com/kiyasov/nestelia/blob/main/packages/core/src/di/container.ts#L96)
 
 ##### Type Parameters
 
@@ -201,7 +201,7 @@ getFromModule<T>(
 contextId?): Promise<T | undefined>;
 ```
 
-Defined in: [packages/core/src/di/container.ts:170](https://github.com/kiyasov/elysia-nest/blob/main/packages/core/src/di/container.ts#L170)
+Defined in: [packages/core/src/di/container.ts:170](https://github.com/kiyasov/nestelia/blob/main/packages/core/src/di/container.ts#L170)
 
 #### Type Parameters
 
@@ -229,7 +229,7 @@ Defined in: [packages/core/src/di/container.ts:170](https://github.com/kiyasov/e
 getGlobalModules(): Set<Module>;
 ```
 
-Defined in: [packages/core/src/di/container.ts:72](https://github.com/kiyasov/elysia-nest/blob/main/packages/core/src/di/container.ts#L72)
+Defined in: [packages/core/src/di/container.ts:72](https://github.com/kiyasov/nestelia/blob/main/packages/core/src/di/container.ts#L72)
 
 #### Returns
 
@@ -243,7 +243,7 @@ Defined in: [packages/core/src/di/container.ts:72](https://github.com/kiyasov/el
 getModuleByKey(key): Module | undefined;
 ```
 
-Defined in: [packages/core/src/di/container.ts:64](https://github.com/kiyasov/elysia-nest/blob/main/packages/core/src/di/container.ts#L64)
+Defined in: [packages/core/src/di/container.ts:64](https://github.com/kiyasov/nestelia/blob/main/packages/core/src/di/container.ts#L64)
 
 #### Parameters
 
@@ -263,7 +263,7 @@ Defined in: [packages/core/src/di/container.ts:64](https://github.com/kiyasov/el
 getModules(): Map<string, Module>;
 ```
 
-Defined in: [packages/core/src/di/container.ts:60](https://github.com/kiyasov/elysia-nest/blob/main/packages/core/src/di/container.ts#L60)
+Defined in: [packages/core/src/di/container.ts:60](https://github.com/kiyasov/nestelia/blob/main/packages/core/src/di/container.ts#L60)
 
 #### Returns
 
@@ -277,7 +277,7 @@ Defined in: [packages/core/src/di/container.ts:60](https://github.com/kiyasov/el
 register(providers, moduleKey?): void;
 ```
 
-Defined in: [packages/core/src/di/container.ts:236](https://github.com/kiyasov/elysia-nest/blob/main/packages/core/src/di/container.ts#L236)
+Defined in: [packages/core/src/di/container.ts:236](https://github.com/kiyasov/nestelia/blob/main/packages/core/src/di/container.ts#L236)
 
 #### Parameters
 
@@ -298,7 +298,7 @@ Defined in: [packages/core/src/di/container.ts:236](https://github.com/kiyasov/e
 registerControllers(controllers, moduleKey?): void;
 ```
 
-Defined in: [packages/core/src/di/container.ts:207](https://github.com/kiyasov/elysia-nest/blob/main/packages/core/src/di/container.ts#L207)
+Defined in: [packages/core/src/di/container.ts:207](https://github.com/kiyasov/nestelia/blob/main/packages/core/src/di/container.ts#L207)
 
 #### Parameters
 
@@ -319,7 +319,7 @@ Defined in: [packages/core/src/di/container.ts:207](https://github.com/kiyasov/e
 static getRequestContext(): RequestContext | undefined;
 ```
 
-Defined in: [packages/core/src/di/container.ts:265](https://github.com/kiyasov/elysia-nest/blob/main/packages/core/src/di/container.ts#L265)
+Defined in: [packages/core/src/di/container.ts:265](https://github.com/kiyasov/nestelia/blob/main/packages/core/src/di/container.ts#L265)
 
 #### Returns
 
@@ -333,7 +333,7 @@ Defined in: [packages/core/src/di/container.ts:265](https://github.com/kiyasov/e
 static runInRequestContext<R>(context, fn): R;
 ```
 
-Defined in: [packages/core/src/di/container.ts:269](https://github.com/kiyasov/elysia-nest/blob/main/packages/core/src/di/container.ts#L269)
+Defined in: [packages/core/src/di/container.ts:269](https://github.com/kiyasov/nestelia/blob/main/packages/core/src/di/container.ts#L269)
 
 #### Type Parameters
 

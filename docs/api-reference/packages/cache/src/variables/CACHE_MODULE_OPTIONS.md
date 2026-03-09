@@ -4,7 +4,7 @@
 const CACHE_MODULE_OPTIONS: string | symbol = MODULE_OPTIONS_TOKEN;
 ```
 
-Defined in: [packages/cache/src/cache.constants.ts:41](https://github.com/kiyasov/elysia-nest/blob/main/packages/cache/src/cache.constants.ts#L41)
+Defined in: [packages/cache/src/cache.constants.ts:41](https://github.com/kiyasov/nestelia/blob/main/packages/cache/src/cache.constants.ts#L41)
 
 Re-export of MODULE_OPTIONS_TOKEN for convenience.
 

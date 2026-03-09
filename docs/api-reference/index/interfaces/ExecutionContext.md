@@ -1,6 +1,6 @@
 # Interface: ExecutionContext
 
-Defined in: [packages/core/src/interfaces/execution-context.interface.ts:39](https://github.com/kiyasov/elysia-nest/blob/main/packages/core/src/interfaces/execution-context.interface.ts#L39)
+Defined in: [packages/core/src/interfaces/execution-context.interface.ts:39](https://github.com/kiyasov/nestelia/blob/main/packages/core/src/interfaces/execution-context.interface.ts#L39)
 
 Execution context interface providing access to
 the request/response and handler information
@@ -15,7 +15,7 @@ the request/response and handler information
 getArgByIndex<T>(index): T;
 ```
 
-Defined in: [packages/core/src/interfaces/execution-context.interface.ts:53](https://github.com/kiyasov/elysia-nest/blob/main/packages/core/src/interfaces/execution-context.interface.ts#L53)
+Defined in: [packages/core/src/interfaces/execution-context.interface.ts:53](https://github.com/kiyasov/nestelia/blob/main/packages/core/src/interfaces/execution-context.interface.ts#L53)
 
 Get argument by index
 
@@ -43,7 +43,7 @@ Get argument by index
 getArgs<T>(): T;
 ```
 
-Defined in: [packages/core/src/interfaces/execution-context.interface.ts:58](https://github.com/kiyasov/elysia-nest/blob/main/packages/core/src/interfaces/execution-context.interface.ts#L58)
+Defined in: [packages/core/src/interfaces/execution-context.interface.ts:58](https://github.com/kiyasov/nestelia/blob/main/packages/core/src/interfaces/execution-context.interface.ts#L58)
 
 Get all arguments
 
@@ -65,7 +65,7 @@ Get all arguments
 getClass<T>(): T;
 ```
 
-Defined in: [packages/core/src/interfaces/execution-context.interface.ts:43](https://github.com/kiyasov/elysia-nest/blob/main/packages/core/src/interfaces/execution-context.interface.ts#L43)
+Defined in: [packages/core/src/interfaces/execution-context.interface.ts:43](https://github.com/kiyasov/nestelia/blob/main/packages/core/src/interfaces/execution-context.interface.ts#L43)
 
 Returns the class of the current handler
 
@@ -87,7 +87,7 @@ Returns the class of the current handler
 getHandler(): (...args) => unknown;
 ```
 
-Defined in: [packages/core/src/interfaces/execution-context.interface.ts:48](https://github.com/kiyasov/elysia-nest/blob/main/packages/core/src/interfaces/execution-context.interface.ts#L48)
+Defined in: [packages/core/src/interfaces/execution-context.interface.ts:48](https://github.com/kiyasov/nestelia/blob/main/packages/core/src/interfaces/execution-context.interface.ts#L48)
 
 Returns the handler function
 
@@ -115,7 +115,7 @@ Returns the handler function
 getType<TContext>(): TContext;
 ```
 
-Defined in: [packages/core/src/interfaces/execution-context.interface.ts:63](https://github.com/kiyasov/elysia-nest/blob/main/packages/core/src/interfaces/execution-context.interface.ts#L63)
+Defined in: [packages/core/src/interfaces/execution-context.interface.ts:63](https://github.com/kiyasov/nestelia/blob/main/packages/core/src/interfaces/execution-context.interface.ts#L63)
 
 Get type of the context
 
@@ -137,7 +137,7 @@ Get type of the context
 switchToHttp(): HttpArgumentsHost;
 ```
 
-Defined in: [packages/core/src/interfaces/execution-context.interface.ts:68](https://github.com/kiyasov/elysia-nest/blob/main/packages/core/src/interfaces/execution-context.interface.ts#L68)
+Defined in: [packages/core/src/interfaces/execution-context.interface.ts:68](https://github.com/kiyasov/nestelia/blob/main/packages/core/src/interfaces/execution-context.interface.ts#L68)
 
 Switch to HTTP context
 
@@ -153,7 +153,7 @@ Switch to HTTP context
 switchToRpc(): RpcArgumentsHost;
 ```
 
-Defined in: [packages/core/src/interfaces/execution-context.interface.ts:73](https://github.com/kiyasov/elysia-nest/blob/main/packages/core/src/interfaces/execution-context.interface.ts#L73)
+Defined in: [packages/core/src/interfaces/execution-context.interface.ts:73](https://github.com/kiyasov/nestelia/blob/main/packages/core/src/interfaces/execution-context.interface.ts#L73)
 
 Switch to RPC context
 
@@ -169,7 +169,7 @@ Switch to RPC context
 switchToWs(): WsArgumentsHost;
 ```
 
-Defined in: [packages/core/src/interfaces/execution-context.interface.ts:78](https://github.com/kiyasov/elysia-nest/blob/main/packages/core/src/interfaces/execution-context.interface.ts#L78)
+Defined in: [packages/core/src/interfaces/execution-context.interface.ts:78](https://github.com/kiyasov/nestelia/blob/main/packages/core/src/interfaces/execution-context.interface.ts#L78)
 
 Switch to WebSocket context
 

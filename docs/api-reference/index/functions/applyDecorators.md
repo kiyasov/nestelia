@@ -4,7 +4,7 @@
 function applyDecorators(...decorators): (target, propertyKey?, descriptor?) => void;
 ```
 
-Defined in: [packages/core/src/decorators/apply-decorators.ts:9](https://github.com/kiyasov/elysia-nest/blob/main/packages/core/src/decorators/apply-decorators.ts#L9)
+Defined in: [packages/core/src/decorators/apply-decorators.ts:9](https://github.com/kiyasov/nestelia/blob/main/packages/core/src/decorators/apply-decorators.ts#L9)
 
 Applies multiple decorators to a target (class, method, or property).
 Useful for composing multiple decorators into a single one.

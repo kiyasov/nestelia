@@ -1,6 +1,6 @@
 import { createCache } from "cache-manager";
 
-import { DynamicModule, Module } from "@kiyasov/elysia-nest";
+import { DynamicModule, Module } from "nestelia";
 import { CACHE_MANAGER } from "./cache.constants";
 import { ConfigurableModuleClass } from "./cache.module-definition";
 import {
@@ -32,7 +32,7 @@ export class Cache {}
 export interface Cache extends ReturnType<typeof createCache> {}
 
 /**
- * Module that provides caching functionality for @kiyasov/elysia-nest.
+ * Module that provides caching functionality for nestelia.
  *
  * This module wraps the cache-manager library and provides:
  * - In-memory caching by default

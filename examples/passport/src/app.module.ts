@@ -1,6 +1,6 @@
 import "reflect-metadata";
 
-import { Module } from "@kiyasov/elysia-nest";
+import { Module } from "nestelia";
 
 import { AuthController } from "./auth.controller";
 import { BearerStrategy } from "./bearer.strategy";

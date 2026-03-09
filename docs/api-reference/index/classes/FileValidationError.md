@@ -1,6 +1,6 @@
 # Class: FileValidationError
 
-Defined in: [packages/core/src/decorators/param.decorators.ts:116](https://github.com/kiyasov/elysia-nest/blob/main/packages/core/src/decorators/param.decorators.ts#L116)
+Defined in: [packages/core/src/decorators/param.decorators.ts:116](https://github.com/kiyasov/nestelia/blob/main/packages/core/src/decorators/param.decorators.ts#L116)
 
 ## Extends
 
@@ -17,7 +17,7 @@ new FileValidationError(
    message): FileValidationError;
 ```
 
-Defined in: [packages/core/src/decorators/param.decorators.ts:117](https://github.com/kiyasov/elysia-nest/blob/main/packages/core/src/decorators/param.decorators.ts#L117)
+Defined in: [packages/core/src/decorators/param.decorators.ts:117](https://github.com/kiyasov/nestelia/blob/main/packages/core/src/decorators/param.decorators.ts#L117)
 
 #### Parameters
 
@@ -231,8 +231,8 @@ Error.prepareStackTrace
 | Property | Modifier | Type | Description | Inherited from | Defined in |
 | ------ | ------ | ------ | ------ | ------ | ------ |
 | <a id="cause"></a> `cause?` | `public` | `unknown` | The cause of the error. | `Error.cause` | node\_modules/.bun/typescript@5.9.3/node\_modules/typescript/lib/lib.es2022.error.d.ts:26 |
-| <a id="code"></a> `code` | `readonly` | `"SIZE_LIMIT"` \| `"INVALID_TYPE"` \| `"MAX_FILES"` \| `"MISSING_FILE"` | - | - | [packages/core/src/decorators/param.decorators.ts:119](https://github.com/kiyasov/elysia-nest/blob/main/packages/core/src/decorators/param.decorators.ts#L119) |
-| <a id="field"></a> `field` | `readonly` | `string` | - | - | [packages/core/src/decorators/param.decorators.ts:118](https://github.com/kiyasov/elysia-nest/blob/main/packages/core/src/decorators/param.decorators.ts#L118) |
+| <a id="code"></a> `code` | `readonly` | `"SIZE_LIMIT"` \| `"INVALID_TYPE"` \| `"MAX_FILES"` \| `"MISSING_FILE"` | - | - | [packages/core/src/decorators/param.decorators.ts:119](https://github.com/kiyasov/nestelia/blob/main/packages/core/src/decorators/param.decorators.ts#L119) |
+| <a id="field"></a> `field` | `readonly` | `string` | - | - | [packages/core/src/decorators/param.decorators.ts:118](https://github.com/kiyasov/nestelia/blob/main/packages/core/src/decorators/param.decorators.ts#L118) |
 | <a id="message"></a> `message` | `public` | `string` | - | `Error.message` | node\_modules/.bun/typescript@5.9.3/node\_modules/typescript/lib/lib.es5.d.ts:1077 |
 | <a id="name"></a> `name` | `public` | `string` | - | `Error.name` | node\_modules/.bun/typescript@5.9.3/node\_modules/typescript/lib/lib.es5.d.ts:1076 |
 | <a id="stack"></a> `stack?` | `public` | `string` | - | `Error.stack` | node\_modules/.bun/typescript@5.9.3/node\_modules/typescript/lib/lib.es5.d.ts:1078 |

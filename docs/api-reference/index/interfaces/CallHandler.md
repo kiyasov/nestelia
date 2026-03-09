@@ -1,6 +1,6 @@
 # Interface: CallHandler\<T\>
 
-Defined in: [packages/core/src/interceptors/interceptor.interface.ts:32](https://github.com/kiyasov/elysia-nest/blob/main/packages/core/src/interceptors/interceptor.interface.ts#L32)
+Defined in: [packages/core/src/interceptors/interceptor.interface.ts:32](https://github.com/kiyasov/nestelia/blob/main/packages/core/src/interceptors/interceptor.interface.ts#L32)
 
 Call handler interface for interceptors
 
@@ -20,7 +20,7 @@ Call handler interface for interceptors
 handle(): Observable<T>;
 ```
 
-Defined in: [packages/core/src/interceptors/interceptor.interface.ts:36](https://github.com/kiyasov/elysia-nest/blob/main/packages/core/src/interceptors/interceptor.interface.ts#L36)
+Defined in: [packages/core/src/interceptors/interceptor.interface.ts:36](https://github.com/kiyasov/nestelia/blob/main/packages/core/src/interceptors/interceptor.interface.ts#L36)
 
 Returns an Observable representing the response stream
 

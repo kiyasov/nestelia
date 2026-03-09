@@ -1,6 +1,6 @@
 # Class: RedisServer
 
-Defined in: [packages/microservices/transports/redis.server.ts:30](https://github.com/kiyasov/elysia-nest/blob/main/packages/microservices/transports/redis.server.ts#L30)
+Defined in: [packages/microservices/transports/redis.server.ts:30](https://github.com/kiyasov/nestelia/blob/main/packages/microservices/transports/redis.server.ts#L30)
 
 Transport server that uses Redis Pub/Sub for message passing.
 
@@ -22,7 +22,7 @@ Requires the optional peer dependency `ioredis`.
 new RedisServer(options): RedisServer;
 ```
 
-Defined in: [packages/microservices/transports/redis.server.ts:39](https://github.com/kiyasov/elysia-nest/blob/main/packages/microservices/transports/redis.server.ts#L39)
+Defined in: [packages/microservices/transports/redis.server.ts:39](https://github.com/kiyasov/nestelia/blob/main/packages/microservices/transports/redis.server.ts#L39)
 
 #### Parameters
 
@@ -104,7 +104,7 @@ v13.4.0, v12.16.0
 addEventHandler(pattern, callback): void;
 ```
 
-Defined in: [packages/microservices/transports/redis.server.ts:130](https://github.com/kiyasov/elysia-nest/blob/main/packages/microservices/transports/redis.server.ts#L130)
+Defined in: [packages/microservices/transports/redis.server.ts:130](https://github.com/kiyasov/nestelia/blob/main/packages/microservices/transports/redis.server.ts#L130)
 
 Registers `callback` as a fire-and-forget event handler for `pattern`.
 The handler's return value is ignored.
@@ -132,7 +132,7 @@ The handler's return value is ignored.
 addHandler(pattern, callback): void;
 ```
 
-Defined in: [packages/microservices/transports/server.ts:32](https://github.com/kiyasov/elysia-nest/blob/main/packages/microservices/transports/server.ts#L32)
+Defined in: [packages/microservices/transports/server.ts:32](https://github.com/kiyasov/nestelia/blob/main/packages/microservices/transports/server.ts#L32)
 
 Registers `callback` as a request-response handler for `pattern`.
 Equivalent to [addMessageHandler](BaseServer.md#addmessagehandler).
@@ -197,7 +197,7 @@ v0.1.26
 addMessageHandler(pattern, callback): void;
 ```
 
-Defined in: [packages/microservices/transports/redis.server.ts:120](https://github.com/kiyasov/elysia-nest/blob/main/packages/microservices/transports/redis.server.ts#L120)
+Defined in: [packages/microservices/transports/redis.server.ts:120](https://github.com/kiyasov/nestelia/blob/main/packages/microservices/transports/redis.server.ts#L120)
 
 Registers `callback` as a request-response handler for `pattern`.
 The handler is expected to return a value that will be sent back to
@@ -226,7 +226,7 @@ the caller.
 close(): void;
 ```
 
-Defined in: [packages/microservices/transports/redis.server.ts:241](https://github.com/kiyasov/elysia-nest/blob/main/packages/microservices/transports/redis.server.ts#L241)
+Defined in: [packages/microservices/transports/redis.server.ts:241](https://github.com/kiyasov/nestelia/blob/main/packages/microservices/transports/redis.server.ts#L241)
 
 Disconnects both Redis clients and clears subscriptions.
 
@@ -320,7 +320,7 @@ v0.1.26
 emitEvent<T>(pattern, data): void;
 ```
 
-Defined in: [packages/microservices/transports/redis.server.ts:233](https://github.com/kiyasov/elysia-nest/blob/main/packages/microservices/transports/redis.server.ts#L233)
+Defined in: [packages/microservices/transports/redis.server.ts:233](https://github.com/kiyasov/nestelia/blob/main/packages/microservices/transports/redis.server.ts#L233)
 
 Publishes a fire-and-forget event to `pattern`.
 
@@ -421,7 +421,7 @@ protected handleEvent<T>(
    ctx): void;
 ```
 
-Defined in: [packages/microservices/transports/server.ts:86](https://github.com/kiyasov/elysia-nest/blob/main/packages/microservices/transports/server.ts#L86)
+Defined in: [packages/microservices/transports/server.ts:86](https://github.com/kiyasov/nestelia/blob/main/packages/microservices/transports/server.ts#L86)
 
 Dispatches an incoming event to the matching event handler.
 Silently ignores events without a registered handler.
@@ -459,7 +459,7 @@ protected handleMessage<T, R>(
    ctx): unknown;
 ```
 
-Defined in: [packages/microservices/transports/server.ts:70](https://github.com/kiyasov/elysia-nest/blob/main/packages/microservices/transports/server.ts#L70)
+Defined in: [packages/microservices/transports/server.ts:70](https://github.com/kiyasov/nestelia/blob/main/packages/microservices/transports/server.ts#L70)
 
 Dispatches an incoming request to the matching message handler.
 
@@ -498,7 +498,7 @@ When no handler is registered for `pattern`.
 listen(callback?): void;
 ```
 
-Defined in: [packages/microservices/transports/redis.server.ts:53](https://github.com/kiyasov/elysia-nest/blob/main/packages/microservices/transports/redis.server.ts#L53)
+Defined in: [packages/microservices/transports/redis.server.ts:53](https://github.com/kiyasov/nestelia/blob/main/packages/microservices/transports/redis.server.ts#L53)
 
 Establishes Redis subscriber and publisher connections then subscribes to
 all registered pattern channels.
@@ -1089,7 +1089,7 @@ v0.1.26
 sendMessage<T>(pattern, data): Promise<unknown>;
 ```
 
-Defined in: [packages/microservices/transports/redis.server.ts:186](https://github.com/kiyasov/elysia-nest/blob/main/packages/microservices/transports/redis.server.ts#L186)
+Defined in: [packages/microservices/transports/redis.server.ts:186](https://github.com/kiyasov/nestelia/blob/main/packages/microservices/transports/redis.server.ts#L186)
 
 Sends a request to `pattern` and waits for a reply.
 The default timeout is **5 seconds**.
@@ -1155,5 +1155,5 @@ v0.3.5
 
 | Property | Modifier | Type | Description | Inherited from | Defined in |
 | ------ | ------ | ------ | ------ | ------ | ------ |
-| <a id="eventhandlers"></a> `eventHandlers` | `readonly` | `Map`\<`string`, [`MessageHandler`](../type-aliases/MessageHandler.md)\> | Handlers for fire-and-forget event patterns. | [`BaseServer`](BaseServer.md).[`eventHandlers`](BaseServer.md#eventhandlers) | [packages/microservices/transports/server.ts:26](https://github.com/kiyasov/elysia-nest/blob/main/packages/microservices/transports/server.ts#L26) |
-| <a id="messagehandlers"></a> `messageHandlers` | `readonly` | `Map`\<`string`, [`MessageHandler`](../type-aliases/MessageHandler.md)\> | Handlers for request-response patterns. | [`BaseServer`](BaseServer.md).[`messageHandlers`](BaseServer.md#messagehandlers) | [packages/microservices/transports/server.ts:24](https://github.com/kiyasov/elysia-nest/blob/main/packages/microservices/transports/server.ts#L24) |
+| <a id="eventhandlers"></a> `eventHandlers` | `readonly` | `Map`\<`string`, [`MessageHandler`](../type-aliases/MessageHandler.md)\> | Handlers for fire-and-forget event patterns. | [`BaseServer`](BaseServer.md).[`eventHandlers`](BaseServer.md#eventhandlers) | [packages/microservices/transports/server.ts:26](https://github.com/kiyasov/nestelia/blob/main/packages/microservices/transports/server.ts#L26) |
+| <a id="messagehandlers"></a> `messageHandlers` | `readonly` | `Map`\<`string`, [`MessageHandler`](../type-aliases/MessageHandler.md)\> | Handlers for request-response patterns. | [`BaseServer`](BaseServer.md).[`messageHandlers`](BaseServer.md#messagehandlers) | [packages/microservices/transports/server.ts:24](https://github.com/kiyasov/nestelia/blob/main/packages/microservices/transports/server.ts#L24) |

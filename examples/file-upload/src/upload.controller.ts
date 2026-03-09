@@ -1,4 +1,4 @@
-import { Controller, File, Files, Form, HttpCode, Post } from "@kiyasov/elysia-nest";
+import { Controller, File, Files, Form, HttpCode, Post } from "nestelia";
 
 import type { FileInfo } from "./upload.service";
 import { UploadService } from "./upload.service";

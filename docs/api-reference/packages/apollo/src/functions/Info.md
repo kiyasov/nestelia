@@ -4,7 +4,7 @@
 function Info(): ParameterDecorator;
 ```
 
-Defined in: [packages/apollo/src/decorators/info.decorator.ts:36](https://github.com/kiyasov/elysia-nest/blob/main/packages/apollo/src/decorators/info.decorator.ts#L36)
+Defined in: [packages/apollo/src/decorators/info.decorator.ts:36](https://github.com/kiyasov/nestelia/blob/main/packages/apollo/src/decorators/info.decorator.ts#L36)
 
 Decorator for GraphQL resolve info.
 Provides access to GraphQL request information (AST, field nodes, etc.).

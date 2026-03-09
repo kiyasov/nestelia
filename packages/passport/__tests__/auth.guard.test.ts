@@ -1,7 +1,7 @@
 import "reflect-metadata";
 
 import { afterEach, describe, expect, it } from "bun:test";
-import type { ExecutionContext } from "@kiyasov/elysia-nest";
+import type { ExecutionContext } from "nestelia";
 import { AuthGuard } from "../src/auth.guard";
 import { clearStrategyRegistries } from "../src/passport-strategy";
 

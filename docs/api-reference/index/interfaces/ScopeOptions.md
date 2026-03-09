@@ -1,6 +1,6 @@
 # Interface: ScopeOptions
 
-Defined in: [packages/core/src/di/scope-options.interface.ts:7](https://github.com/kiyasov/elysia-nest/blob/main/packages/core/src/di/scope-options.interface.ts#L7)
+Defined in: [packages/core/src/di/scope-options.interface.ts:7](https://github.com/kiyasov/nestelia/blob/main/packages/core/src/di/scope-options.interface.ts#L7)
 
 ## Extended by
 
@@ -11,4 +11,4 @@ Defined in: [packages/core/src/di/scope-options.interface.ts:7](https://github.c
 
 | Property | Type | Defined in |
 | ------ | ------ | ------ |
-| <a id="scope"></a> `scope?` | [`Scope`](../enumerations/Scope.md) | [packages/core/src/di/scope-options.interface.ts:8](https://github.com/kiyasov/elysia-nest/blob/main/packages/core/src/di/scope-options.interface.ts#L8) |
+| <a id="scope"></a> `scope?` | [`Scope`](../enumerations/Scope.md) | [packages/core/src/di/scope-options.interface.ts:8](https://github.com/kiyasov/nestelia/blob/main/packages/core/src/di/scope-options.interface.ts#L8) |

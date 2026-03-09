@@ -1,8 +1,8 @@
 # Class: GraphQLModule
 
-Defined in: [packages/apollo/src/graphql.module.ts:23](https://github.com/kiyasov/elysia-nest/blob/main/packages/apollo/src/graphql.module.ts#L23)
+Defined in: [packages/apollo/src/graphql.module.ts:23](https://github.com/kiyasov/nestelia/blob/main/packages/apollo/src/graphql.module.ts#L23)
 
-GraphQL module for @kiyasov/elysia-nest backed by Apollo Server.
+GraphQL module for nestelia backed by Apollo Server.
 Provides static and async configuration methods.
 
 ## Example
@@ -35,7 +35,7 @@ new GraphQLModule(): GraphQLModule;
 static forRoot(options): DynamicModule;
 ```
 
-Defined in: [packages/apollo/src/graphql.module.ts:49](https://github.com/kiyasov/elysia-nest/blob/main/packages/apollo/src/graphql.module.ts#L49)
+Defined in: [packages/apollo/src/graphql.module.ts:49](https://github.com/kiyasov/nestelia/blob/main/packages/apollo/src/graphql.module.ts#L49)
 
 Configures GraphQL with static options.
 The Apollo Server is started eagerly during module bootstrap.
@@ -55,7 +55,7 @@ Dynamic module configuration.
 #### Example
 
 ```typescript
-import { ElysiaFactory } from '@kiyasov/elysia-nest';
+import { ElysiaFactory } from 'nestelia';
 
 const app = await ElysiaFactory.create(AppModule);
 
@@ -79,7 +79,7 @@ class AppModule {}
 static forRootAsync(options): DynamicModule;
 ```
 
-Defined in: [packages/apollo/src/graphql.module.ts:97](https://github.com/kiyasov/elysia-nest/blob/main/packages/apollo/src/graphql.module.ts#L97)
+Defined in: [packages/apollo/src/graphql.module.ts:97](https://github.com/kiyasov/nestelia/blob/main/packages/apollo/src/graphql.module.ts#L97)
 
 Configures GraphQL with async options resolved from the DI container.
 

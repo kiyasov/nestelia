@@ -4,7 +4,7 @@
 const Root: () => ParameterDecorator = Parent;
 ```
 
-Defined in: [packages/apollo/src/decorators/parent.decorator.ts:58](https://github.com/kiyasov/elysia-nest/blob/main/packages/apollo/src/decorators/parent.decorator.ts#L58)
+Defined in: [packages/apollo/src/decorators/parent.decorator.ts:58](https://github.com/kiyasov/nestelia/blob/main/packages/apollo/src/decorators/parent.decorator.ts#L58)
 
 Alias for
 

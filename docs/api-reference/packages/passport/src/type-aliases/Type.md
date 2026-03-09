@@ -4,7 +4,7 @@
 type Type<T> = (...args) => T;
 ```
 
-Defined in: [packages/passport/src/auth.guard.ts:32](https://github.com/kiyasov/elysia-nest/blob/main/packages/passport/src/auth.guard.ts#L32)
+Defined in: [packages/passport/src/auth.guard.ts:32](https://github.com/kiyasov/nestelia/blob/main/packages/passport/src/auth.guard.ts#L32)
 
 ## Type Parameters
 

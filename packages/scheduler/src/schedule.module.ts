@@ -1,5 +1,5 @@
-import { Module } from "@kiyasov/elysia-nest";
-import type { Provider } from "@kiyasov/elysia-nest";
+import { Module } from "nestelia";
+import type { Provider } from "nestelia";
 import {
   Scheduler,
   SchedulerConfig,

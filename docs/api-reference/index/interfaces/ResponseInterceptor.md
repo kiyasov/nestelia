@@ -1,6 +1,6 @@
 # Interface: ResponseInterceptor
 
-Defined in: [packages/core/src/interceptors/interceptor.interface.ts:19](https://github.com/kiyasov/elysia-nest/blob/main/packages/core/src/interceptors/interceptor.interface.ts#L19)
+Defined in: [packages/core/src/interceptors/interceptor.interface.ts:19](https://github.com/kiyasov/nestelia/blob/main/packages/core/src/interceptors/interceptor.interface.ts#L19)
 
 Interface for response interceptors
 
@@ -12,7 +12,7 @@ Interface for response interceptors
 interceptAfter(context): any;
 ```
 
-Defined in: [packages/core/src/interceptors/interceptor.interface.ts:24](https://github.com/kiyasov/elysia-nest/blob/main/packages/core/src/interceptors/interceptor.interface.ts#L24)
+Defined in: [packages/core/src/interceptors/interceptor.interface.ts:24](https://github.com/kiyasov/nestelia/blob/main/packages/core/src/interceptors/interceptor.interface.ts#L24)
 
 Method to intercept outgoing responses
 

@@ -1,6 +1,6 @@
 # Interface: CustomScalar\<TExternal, TInternal\>
 
-Defined in: [packages/apollo/src/decorators/type.decorator.ts:387](https://github.com/kiyasov/elysia-nest/blob/main/packages/apollo/src/decorators/type.decorator.ts#L387)
+Defined in: [packages/apollo/src/decorators/type.decorator.ts:387](https://github.com/kiyasov/nestelia/blob/main/packages/apollo/src/decorators/type.decorator.ts#L387)
 
 Interface for custom scalars.
 
@@ -19,7 +19,7 @@ Interface for custom scalars.
 parseLiteral(value): TInternal | null;
 ```
 
-Defined in: [packages/apollo/src/decorators/type.decorator.ts:395](https://github.com/kiyasov/elysia-nest/blob/main/packages/apollo/src/decorators/type.decorator.ts#L395)
+Defined in: [packages/apollo/src/decorators/type.decorator.ts:395](https://github.com/kiyasov/nestelia/blob/main/packages/apollo/src/decorators/type.decorator.ts#L395)
 
 Parses a literal AST node to internal representation.
 
@@ -41,7 +41,7 @@ Parses a literal AST node to internal representation.
 parseValue(value): TInternal;
 ```
 
-Defined in: [packages/apollo/src/decorators/type.decorator.ts:391](https://github.com/kiyasov/elysia-nest/blob/main/packages/apollo/src/decorators/type.decorator.ts#L391)
+Defined in: [packages/apollo/src/decorators/type.decorator.ts:391](https://github.com/kiyasov/nestelia/blob/main/packages/apollo/src/decorators/type.decorator.ts#L391)
 
 Parses an external value to internal representation.
 
@@ -63,7 +63,7 @@ Parses an external value to internal representation.
 serialize(value): TExternal;
 ```
 
-Defined in: [packages/apollo/src/decorators/type.decorator.ts:393](https://github.com/kiyasov/elysia-nest/blob/main/packages/apollo/src/decorators/type.decorator.ts#L393)
+Defined in: [packages/apollo/src/decorators/type.decorator.ts:393](https://github.com/kiyasov/nestelia/blob/main/packages/apollo/src/decorators/type.decorator.ts#L393)
 
 Serializes an internal value to external representation.
 
@@ -81,4 +81,4 @@ Serializes an internal value to external representation.
 
 | Property | Type | Description | Defined in |
 | ------ | ------ | ------ | ------ |
-| <a id="description"></a> `description` | `string` | Description of the scalar type. | [packages/apollo/src/decorators/type.decorator.ts:389](https://github.com/kiyasov/elysia-nest/blob/main/packages/apollo/src/decorators/type.decorator.ts#L389) |
+| <a id="description"></a> `description` | `string` | Description of the scalar type. | [packages/apollo/src/decorators/type.decorator.ts:389](https://github.com/kiyasov/nestelia/blob/main/packages/apollo/src/decorators/type.decorator.ts#L389) |

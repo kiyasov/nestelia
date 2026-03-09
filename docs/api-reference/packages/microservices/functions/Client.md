@@ -4,7 +4,7 @@
 function Client(config): PropertyDecorator;
 ```
 
-Defined in: [packages/microservices/decorators/client.decorator.ts:21](https://github.com/kiyasov/elysia-nest/blob/main/packages/microservices/decorators/client.decorator.ts#L21)
+Defined in: [packages/microservices/decorators/client.decorator.ts:21](https://github.com/kiyasov/nestelia/blob/main/packages/microservices/decorators/client.decorator.ts#L21)
 
 Marks a class property for automatic [ClientProxy](../classes/ClientProxy.md) injection.
 The injected client is created using `config` and is ready to use after

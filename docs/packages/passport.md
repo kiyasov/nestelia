@@ -4,7 +4,7 @@ icon: key
 description: Authentication with Passport.js strategies
 ---
 
-The Passport package integrates Passport.js authentication strategies into @kiyasov/elysia-nest's guard system.
+The Passport package integrates Passport.js authentication strategies into nestelia's guard system.
 
 ## Installation
 
@@ -20,8 +20,8 @@ bun add passport-local
 Create a strategy by extending the `PassportStrategy` mixin:
 
 ```typescript
-import { Injectable } from "@kiyasov/elysia-nest";
-import { PassportStrategy } from "@kiyasov/elysia-nest/passport";
+import { Injectable } from "nestelia";
+import { PassportStrategy } from "nestelia/passport";
 import { Strategy, ExtractJwt } from "passport-jwt";
 
 @Injectable()
@@ -46,8 +46,8 @@ The `validate()` method is called after the strategy verifies the credentials. I
 Use `AuthGuard` to protect routes with a specific strategy:
 
 ```typescript
-import { Controller, Get } from "@kiyasov/elysia-nest";
-import { AuthGuard } from "@kiyasov/elysia-nest/passport";
+import { Controller, Get } from "nestelia";
+import { AuthGuard } from "nestelia/passport";
 
 @Controller("/profile")
 class ProfileController {

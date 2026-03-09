@@ -1,25 +1,25 @@
 ---
-name: elysia-nest
-description: Scaffold modules, controllers, services, guards, interceptors, and more for the elysia-nest framework (@kiyasov/elysia-nest) — NestJS-style decorators and DI on top of Elysia.
+name: nestelia
+description: Scaffold modules, controllers, services, guards, interceptors, and more for the nestelia framework — NestJS-style decorators and DI on top of Elysia.
 ---
 
-# elysia-nest Skill
+# nestelia Skill
 
 ## When to Use This Skill
 
 TRIGGER this skill when the user wants to:
-- Scaffold a new module, controller, or service for **elysia-nest** (`@kiyasov/elysia-nest`)
+- Scaffold a new module, controller, or service for **nestelia** (`nestelia`)
 - Create a guard, interceptor, pipe, or exception filter
-- Use `@kiyasov/elysia-nest` decorators correctly
+- Use `nestelia` decorators correctly
 - Set up the app entry point with `createElysiaApplication`
-- Use microservices, Apollo GraphQL, caching, or passport with elysia-nest
+- Use microservices, Apollo GraphQL, caching, or passport with nestelia
 
 ---
 
 ## Project Setup
 
 ```bash
-bun add @kiyasov/elysia-nest elysia reflect-metadata
+bun add nestelia elysia reflect-metadata
 ```
 
 `tsconfig.json` must have:
@@ -45,7 +45,7 @@ When asked to create a module for a resource (e.g., `users`), generate these fil
 
 ### `users.service.ts`
 ```typescript
-import { Injectable } from "@kiyasov/elysia-nest";
+import { Injectable } from "nestelia";
 
 @Injectable()
 export class UsersService {
@@ -69,8 +69,8 @@ export class UsersService {
 
 ### `users.controller.ts`
 ```typescript
-import { Controller, Get, Post, Delete } from "@kiyasov/elysia-nest";
-import { Body, Params } from "@kiyasov/elysia-nest";
+import { Controller, Get, Post, Delete } from "nestelia";
+import { Body, Params } from "nestelia";
 import { UsersService } from "./users.service";
 
 @Controller("/users")
@@ -96,7 +96,7 @@ export class UsersController {
 
 ### `users.module.ts`
 ```typescript
-import { Module } from "@kiyasov/elysia-nest";
+import { Module } from "nestelia";
 import { UsersController } from "./users.controller";
 import { UsersService } from "./users.service";
 
@@ -109,7 +109,7 @@ export class UsersModule {}
 
 ### `app.module.ts`
 ```typescript
-import { Module } from "@kiyasov/elysia-nest";
+import { Module } from "nestelia";
 import { UsersModule } from "./users/users.module";
 
 @Module({
@@ -121,7 +121,7 @@ export class AppModule {}
 ### `main.ts`
 ```typescript
 import "reflect-metadata";
-import { createElysiaApplication } from "@kiyasov/elysia-nest";
+import { createElysiaApplication } from "nestelia";
 import { AppModule } from "./app.module";
 
 const app = await createElysiaApplication(AppModule);
@@ -134,7 +134,7 @@ app.listen(3000, () => console.log("Listening on http://localhost:3000"));
 
 ### HTTP Method Decorators
 ```typescript
-import { Get, Post, Put, Patch, Delete, All } from "@kiyasov/elysia-nest";
+import { Get, Post, Put, Patch, Delete, All } from "nestelia";
 
 @Get("/path")
 @Post("/path")
@@ -147,7 +147,7 @@ import { Get, Post, Put, Patch, Delete, All } from "@kiyasov/elysia-nest";
 
 **Class-transformer/class-validator based (`param.decorators`):**
 ```typescript
-import { Body, Params, Query, Form, File, Files } from "@kiyasov/elysia-nest";
+import { Body, Params, Query, Form, File, Files } from "nestelia";
 
 // With DTO (validates via class-validator):
 @Post("/")
@@ -174,7 +174,7 @@ uploadMany(@Files("photos", { maxFiles: 10 }) files: File[]) {}
 
 **TypeBox-based (schema validation at Elysia level, `http.decorators`):**
 ```typescript
-import { Body, Param, Query } from "@kiyasov/elysia-nest";
+import { Body, Param, Query } from "nestelia";
 import { Type } from "@sinclair/typebox";
 
 const CreateUserSchema = Type.Object({ name: Type.String() });
@@ -185,7 +185,7 @@ create(@Body(CreateUserSchema) body: { name: string }) {}
 
 **Other context decorators:**
 ```typescript
-import { Req, Res, Ctx, Headers, Ip, Session } from "@kiyasov/elysia-nest";
+import { Req, Res, Ctx, Headers, Ip, Session } from "nestelia";
 ```
 
 ---
@@ -193,7 +193,7 @@ import { Req, Res, Ctx, Headers, Ip, Session } from "@kiyasov/elysia-nest";
 ## Dependency Injection
 
 ```typescript
-import { Injectable, Inject } from "@kiyasov/elysia-nest";
+import { Injectable, Inject } from "nestelia";
 
 // Singleton (default)
 @Injectable()
@@ -225,7 +225,7 @@ export class AppService {
 ## Guards
 
 ```typescript
-import { Injectable, CanActivate, ExecutionContext, UseGuards } from "@kiyasov/elysia-nest";
+import { Injectable, CanActivate, ExecutionContext, UseGuards } from "nestelia";
 
 @Injectable()
 export class AuthGuard implements CanActivate {
@@ -245,7 +245,7 @@ export class ProtectedController {}
 ## Interceptors
 
 ```typescript
-import { Injectable, NestInterceptor, ExecutionContext, CallHandler, UseInterceptors } from "@kiyasov/elysia-nest";
+import { Injectable, NestInterceptor, ExecutionContext, CallHandler, UseInterceptors } from "nestelia";
 
 @Injectable()
 export class LoggingInterceptor implements NestInterceptor {
@@ -267,7 +267,7 @@ export class AppController {}
 ## Exception Filters
 
 ```typescript
-import { Catch, ExceptionFilter, HttpException } from "@kiyasov/elysia-nest";
+import { Catch, ExceptionFilter, HttpException } from "nestelia";
 
 @Catch(HttpException)
 export class HttpExceptionFilter implements ExceptionFilter {
@@ -284,7 +284,7 @@ Built-in exceptions: `BadRequestException`, `UnauthorizedException`, `ForbiddenE
 ## Lifecycle Hooks
 
 ```typescript
-import { Injectable, OnModuleInit, OnApplicationBootstrap, OnModuleDestroy } from "@kiyasov/elysia-nest";
+import { Injectable, OnModuleInit, OnApplicationBootstrap, OnModuleDestroy } from "nestelia";
 
 @Injectable()
 export class AppService implements OnModuleInit, OnApplicationBootstrap, OnModuleDestroy {
@@ -299,7 +299,7 @@ export class AppService implements OnModuleInit, OnApplicationBootstrap, OnModul
 ## Middleware
 
 ```typescript
-import { Injectable, ElysiaMiddleware, UseMiddleware } from "@kiyasov/elysia-nest";
+import { Injectable, ElysiaMiddleware, UseMiddleware } from "nestelia";
 
 @Injectable()
 export class LoggerMiddleware implements ElysiaMiddleware {
@@ -320,22 +320,22 @@ export class AppController {}
 
 ```typescript
 // Scheduler (cron jobs)
-import { Cron, Interval } from "@kiyasov/elysia-nest/scheduler";
+import { Cron, Interval } from "nestelia/scheduler";
 
 // Microservices
-import { MicroservicesModule } from "@kiyasov/elysia-nest/microservices";
+import { MicroservicesModule } from "nestelia/microservices";
 
 // Apollo GraphQL
-import { ApolloModule } from "@kiyasov/elysia-nest/apollo";
+import { ApolloModule } from "nestelia/apollo";
 
 // Passport authentication
-import { PassportModule } from "@kiyasov/elysia-nest/passport";
+import { PassportModule } from "nestelia/passport";
 
 // Response caching
-import { CacheModule, CacheKey } from "@kiyasov/elysia-nest/cache";
+import { CacheModule, CacheKey } from "nestelia/cache";
 
 // Test utilities
-import { Test } from "@kiyasov/elysia-nest/testing";
+import { Test } from "nestelia/testing";
 ```
 
 ---
@@ -343,7 +343,7 @@ import { Test } from "@kiyasov/elysia-nest/testing";
 ## Configurable Modules (forRoot/forRootAsync)
 
 ```typescript
-import { ConfigurableModuleBuilder } from "@kiyasov/elysia-nest";
+import { ConfigurableModuleBuilder } from "nestelia";
 
 export interface DatabaseOptions {
   url: string;
@@ -374,7 +374,7 @@ export class AppModule {}
 ## Testing
 
 ```typescript
-import { Test } from "@kiyasov/elysia-nest/testing";
+import { Test } from "nestelia/testing";
 import { UsersService } from "./users.service";
 import { UsersController } from "./users.controller";
 
@@ -395,4 +395,4 @@ const service = module.get(UsersService);
 3. Declare all controllers and providers in a `@Module()`.
 4. Use `crypto.randomUUID()` for ID generation — never `Math.random()`.
 5. `@Params` (from param.decorators) is for class-transformer/class-validator DTOs. `@Param` (from http.decorators) is for TypeBox schemas.
-6. All imports come from `@kiyasov/elysia-nest` (core) or subpath exports like `@kiyasov/elysia-nest/cache`.
+6. All imports come from `nestelia` (core) or subpath exports like `nestelia/cache`.

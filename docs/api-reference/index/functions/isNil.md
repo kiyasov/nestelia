@@ -4,7 +4,7 @@
 function isNil(value): value is null | undefined;
 ```
 
-Defined in: [packages/core/src/utils/shared.utils.ts:4](https://github.com/kiyasov/elysia-nest/blob/main/packages/core/src/utils/shared.utils.ts#L4)
+Defined in: [packages/core/src/utils/shared.utils.ts:4](https://github.com/kiyasov/nestelia/blob/main/packages/core/src/utils/shared.utils.ts#L4)
 
 Check if value is nil (null or undefined)
 

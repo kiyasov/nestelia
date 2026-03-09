@@ -1,13 +1,13 @@
 import { Observable, of } from "rxjs";
 import { catchError, tap } from "rxjs/operators";
 
-import { HttpAdapterHost, Reflector } from "@kiyasov/elysia-nest";
-import { StreamableFile } from "@kiyasov/elysia-nest";
-import { Inject, Injectable, Optional } from "@kiyasov/elysia-nest";
-import { CallHandler, NestInterceptor } from "@kiyasov/elysia-nest";
-import { ExecutionContext } from "@kiyasov/elysia-nest";
-import { Logger } from "@kiyasov/elysia-nest";
-import { isFunction, isNil } from "@kiyasov/elysia-nest";
+import { HttpAdapterHost, Reflector } from "nestelia";
+import { StreamableFile } from "nestelia";
+import { Inject, Injectable, Optional } from "nestelia";
+import { CallHandler, NestInterceptor } from "nestelia";
+import { ExecutionContext } from "nestelia";
+import { Logger } from "nestelia";
+import { isFunction, isNil } from "nestelia";
 import {
   CACHE_KEY_METADATA,
   CACHE_MANAGER,

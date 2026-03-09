@@ -1,7 +1,7 @@
 import type {
   ProviderToken,
   Type,
-} from "@kiyasov/elysia-nest";
+} from "nestelia";
 
 /**
  * Metadata for provider overrides in testing module

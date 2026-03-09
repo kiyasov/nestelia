@@ -4,14 +4,14 @@ icon: boxes
 description: Organize your application into cohesive blocks
 ---
 
-Modules are the primary way to organize an @kiyasov/elysia-nest application. Each module encapsulates a set of controllers, providers, and imports.
+Modules are the primary way to organize an nestelia application. Each module encapsulates a set of controllers, providers, and imports.
 
 ## Defining a Module
 
 Use the `@Module()` decorator to declare a module:
 
 ```typescript
-import { Module } from "@kiyasov/elysia-nest";
+import { Module } from "nestelia";
 
 @Module({
   controllers: [UserController],
@@ -85,7 +85,7 @@ class ApiModule {}
 Mark a module as global so its providers are available everywhere without importing:
 
 ```typescript
-import { Global, Module } from "@kiyasov/elysia-nest";
+import { Global, Module } from "nestelia";
 
 @Global()
 @Module({

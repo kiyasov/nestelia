@@ -1,4 +1,4 @@
-import { Logger } from "@kiyasov/elysia-nest";
+import { Logger } from "nestelia";
 
 /**
  * Logger instance for the Apollo package.

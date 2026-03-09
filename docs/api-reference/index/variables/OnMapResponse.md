@@ -4,7 +4,7 @@
 const OnMapResponse: (options?) => MethodDecorator;
 ```
 
-Defined in: [packages/core/src/decorators/lifecycle.decorators.ts:172](https://github.com/kiyasov/elysia-nest/blob/main/packages/core/src/decorators/lifecycle.decorators.ts#L172)
+Defined in: [packages/core/src/decorators/lifecycle.decorators.ts:172](https://github.com/kiyasov/nestelia/blob/main/packages/core/src/decorators/lifecycle.decorators.ts#L172)
 
 Hook called to map response
 

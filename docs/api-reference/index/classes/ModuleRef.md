@@ -1,6 +1,6 @@
 # Class: ModuleRef
 
-Defined in: [packages/core/src/di/module-ref.ts:36](https://github.com/kiyasov/elysia-nest/blob/main/packages/core/src/di/module-ref.ts#L36)
+Defined in: [packages/core/src/di/module-ref.ts:36](https://github.com/kiyasov/nestelia/blob/main/packages/core/src/di/module-ref.ts#L36)
 
 ModuleRef provides a way to access providers within a module.
 It is automatically injected by the framework and allows retrieving
@@ -30,7 +30,7 @@ class MyService {
 get moduleMetatype(): ProviderToken;
 ```
 
-Defined in: [packages/core/src/di/module-ref.ts:128](https://github.com/kiyasov/elysia-nest/blob/main/packages/core/src/di/module-ref.ts#L128)
+Defined in: [packages/core/src/di/module-ref.ts:128](https://github.com/kiyasov/nestelia/blob/main/packages/core/src/di/module-ref.ts#L128)
 
 Get the module metatype (class)
 
@@ -48,7 +48,7 @@ Get the module metatype (class)
 get moduleToken(): string;
 ```
 
-Defined in: [packages/core/src/di/module-ref.ts:121](https://github.com/kiyasov/elysia-nest/blob/main/packages/core/src/di/module-ref.ts#L121)
+Defined in: [packages/core/src/di/module-ref.ts:121](https://github.com/kiyasov/nestelia/blob/main/packages/core/src/di/module-ref.ts#L121)
 
 Get the module token/name
 
@@ -64,7 +64,7 @@ Get the module token/name
 new ModuleRef(container, moduleRef): ModuleRef;
 ```
 
-Defined in: [packages/core/src/di/module-ref.ts:40](https://github.com/kiyasov/elysia-nest/blob/main/packages/core/src/di/module-ref.ts#L40)
+Defined in: [packages/core/src/di/module-ref.ts:40](https://github.com/kiyasov/nestelia/blob/main/packages/core/src/di/module-ref.ts#L40)
 
 #### Parameters
 
@@ -85,7 +85,7 @@ Defined in: [packages/core/src/di/module-ref.ts:40](https://github.com/kiyasov/e
 get<T>(token, options?): T;
 ```
 
-Defined in: [packages/core/src/di/module-ref.ts:63](https://github.com/kiyasov/elysia-nest/blob/main/packages/core/src/di/module-ref.ts#L63)
+Defined in: [packages/core/src/di/module-ref.ts:63](https://github.com/kiyasov/nestelia/blob/main/packages/core/src/di/module-ref.ts#L63)
 
 Get a provider instance from the module.
 Returns only already resolved instances (synchronous).

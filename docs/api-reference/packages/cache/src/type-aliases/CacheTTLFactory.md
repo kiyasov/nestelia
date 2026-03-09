@@ -4,7 +4,7 @@
 type CacheTTLFactory = (ctx) => Promise<number> | number;
 ```
 
-Defined in: [packages/cache/src/decorators/cache-ttl.decorator.ts:25](https://github.com/kiyasov/elysia-nest/blob/main/packages/cache/src/decorators/cache-ttl.decorator.ts#L25)
+Defined in: [packages/cache/src/decorators/cache-ttl.decorator.ts:25](https://github.com/kiyasov/nestelia/blob/main/packages/cache/src/decorators/cache-ttl.decorator.ts#L25)
 
 Factory function type for generating TTL (time-to-live) values dynamically.
 

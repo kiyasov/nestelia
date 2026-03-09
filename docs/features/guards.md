@@ -19,7 +19,7 @@ If `canActivate` returns `false`, the request is rejected with **403 Forbidden**
 ## Creating a Guard
 
 ```typescript
-import { Injectable, CanActivate, ExecutionContext } from "@kiyasov/elysia-nest";
+import { Injectable, CanActivate, ExecutionContext } from "nestelia";
 
 @Injectable()
 class AuthGuard implements CanActivate {
@@ -51,7 +51,7 @@ class RolesGuard implements CanActivate {
 Apply guards at the **method level** (single route) or **class level** (all routes in a controller). When both are present, class-level guards run first.
 
 ```typescript
-import { Controller, Get, UseGuards } from "@kiyasov/elysia-nest";
+import { Controller, Get, UseGuards } from "nestelia";
 
 @Controller("/admin")
 @UseGuards(AuthGuard)       // runs for every route in this controller

@@ -9,7 +9,7 @@
 | [Float](classes/Float.md) | Marker class for GraphQL Float scalar. Use with @Field(() => Float). |
 | [ForbiddenError](classes/ForbiddenError.md) | Error thrown when the user is not authorized to access a resource. |
 | [GraphQLList](classes/GraphQLList.md) | List Type Wrapper |
-| [GraphQLModule](classes/GraphQLModule.md) | GraphQL module for @kiyasov/elysia-nest backed by Apollo Server. Provides static and async configuration methods. |
+| [GraphQLModule](classes/GraphQLModule.md) | GraphQL module for nestelia backed by Apollo Server. Provides static and async configuration methods. |
 | [GraphQLNonNull](classes/GraphQLNonNull.md) | Non-Null Type Wrapper |
 | [GraphQLObjectType](classes/GraphQLObjectType.md) | Object Type Definition |
 | [GraphQLSchema](classes/GraphQLSchema.md) | Schema Definition |

@@ -1,6 +1,6 @@
 # Class: AmqpConnection
 
-Defined in: [packages/rabbitmq/src/connection/amqp-connection.ts:42](https://github.com/kiyasov/elysia-nest/blob/main/packages/rabbitmq/src/connection/amqp-connection.ts#L42)
+Defined in: [packages/rabbitmq/src/connection/amqp-connection.ts:42](https://github.com/kiyasov/nestelia/blob/main/packages/rabbitmq/src/connection/amqp-connection.ts#L42)
 
 RabbitMQ connection class for publishing and consuming messages
 This is the main class for RabbitMQ operations
@@ -13,7 +13,7 @@ This is the main class for RabbitMQ operations
 new AmqpConnection(config, logger): AmqpConnection;
 ```
 
-Defined in: [packages/rabbitmq/src/connection/amqp-connection.ts:61](https://github.com/kiyasov/elysia-nest/blob/main/packages/rabbitmq/src/connection/amqp-connection.ts#L61)
+Defined in: [packages/rabbitmq/src/connection/amqp-connection.ts:61](https://github.com/kiyasov/nestelia/blob/main/packages/rabbitmq/src/connection/amqp-connection.ts#L61)
 
 #### Parameters
 
@@ -34,7 +34,7 @@ Defined in: [packages/rabbitmq/src/connection/amqp-connection.ts:61](https://git
 assertExchange(config): Promise<void>;
 ```
 
-Defined in: [packages/rabbitmq/src/connection/amqp-connection.ts:309](https://github.com/kiyasov/elysia-nest/blob/main/packages/rabbitmq/src/connection/amqp-connection.ts#L309)
+Defined in: [packages/rabbitmq/src/connection/amqp-connection.ts:309](https://github.com/kiyasov/nestelia/blob/main/packages/rabbitmq/src/connection/amqp-connection.ts#L309)
 
 Assert an exchange
 
@@ -56,7 +56,7 @@ Assert an exchange
 assertQueue(config): Promise<void>;
 ```
 
-Defined in: [packages/rabbitmq/src/connection/amqp-connection.ts:330](https://github.com/kiyasov/elysia-nest/blob/main/packages/rabbitmq/src/connection/amqp-connection.ts#L330)
+Defined in: [packages/rabbitmq/src/connection/amqp-connection.ts:330](https://github.com/kiyasov/nestelia/blob/main/packages/rabbitmq/src/connection/amqp-connection.ts#L330)
 
 Assert a queue
 
@@ -78,7 +78,7 @@ Assert a queue
 connect(): Promise<void>;
 ```
 
-Defined in: [packages/rabbitmq/src/connection/amqp-connection.ts:102](https://github.com/kiyasov/elysia-nest/blob/main/packages/rabbitmq/src/connection/amqp-connection.ts#L102)
+Defined in: [packages/rabbitmq/src/connection/amqp-connection.ts:102](https://github.com/kiyasov/nestelia/blob/main/packages/rabbitmq/src/connection/amqp-connection.ts#L102)
 
 Connect to RabbitMQ
 
@@ -94,7 +94,7 @@ Connect to RabbitMQ
 createSubscriber(handler, options?): Promise<void>;
 ```
 
-Defined in: [packages/rabbitmq/src/connection/amqp-connection.ts:785](https://github.com/kiyasov/elysia-nest/blob/main/packages/rabbitmq/src/connection/amqp-connection.ts#L785)
+Defined in: [packages/rabbitmq/src/connection/amqp-connection.ts:785](https://github.com/kiyasov/nestelia/blob/main/packages/rabbitmq/src/connection/amqp-connection.ts#L785)
 
 #### Parameters
 
@@ -120,7 +120,7 @@ Use registerHandlers instead
 disconnect(): Promise<void>;
 ```
 
-Defined in: [packages/rabbitmq/src/connection/amqp-connection.ts:246](https://github.com/kiyasov/elysia-nest/blob/main/packages/rabbitmq/src/connection/amqp-connection.ts#L246)
+Defined in: [packages/rabbitmq/src/connection/amqp-connection.ts:246](https://github.com/kiyasov/nestelia/blob/main/packages/rabbitmq/src/connection/amqp-connection.ts#L246)
 
 Disconnect from RabbitMQ
 
@@ -136,7 +136,7 @@ Disconnect from RabbitMQ
 getChannel(): Channel | null;
 ```
 
-Defined in: [packages/rabbitmq/src/connection/amqp-connection.ts:536](https://github.com/kiyasov/elysia-nest/blob/main/packages/rabbitmq/src/connection/amqp-connection.ts#L536)
+Defined in: [packages/rabbitmq/src/connection/amqp-connection.ts:536](https://github.com/kiyasov/nestelia/blob/main/packages/rabbitmq/src/connection/amqp-connection.ts#L536)
 
 Get the consumer channel (for consuming messages)
 
@@ -152,7 +152,7 @@ Get the consumer channel (for consuming messages)
 getConnection(): ChannelModel | null;
 ```
 
-Defined in: [packages/rabbitmq/src/connection/amqp-connection.ts:550](https://github.com/kiyasov/elysia-nest/blob/main/packages/rabbitmq/src/connection/amqp-connection.ts#L550)
+Defined in: [packages/rabbitmq/src/connection/amqp-connection.ts:550](https://github.com/kiyasov/nestelia/blob/main/packages/rabbitmq/src/connection/amqp-connection.ts#L550)
 
 Get the underlying connection (for advanced usage)
 
@@ -168,7 +168,7 @@ Get the underlying connection (for advanced usage)
 getPublisherChannel(): Channel | null;
 ```
 
-Defined in: [packages/rabbitmq/src/connection/amqp-connection.ts:543](https://github.com/kiyasov/elysia-nest/blob/main/packages/rabbitmq/src/connection/amqp-connection.ts#L543)
+Defined in: [packages/rabbitmq/src/connection/amqp-connection.ts:543](https://github.com/kiyasov/nestelia/blob/main/packages/rabbitmq/src/connection/amqp-connection.ts#L543)
 
 Get the publisher channel (for publishing messages)
 
@@ -184,7 +184,7 @@ Get the publisher channel (for publishing messages)
 isConnectionReady(): boolean;
 ```
 
-Defined in: [packages/rabbitmq/src/connection/amqp-connection.ts:302](https://github.com/kiyasov/elysia-nest/blob/main/packages/rabbitmq/src/connection/amqp-connection.ts#L302)
+Defined in: [packages/rabbitmq/src/connection/amqp-connection.ts:302](https://github.com/kiyasov/nestelia/blob/main/packages/rabbitmq/src/connection/amqp-connection.ts#L302)
 
 Check if connected to RabbitMQ
 
@@ -204,7 +204,7 @@ publish<T>(
 options?): Promise<boolean>;
 ```
 
-Defined in: [packages/rabbitmq/src/connection/amqp-connection.ts:370](https://github.com/kiyasov/elysia-nest/blob/main/packages/rabbitmq/src/connection/amqp-connection.ts#L370)
+Defined in: [packages/rabbitmq/src/connection/amqp-connection.ts:370](https://github.com/kiyasov/nestelia/blob/main/packages/rabbitmq/src/connection/amqp-connection.ts#L370)
 
 Publish a message to an exchange
 
@@ -235,7 +235,7 @@ Publish a message to an exchange
 registerHandlers(handler, options?): Promise<void>;
 ```
 
-Defined in: [packages/rabbitmq/src/connection/amqp-connection.ts:710](https://github.com/kiyasov/elysia-nest/blob/main/packages/rabbitmq/src/connection/amqp-connection.ts#L710)
+Defined in: [packages/rabbitmq/src/connection/amqp-connection.ts:710](https://github.com/kiyasov/nestelia/blob/main/packages/rabbitmq/src/connection/amqp-connection.ts#L710)
 
 Register RabbitMQ handlers from a service class
 Scans the class for
@@ -274,7 +274,7 @@ await amqpConnection.registerHandlers(UserBonusesService);
 request<T, R>(options): Promise<R>;
 ```
 
-Defined in: [packages/rabbitmq/src/connection/amqp-connection.ts:572](https://github.com/kiyasov/elysia-nest/blob/main/packages/rabbitmq/src/connection/amqp-connection.ts#L572)
+Defined in: [packages/rabbitmq/src/connection/amqp-connection.ts:572](https://github.com/kiyasov/nestelia/blob/main/packages/rabbitmq/src/connection/amqp-connection.ts#L572)
 
 Make an RPC request and wait for a response
 This method creates a temporary reply queue, sends the request, and waits for a response
@@ -321,7 +321,7 @@ sendToQueue<T>(
 options?): Promise<boolean>;
 ```
 
-Defined in: [packages/rabbitmq/src/connection/amqp-connection.ts:404](https://github.com/kiyasov/elysia-nest/blob/main/packages/rabbitmq/src/connection/amqp-connection.ts#L404)
+Defined in: [packages/rabbitmq/src/connection/amqp-connection.ts:404](https://github.com/kiyasov/nestelia/blob/main/packages/rabbitmq/src/connection/amqp-connection.ts#L404)
 
 Send a message directly to a queue
 
@@ -354,7 +354,7 @@ subscribe<T>(
 options?): Promise<string>;
 ```
 
-Defined in: [packages/rabbitmq/src/connection/amqp-connection.ts:435](https://github.com/kiyasov/elysia-nest/blob/main/packages/rabbitmq/src/connection/amqp-connection.ts#L435)
+Defined in: [packages/rabbitmq/src/connection/amqp-connection.ts:435](https://github.com/kiyasov/nestelia/blob/main/packages/rabbitmq/src/connection/amqp-connection.ts#L435)
 
 Subscribe to messages from a queue
 
@@ -386,7 +386,7 @@ Subscribe to messages from a queue
 unsubscribe(consumerTag): Promise<void>;
 ```
 
-Defined in: [packages/rabbitmq/src/connection/amqp-connection.ts:474](https://github.com/kiyasov/elysia-nest/blob/main/packages/rabbitmq/src/connection/amqp-connection.ts#L474)
+Defined in: [packages/rabbitmq/src/connection/amqp-connection.ts:474](https://github.com/kiyasov/nestelia/blob/main/packages/rabbitmq/src/connection/amqp-connection.ts#L474)
 
 Cancel a consumer subscription
 

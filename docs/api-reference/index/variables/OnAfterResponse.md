@@ -4,7 +4,7 @@
 const OnAfterResponse: (options?) => MethodDecorator;
 ```
 
-Defined in: [packages/core/src/decorators/lifecycle.decorators.ts:189](https://github.com/kiyasov/elysia-nest/blob/main/packages/core/src/decorators/lifecycle.decorators.ts#L189)
+Defined in: [packages/core/src/decorators/lifecycle.decorators.ts:189](https://github.com/kiyasov/nestelia/blob/main/packages/core/src/decorators/lifecycle.decorators.ts#L189)
 
 Hook called after response is sent
 

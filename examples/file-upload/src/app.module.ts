@@ -1,6 +1,6 @@
 import "reflect-metadata";
 
-import { Module } from "@kiyasov/elysia-nest";
+import { Module } from "nestelia";
 
 import { UploadController } from "./upload.controller";
 import { UploadService } from "./upload.service";

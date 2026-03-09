@@ -6,7 +6,7 @@ type CacheModuleOptions<T> = CacheOptions<T> & {
 };
 ```
 
-Defined in: [packages/cache/src/interfaces/cache-module.interface.ts:32](https://github.com/kiyasov/elysia-nest/blob/main/packages/cache/src/interfaces/cache-module.interface.ts#L32)
+Defined in: [packages/cache/src/interfaces/cache-module.interface.ts:32](https://github.com/kiyasov/nestelia/blob/main/packages/cache/src/interfaces/cache-module.interface.ts#L32)
 
 Options for configuring the Cache module.
 
@@ -14,7 +14,7 @@ Options for configuring the Cache module.
 
 | Name | Type | Description | Defined in |
 | ------ | ------ | ------ | ------ |
-| `isGlobal?` | `boolean` | If `true`, register `CacheModule` as a global module. **Default** `false` | [packages/cache/src/interfaces/cache-module.interface.ts:40](https://github.com/kiyasov/elysia-nest/blob/main/packages/cache/src/interfaces/cache-module.interface.ts#L40) |
+| `isGlobal?` | `boolean` | If `true`, register `CacheModule` as a global module. **Default** `false` | [packages/cache/src/interfaces/cache-module.interface.ts:40](https://github.com/kiyasov/nestelia/blob/main/packages/cache/src/interfaces/cache-module.interface.ts#L40) |
 
 ## Type Parameters
 

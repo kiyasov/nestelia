@@ -1,7 +1,7 @@
 ---
 title: Installation
 icon: download
-description: Install @kiyasov/elysia-nest and set up your project
+description: Install nestelia and set up your project
 ---
 
 ## Prerequisites
@@ -12,14 +12,14 @@ description: Install @kiyasov/elysia-nest and set up your project
 ## Install
 
 ```bash
-bun add @kiyasov/elysia-nest elysia
+bun add nestelia elysia
 ```
 
-@kiyasov/elysia-nest requires `elysia` ^1.2.0 as a peer dependency.
+nestelia requires `elysia` ^1.2.0 as a peer dependency.
 
 ## TypeScript Configuration
 
-@kiyasov/elysia-nest relies on decorators and metadata reflection. Make sure your `tsconfig.json` includes:
+nestelia relies on decorators and metadata reflection. Make sure your `tsconfig.json` includes:
 
 ```json
 {
@@ -36,7 +36,7 @@ bun add @kiyasov/elysia-nest elysia
 
 ## Optional Peer Dependencies
 
-All subpaths are included in the `@kiyasov/elysia-nest` package. Install only the peer dependencies you need:
+All subpaths are included in the `nestelia` package. Install only the peer dependencies you need:
 
 ```bash
 # Microservices — Redis transport
@@ -66,7 +66,7 @@ bun add ioredis
 Create a minimal app to verify everything works:
 
 ```typescript
-import { createElysiaApplication, Controller, Get, Module } from "@kiyasov/elysia-nest";
+import { createElysiaApplication, Controller, Get, Module } from "nestelia";
 
 @Controller("/")
 class AppController {

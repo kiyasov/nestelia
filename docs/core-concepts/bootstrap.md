@@ -1,7 +1,7 @@
 ---
 title: Bootstrap
 icon: power
-description: Initialize and start your @kiyasov/elysia-nest application
+description: Initialize and start your nestelia application
 ---
 
 The `createElysiaApplication` function initializes the root module and returns an Elysia instance ready to listen for requests.
@@ -9,7 +9,7 @@ The `createElysiaApplication` function initializes the root module and returns a
 ## Basic Usage
 
 ```typescript
-import { createElysiaApplication } from "@kiyasov/elysia-nest";
+import { createElysiaApplication } from "nestelia";
 
 const app = await createElysiaApplication(AppModule);
 app.listen(3000);
@@ -29,8 +29,8 @@ app.listen(3000);
 When using the microservices package, `createElysiaApplication` returns an `ElysiaNestApplication` that supports hybrid HTTP + microservice mode:
 
 ```typescript
-import { createElysiaApplication } from "@kiyasov/elysia-nest";
-import { Transport } from "@kiyasov/elysia-nest/microservices";
+import { createElysiaApplication } from "nestelia";
+import { Transport } from "nestelia/microservices";
 
 const app = await createElysiaApplication(AppModule);
 
@@ -45,7 +45,7 @@ app.listen(3000);
 
 ## Graceful Shutdown
 
-@kiyasov/elysia-nest supports shutdown lifecycle hooks. When the process receives a termination signal:
+nestelia supports shutdown lifecycle hooks. When the process receives a termination signal:
 
 1. `BeforeApplicationShutdown` hooks run first
 2. `OnModuleDestroy` hooks run for cleanup

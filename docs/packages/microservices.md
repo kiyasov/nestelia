@@ -16,8 +16,8 @@ bun add amqplib   # RabbitMQ transport
 ## Setup
 
 ```typescript
-import { createElysiaApplication } from "@kiyasov/elysia-nest";
-import { Transport } from "@kiyasov/elysia-nest/microservices";
+import { createElysiaApplication } from "nestelia";
+import { Transport } from "nestelia/microservices";
 
 const app = await createElysiaApplication(AppModule);
 
@@ -51,8 +51,8 @@ enum Transport {
 Use `@MessagePattern()` for request/response communication:
 
 ```typescript
-import { Controller } from "@kiyasov/elysia-nest";
-import { MessagePattern, Payload } from "@kiyasov/elysia-nest/microservices";
+import { Controller } from "nestelia";
+import { MessagePattern, Payload } from "nestelia/microservices";
 
 @Controller()
 class MathController {
@@ -68,7 +68,7 @@ class MathController {
 Use `@EventPattern()` for fire-and-forget events:
 
 ```typescript
-import { EventPattern, Payload } from "@kiyasov/elysia-nest/microservices";
+import { EventPattern, Payload } from "nestelia/microservices";
 
 @Controller()
 class NotificationController {
@@ -84,8 +84,8 @@ class NotificationController {
 Send messages to other microservices:
 
 ```typescript
-import { Injectable } from "@kiyasov/elysia-nest";
-import { ClientFactory, Transport } from "@kiyasov/elysia-nest/microservices";
+import { Injectable } from "nestelia";
+import { ClientFactory, Transport } from "nestelia/microservices";
 
 @Injectable()
 class OrderService {

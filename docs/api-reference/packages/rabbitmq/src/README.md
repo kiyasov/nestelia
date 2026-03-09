@@ -6,7 +6,7 @@
 | ------ | ------ |
 | [AmqpConnection](classes/AmqpConnection.md) | RabbitMQ connection class for publishing and consuming messages This is the main class for RabbitMQ operations |
 | [Nack](classes/Nack.md) | Nack (Negative Acknowledgment) class for RabbitMQ message handling Used in |
-| [RabbitMQModule](classes/RabbitMQModule.md) | RabbitMQ module for @@kiyasov/elysia-nest Provides RabbitMQ integration with decorators for messaging |
+| [RabbitMQModule](classes/RabbitMQModule.md) | RabbitMQ module for |
 
 ## Functions
 
@@ -22,7 +22,7 @@
 | [RabbitErrorHandler](functions/RabbitErrorHandler.md) | Decorator for consumer error handlers |
 | [RabbitHandler](functions/RabbitHandler.md) | Decorator to mark a class as a RabbitMQ handler Scans the class for |
 | [RabbitInterceptor](functions/RabbitInterceptor.md) | Decorator for message interceptors/transformers |
-| [RabbitPayload](functions/RabbitPayload.md) | Parameter decorator to extract the message payload In @@kiyasov/elysia-nest/rabbitmq this extracts the actual message content |
+| [RabbitPayload](functions/RabbitPayload.md) | Parameter decorator to extract the message payload In @nestelia/rabbitmq this extracts the actual message content |
 | [RabbitPriority](functions/RabbitPriority.md) | Decorator to configure message priority |
 | [RabbitQueueArguments](functions/RabbitQueueArguments.md) | Decorator to configure queue arguments |
 | [RabbitRetry](functions/RabbitRetry.md) | Decorator to configure retry behavior for a specific handler |

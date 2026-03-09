@@ -1,6 +1,6 @@
 # Class: SchedulerRegistry
 
-Defined in: [packages/scheduler/src/services/scheduler.service.ts:213](https://github.com/kiyasov/elysia-nest/blob/main/packages/scheduler/src/services/scheduler.service.ts#L213)
+Defined in: [packages/scheduler/src/services/scheduler.service.ts:213](https://github.com/kiyasov/nestelia/blob/main/packages/scheduler/src/services/scheduler.service.ts#L213)
 
 Registry for managing multiple schedulers
 
@@ -24,7 +24,7 @@ new SchedulerRegistry(): SchedulerRegistry;
 addScheduler(name, scheduler): void;
 ```
 
-Defined in: [packages/scheduler/src/services/scheduler.service.ts:219](https://github.com/kiyasov/elysia-nest/blob/main/packages/scheduler/src/services/scheduler.service.ts#L219)
+Defined in: [packages/scheduler/src/services/scheduler.service.ts:219](https://github.com/kiyasov/nestelia/blob/main/packages/scheduler/src/services/scheduler.service.ts#L219)
 
 Add a scheduler to the registry
 
@@ -47,7 +47,7 @@ Add a scheduler to the registry
 clear(): void;
 ```
 
-Defined in: [packages/scheduler/src/services/scheduler.service.ts:251](https://github.com/kiyasov/elysia-nest/blob/main/packages/scheduler/src/services/scheduler.service.ts#L251)
+Defined in: [packages/scheduler/src/services/scheduler.service.ts:251](https://github.com/kiyasov/nestelia/blob/main/packages/scheduler/src/services/scheduler.service.ts#L251)
 
 Clear all schedulers
 
@@ -63,7 +63,7 @@ Clear all schedulers
 getScheduler(name): Scheduler | undefined;
 ```
 
-Defined in: [packages/scheduler/src/services/scheduler.service.ts:226](https://github.com/kiyasov/elysia-nest/blob/main/packages/scheduler/src/services/scheduler.service.ts#L226)
+Defined in: [packages/scheduler/src/services/scheduler.service.ts:226](https://github.com/kiyasov/nestelia/blob/main/packages/scheduler/src/services/scheduler.service.ts#L226)
 
 Get a scheduler by name
 
@@ -85,7 +85,7 @@ Get a scheduler by name
 getSchedulerNames(): string[];
 ```
 
-Defined in: [packages/scheduler/src/services/scheduler.service.ts:244](https://github.com/kiyasov/elysia-nest/blob/main/packages/scheduler/src/services/scheduler.service.ts#L244)
+Defined in: [packages/scheduler/src/services/scheduler.service.ts:244](https://github.com/kiyasov/nestelia/blob/main/packages/scheduler/src/services/scheduler.service.ts#L244)
 
 Get all scheduler names
 
@@ -101,7 +101,7 @@ Get all scheduler names
 removeScheduler(name): void;
 ```
 
-Defined in: [packages/scheduler/src/services/scheduler.service.ts:233](https://github.com/kiyasov/elysia-nest/blob/main/packages/scheduler/src/services/scheduler.service.ts#L233)
+Defined in: [packages/scheduler/src/services/scheduler.service.ts:233](https://github.com/kiyasov/nestelia/blob/main/packages/scheduler/src/services/scheduler.service.ts#L233)
 
 Remove a scheduler from the registry
 

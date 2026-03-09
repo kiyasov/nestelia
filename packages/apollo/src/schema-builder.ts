@@ -25,11 +25,11 @@ import {
 import {
   GUARDS_METADATA,
   PARAMS_METADATA,
-} from "@kiyasov/elysia-nest";
-import type { ParamMetadata } from "@kiyasov/elysia-nest";
-import type { Container } from "@kiyasov/elysia-nest";
-import { Reflector } from "@kiyasov/elysia-nest";
-import type { ExecutionContext } from "@kiyasov/elysia-nest";
+} from "nestelia";
+import type { ParamMetadata } from "nestelia";
+import type { Container } from "nestelia";
+import { Reflector } from "nestelia";
+import type { ExecutionContext } from "nestelia";
 import {
   ARGS_METADATA,
   CONTEXT_METADATA,

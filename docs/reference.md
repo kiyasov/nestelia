@@ -1,11 +1,11 @@
 ---
 title: API Reference
-description: Complete reference for all @kiyasov/elysia-nest APIs, decorators, and modules
+description: Complete reference for all nestelia APIs, decorators, and modules
 ---
 
 # API Reference
 
-Complete reference for the `@kiyasov/elysia-nest` package and all its subpath modules.
+Complete reference for the `nestelia` package and all its subpath modules.
 
 ## Core
 
@@ -27,11 +27,11 @@ Complete reference for the `@kiyasov/elysia-nest` package and all its subpath mo
 
 | Package | Description |
 |---------|-------------|
-| [@kiyasov/elysia-nest/scheduler](/packages/scheduler) | `@Cron`, `@Interval`, `@Timeout`, `ScheduleModule` |
-| [@kiyasov/elysia-nest/microservices](/packages/microservices) | `@MessagePattern`, `@EventPattern`, `@Client`, `ClientProxy` |
-| [@kiyasov/elysia-nest/apollo](/packages/apollo) | `@Resolver`, `@Query`, `@Mutation`, `@Subscription`, `@ObjectType`, `@Field` |
-| [@kiyasov/elysia-nest/passport](/packages/passport) | `AuthGuard`, `PassportStrategy` |
-| [@kiyasov/elysia-nest/cache](/packages/cache) | `CacheModule`, `@CacheKey`, `@CacheTTL`, `CacheInterceptor` |
-| [@kiyasov/elysia-nest/rabbitmq](/packages/rabbitmq) | `@RabbitSubscribe`, `@RabbitRPC`, `@RabbitRetry`, `@RabbitDLQ` |
-| [@kiyasov/elysia-nest/graphql-pubsub](/packages/graphql-pubsub) | `RedisPubSub`, `GraphQLPubSubModule`, `@InjectPubSub` |
-| [@kiyasov/elysia-nest/testing](/packages/testing) | `Test`, `TestingModule`, `TestingModuleBuilder` |
+| [nestelia/scheduler](/packages/scheduler) | `@Cron`, `@Interval`, `@Timeout`, `ScheduleModule` |
+| [nestelia/microservices](/packages/microservices) | `@MessagePattern`, `@EventPattern`, `@Client`, `ClientProxy` |
+| [nestelia/apollo](/packages/apollo) | `@Resolver`, `@Query`, `@Mutation`, `@Subscription`, `@ObjectType`, `@Field` |
+| [nestelia/passport](/packages/passport) | `AuthGuard`, `PassportStrategy` |
+| [nestelia/cache](/packages/cache) | `CacheModule`, `@CacheKey`, `@CacheTTL`, `CacheInterceptor` |
+| [nestelia/rabbitmq](/packages/rabbitmq) | `@RabbitSubscribe`, `@RabbitRPC`, `@RabbitRetry`, `@RabbitDLQ` |
+| [nestelia/graphql-pubsub](/packages/graphql-pubsub) | `RedisPubSub`, `GraphQLPubSubModule`, `@InjectPubSub` |
+| [nestelia/testing](/packages/testing) | `Test`, `TestingModule`, `TestingModuleBuilder` |

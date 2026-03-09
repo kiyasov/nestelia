@@ -4,7 +4,7 @@
 function createLoggerOptionsProvider(options): ValueProvider;
 ```
 
-Defined in: [packages/core/src/logger/logger.providers.ts:18](https://github.com/kiyasov/elysia-nest/blob/main/packages/core/src/logger/logger.providers.ts#L18)
+Defined in: [packages/core/src/logger/logger.providers.ts:18](https://github.com/kiyasov/nestelia/blob/main/packages/core/src/logger/logger.providers.ts#L18)
 
 Factory to create logger options provider with custom options
 

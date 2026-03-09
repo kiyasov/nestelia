@@ -4,7 +4,7 @@
 function SetMetadata<K, V>(metadataKey, metadataValue): MethodDecorator & ClassDecorator;
 ```
 
-Defined in: [packages/core/src/decorators/set-metadata.decorator.ts:13](https://github.com/kiyasov/elysia-nest/blob/main/packages/core/src/decorators/set-metadata.decorator.ts#L13)
+Defined in: [packages/core/src/decorators/set-metadata.decorator.ts:13](https://github.com/kiyasov/nestelia/blob/main/packages/core/src/decorators/set-metadata.decorator.ts#L13)
 
 Decorator that assigns metadata to the class using the specified key.
 

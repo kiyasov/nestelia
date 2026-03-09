@@ -4,7 +4,7 @@ icon: refresh-cw
 description: Hook into application and module lifecycle events
 ---
 
-@kiyasov/elysia-nest provides lifecycle hooks that let you run logic at specific points during the application startup and shutdown process.
+nestelia provides lifecycle hooks that let you run logic at specific points during the application startup and shutdown process.
 
 ## Module Lifecycle Hooks
 
@@ -15,7 +15,7 @@ Implement these interfaces on your `@Injectable()` services or controllers:
 Called once the module's providers have been instantiated:
 
 ```typescript
-import { Injectable, OnModuleInit } from "@kiyasov/elysia-nest";
+import { Injectable, OnModuleInit } from "nestelia";
 
 @Injectable()
 class DatabaseService implements OnModuleInit {
@@ -92,7 +92,7 @@ During shutdown:
 
 ## Elysia Lifecycle Decorators
 
-@kiyasov/elysia-nest also exposes Elysia's request lifecycle hooks as method decorators on controllers:
+nestelia also exposes Elysia's request lifecycle hooks as method decorators on controllers:
 
 ```typescript
 import {
@@ -101,7 +101,7 @@ import {
   OnAfterHandle,
   OnAfterResponse,
   OnError,
-} from "@kiyasov/elysia-nest";
+} from "nestelia";
 
 @Controller("/")
 class AppController {
@@ -117,7 +117,7 @@ class AppController {
 
   @OnAfterHandle()
   addHeaders(ctx: any) {
-    ctx.set.headers["x-powered-by"] = "@kiyasov/elysia-nest";
+    ctx.set.headers["x-powered-by"] = "nestelia";
   }
 
   @OnError()

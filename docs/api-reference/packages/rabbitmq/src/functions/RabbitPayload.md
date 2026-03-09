@@ -4,10 +4,10 @@
 function RabbitPayload(): ParameterDecorator;
 ```
 
-Defined in: [packages/rabbitmq/src/decorators/rabbitmq.decorators.ts:326](https://github.com/kiyasov/elysia-nest/blob/main/packages/rabbitmq/src/decorators/rabbitmq.decorators.ts#L326)
+Defined in: [packages/rabbitmq/src/decorators/rabbitmq.decorators.ts:326](https://github.com/kiyasov/nestelia/blob/main/packages/rabbitmq/src/decorators/rabbitmq.decorators.ts#L326)
 
 Parameter decorator to extract the message payload
-In @@kiyasov/elysia-nest/rabbitmq this extracts the actual message content
+In @nestelia/rabbitmq this extracts the actual message content
 
 ## Returns
 

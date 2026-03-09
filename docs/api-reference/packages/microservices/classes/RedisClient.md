@@ -1,6 +1,6 @@
 # Class: RedisClient
 
-Defined in: [packages/microservices/client/redis.client.ts:30](https://github.com/kiyasov/elysia-nest/blob/main/packages/microservices/client/redis.client.ts#L30)
+Defined in: [packages/microservices/client/redis.client.ts:30](https://github.com/kiyasov/nestelia/blob/main/packages/microservices/client/redis.client.ts#L30)
 
 Client proxy that communicates over Redis Pub/Sub.
 
@@ -22,7 +22,7 @@ Requires the optional peer dependency `ioredis`.
 new RedisClient(options): RedisClient;
 ```
 
-Defined in: [packages/microservices/client/redis.client.ts:45](https://github.com/kiyasov/elysia-nest/blob/main/packages/microservices/client/redis.client.ts#L45)
+Defined in: [packages/microservices/client/redis.client.ts:45](https://github.com/kiyasov/nestelia/blob/main/packages/microservices/client/redis.client.ts#L45)
 
 #### Parameters
 
@@ -46,7 +46,7 @@ Defined in: [packages/microservices/client/redis.client.ts:45](https://github.co
 close(): void;
 ```
 
-Defined in: [packages/microservices/client/redis.client.ts:145](https://github.com/kiyasov/elysia-nest/blob/main/packages/microservices/client/redis.client.ts#L145)
+Defined in: [packages/microservices/client/redis.client.ts:145](https://github.com/kiyasov/nestelia/blob/main/packages/microservices/client/redis.client.ts#L145)
 
 Disconnects both Redis clients and clears pending state.
 
@@ -66,7 +66,7 @@ Disconnects both Redis clients and clears pending state.
 connect(): Promise<void>;
 ```
 
-Defined in: [packages/microservices/client/redis.client.ts:56](https://github.com/kiyasov/elysia-nest/blob/main/packages/microservices/client/redis.client.ts#L56)
+Defined in: [packages/microservices/client/redis.client.ts:56](https://github.com/kiyasov/nestelia/blob/main/packages/microservices/client/redis.client.ts#L56)
 
 Opens publisher and subscriber connections.
 
@@ -86,7 +86,7 @@ Opens publisher and subscriber connections.
 emit<T>(pattern, data): void;
 ```
 
-Defined in: [packages/microservices/client/redis.client.ts:137](https://github.com/kiyasov/elysia-nest/blob/main/packages/microservices/client/redis.client.ts#L137)
+Defined in: [packages/microservices/client/redis.client.ts:137](https://github.com/kiyasov/nestelia/blob/main/packages/microservices/client/redis.client.ts#L137)
 
 Publishes a fire-and-forget event to `pattern`.
 
@@ -119,7 +119,7 @@ Publishes a fire-and-forget event to `pattern`.
 send<T, R>(pattern, data): Observable<R>;
 ```
 
-Defined in: [packages/microservices/client/redis.client.ts:106](https://github.com/kiyasov/elysia-nest/blob/main/packages/microservices/client/redis.client.ts#L106)
+Defined in: [packages/microservices/client/redis.client.ts:106](https://github.com/kiyasov/nestelia/blob/main/packages/microservices/client/redis.client.ts#L106)
 
 Sends a request to `pattern` and returns an Observable that emits the
 response then completes. Times out after **5 seconds**.

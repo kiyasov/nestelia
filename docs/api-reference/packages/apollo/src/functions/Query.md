@@ -4,7 +4,7 @@
 function Query(typeFn?, options?): MethodDecorator;
 ```
 
-Defined in: [packages/apollo/src/decorators/query.decorator.ts:61](https://github.com/kiyasov/elysia-nest/blob/main/packages/apollo/src/decorators/query.decorator.ts#L61)
+Defined in: [packages/apollo/src/decorators/query.decorator.ts:61](https://github.com/kiyasov/nestelia/blob/main/packages/apollo/src/decorators/query.decorator.ts#L61)
 
 Decorator for a GraphQL Query.
 

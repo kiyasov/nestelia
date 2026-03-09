@@ -1,10 +1,10 @@
-import { Controller, Get } from "@kiyasov/elysia-nest";
+import { Controller, Get } from "nestelia";
 import {
   CACHE_MANAGER,
   CacheKey,
   CacheTTL,
 } from "../../../packages/cache/src";
-import { Inject } from "@kiyasov/elysia-nest";
+import { Inject } from "nestelia";
 
 import { ProductsService } from "./products.service";
 

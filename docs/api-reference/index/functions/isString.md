@@ -4,7 +4,7 @@
 function isString(value): value is string;
 ```
 
-Defined in: [packages/core/src/utils/shared.utils.ts:18](https://github.com/kiyasov/elysia-nest/blob/main/packages/core/src/utils/shared.utils.ts#L18)
+Defined in: [packages/core/src/utils/shared.utils.ts:18](https://github.com/kiyasov/nestelia/blob/main/packages/core/src/utils/shared.utils.ts#L18)
 
 Check if value is a string
 

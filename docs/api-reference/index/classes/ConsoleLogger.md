@@ -1,6 +1,6 @@
 # Class: ConsoleLogger
 
-Defined in: [packages/core/src/logger/console-logger.service.ts:15](https://github.com/kiyasov/elysia-nest/blob/main/packages/core/src/logger/console-logger.service.ts#L15)
+Defined in: [packages/core/src/logger/console-logger.service.ts:15](https://github.com/kiyasov/nestelia/blob/main/packages/core/src/logger/console-logger.service.ts#L15)
 
 ## Implements
 
@@ -14,7 +14,7 @@ Defined in: [packages/core/src/logger/console-logger.service.ts:15](https://gith
 new ConsoleLogger(): ConsoleLogger;
 ```
 
-Defined in: [packages/core/src/logger/console-logger.service.ts:19](https://github.com/kiyasov/elysia-nest/blob/main/packages/core/src/logger/console-logger.service.ts#L19)
+Defined in: [packages/core/src/logger/console-logger.service.ts:19](https://github.com/kiyasov/nestelia/blob/main/packages/core/src/logger/console-logger.service.ts#L19)
 
 #### Returns
 
@@ -26,7 +26,7 @@ Defined in: [packages/core/src/logger/console-logger.service.ts:19](https://gith
 new ConsoleLogger(context): ConsoleLogger;
 ```
 
-Defined in: [packages/core/src/logger/console-logger.service.ts:20](https://github.com/kiyasov/elysia-nest/blob/main/packages/core/src/logger/console-logger.service.ts#L20)
+Defined in: [packages/core/src/logger/console-logger.service.ts:20](https://github.com/kiyasov/nestelia/blob/main/packages/core/src/logger/console-logger.service.ts#L20)
 
 #### Parameters
 
@@ -44,7 +44,7 @@ Defined in: [packages/core/src/logger/console-logger.service.ts:20](https://gith
 new ConsoleLogger(context, options): ConsoleLogger;
 ```
 
-Defined in: [packages/core/src/logger/console-logger.service.ts:21](https://github.com/kiyasov/elysia-nest/blob/main/packages/core/src/logger/console-logger.service.ts#L21)
+Defined in: [packages/core/src/logger/console-logger.service.ts:21](https://github.com/kiyasov/nestelia/blob/main/packages/core/src/logger/console-logger.service.ts#L21)
 
 #### Parameters
 
@@ -65,7 +65,7 @@ Defined in: [packages/core/src/logger/console-logger.service.ts:21](https://gith
 protected colorize(message, logLevel): string;
 ```
 
-Defined in: [packages/core/src/logger/console-logger.service.ts:92](https://github.com/kiyasov/elysia-nest/blob/main/packages/core/src/logger/console-logger.service.ts#L92)
+Defined in: [packages/core/src/logger/console-logger.service.ts:92](https://github.com/kiyasov/nestelia/blob/main/packages/core/src/logger/console-logger.service.ts#L92)
 
 #### Parameters
 
@@ -88,7 +88,7 @@ Defined in: [packages/core/src/logger/console-logger.service.ts:92](https://gith
 debug(message, ...optionalParams): void;
 ```
 
-Defined in: [packages/core/src/logger/console-logger.service.ts:185](https://github.com/kiyasov/elysia-nest/blob/main/packages/core/src/logger/console-logger.service.ts#L185)
+Defined in: [packages/core/src/logger/console-logger.service.ts:185](https://github.com/kiyasov/nestelia/blob/main/packages/core/src/logger/console-logger.service.ts#L185)
 
 ##### Parameters
 
@@ -111,7 +111,7 @@ Defined in: [packages/core/src/logger/console-logger.service.ts:185](https://git
 debug(message, context?): void;
 ```
 
-Defined in: [packages/core/src/logger/console-logger.service.ts:186](https://github.com/kiyasov/elysia-nest/blob/main/packages/core/src/logger/console-logger.service.ts#L186)
+Defined in: [packages/core/src/logger/console-logger.service.ts:186](https://github.com/kiyasov/nestelia/blob/main/packages/core/src/logger/console-logger.service.ts#L186)
 
 ##### Parameters
 
@@ -140,7 +140,7 @@ LoggerService.debug
 error(message, ...optionalParams): void;
 ```
 
-Defined in: [packages/core/src/logger/console-logger.service.ts:160](https://github.com/kiyasov/elysia-nest/blob/main/packages/core/src/logger/console-logger.service.ts#L160)
+Defined in: [packages/core/src/logger/console-logger.service.ts:160](https://github.com/kiyasov/nestelia/blob/main/packages/core/src/logger/console-logger.service.ts#L160)
 
 ##### Parameters
 
@@ -166,7 +166,7 @@ error(
    context?): void;
 ```
 
-Defined in: [packages/core/src/logger/console-logger.service.ts:161](https://github.com/kiyasov/elysia-nest/blob/main/packages/core/src/logger/console-logger.service.ts#L161)
+Defined in: [packages/core/src/logger/console-logger.service.ts:161](https://github.com/kiyasov/nestelia/blob/main/packages/core/src/logger/console-logger.service.ts#L161)
 
 ##### Parameters
 
@@ -196,7 +196,7 @@ LoggerService.error
 fatal(message, ...optionalParams): void;
 ```
 
-Defined in: [packages/core/src/logger/console-logger.service.ts:211](https://github.com/kiyasov/elysia-nest/blob/main/packages/core/src/logger/console-logger.service.ts#L211)
+Defined in: [packages/core/src/logger/console-logger.service.ts:211](https://github.com/kiyasov/nestelia/blob/main/packages/core/src/logger/console-logger.service.ts#L211)
 
 ##### Parameters
 
@@ -222,7 +222,7 @@ fatal(
    context?): void;
 ```
 
-Defined in: [packages/core/src/logger/console-logger.service.ts:212](https://github.com/kiyasov/elysia-nest/blob/main/packages/core/src/logger/console-logger.service.ts#L212)
+Defined in: [packages/core/src/logger/console-logger.service.ts:212](https://github.com/kiyasov/nestelia/blob/main/packages/core/src/logger/console-logger.service.ts#L212)
 
 ##### Parameters
 
@@ -250,7 +250,7 @@ LoggerService.fatal
 protected formatContext(context): string;
 ```
 
-Defined in: [packages/core/src/logger/console-logger.service.ts:39](https://github.com/kiyasov/elysia-nest/blob/main/packages/core/src/logger/console-logger.service.ts#L39)
+Defined in: [packages/core/src/logger/console-logger.service.ts:39](https://github.com/kiyasov/nestelia/blob/main/packages/core/src/logger/console-logger.service.ts#L39)
 
 #### Parameters
 
@@ -276,7 +276,7 @@ protected formatMessage(
    timestampDiff): string;
 ```
 
-Defined in: [packages/core/src/logger/console-logger.service.ts:43](https://github.com/kiyasov/elysia-nest/blob/main/packages/core/src/logger/console-logger.service.ts#L43)
+Defined in: [packages/core/src/logger/console-logger.service.ts:43](https://github.com/kiyasov/nestelia/blob/main/packages/core/src/logger/console-logger.service.ts#L43)
 
 #### Parameters
 
@@ -301,7 +301,7 @@ Defined in: [packages/core/src/logger/console-logger.service.ts:43](https://gith
 protected formatPid(pid): string;
 ```
 
-Defined in: [packages/core/src/logger/console-logger.service.ts:35](https://github.com/kiyasov/elysia-nest/blob/main/packages/core/src/logger/console-logger.service.ts#L35)
+Defined in: [packages/core/src/logger/console-logger.service.ts:35](https://github.com/kiyasov/nestelia/blob/main/packages/core/src/logger/console-logger.service.ts#L35)
 
 #### Parameters
 
@@ -321,7 +321,7 @@ Defined in: [packages/core/src/logger/console-logger.service.ts:35](https://gith
 protected getColorByLogLevel(level): (message) => string;
 ```
 
-Defined in: [packages/core/src/logger/console-logger.service.ts:109](https://github.com/kiyasov/elysia-nest/blob/main/packages/core/src/logger/console-logger.service.ts#L109)
+Defined in: [packages/core/src/logger/console-logger.service.ts:109](https://github.com/kiyasov/nestelia/blob/main/packages/core/src/logger/console-logger.service.ts#L109)
 
 #### Parameters
 
@@ -356,7 +356,7 @@ protected getContextAndMessagesToPrint(args): {
 };
 ```
 
-Defined in: [packages/core/src/logger/console-logger.service.ts:223](https://github.com/kiyasov/elysia-nest/blob/main/packages/core/src/logger/console-logger.service.ts#L223)
+Defined in: [packages/core/src/logger/console-logger.service.ts:223](https://github.com/kiyasov/nestelia/blob/main/packages/core/src/logger/console-logger.service.ts#L223)
 
 #### Parameters
 
@@ -375,8 +375,8 @@ Defined in: [packages/core/src/logger/console-logger.service.ts:223](https://git
 
 | Name | Type | Defined in |
 | ------ | ------ | ------ |
-| `context` | `string` | [packages/core/src/logger/console-logger.service.ts:225](https://github.com/kiyasov/elysia-nest/blob/main/packages/core/src/logger/console-logger.service.ts#L225) |
-| `messages` | `unknown`[] | [packages/core/src/logger/console-logger.service.ts:224](https://github.com/kiyasov/elysia-nest/blob/main/packages/core/src/logger/console-logger.service.ts#L224) |
+| `context` | `string` | [packages/core/src/logger/console-logger.service.ts:225](https://github.com/kiyasov/nestelia/blob/main/packages/core/src/logger/console-logger.service.ts#L225) |
+| `messages` | `unknown`[] | [packages/core/src/logger/console-logger.service.ts:224](https://github.com/kiyasov/nestelia/blob/main/packages/core/src/logger/console-logger.service.ts#L224) |
 
 ***
 
@@ -390,7 +390,7 @@ protected getContextAndStackAndMessagesToPrint(args): {
 };
 ```
 
-Defined in: [packages/core/src/logger/console-logger.service.ts:241](https://github.com/kiyasov/elysia-nest/blob/main/packages/core/src/logger/console-logger.service.ts#L241)
+Defined in: [packages/core/src/logger/console-logger.service.ts:241](https://github.com/kiyasov/nestelia/blob/main/packages/core/src/logger/console-logger.service.ts#L241)
 
 #### Parameters
 
@@ -410,9 +410,9 @@ Defined in: [packages/core/src/logger/console-logger.service.ts:241](https://git
 
 | Name | Type | Defined in |
 | ------ | ------ | ------ |
-| `context` | `string` | [packages/core/src/logger/console-logger.service.ts:243](https://github.com/kiyasov/elysia-nest/blob/main/packages/core/src/logger/console-logger.service.ts#L243) |
-| `messages` | `unknown`[] | [packages/core/src/logger/console-logger.service.ts:242](https://github.com/kiyasov/elysia-nest/blob/main/packages/core/src/logger/console-logger.service.ts#L242) |
-| `stack?` | `string` | [packages/core/src/logger/console-logger.service.ts:244](https://github.com/kiyasov/elysia-nest/blob/main/packages/core/src/logger/console-logger.service.ts#L244) |
+| `context` | `string` | [packages/core/src/logger/console-logger.service.ts:243](https://github.com/kiyasov/nestelia/blob/main/packages/core/src/logger/console-logger.service.ts#L243) |
+| `messages` | `unknown`[] | [packages/core/src/logger/console-logger.service.ts:242](https://github.com/kiyasov/nestelia/blob/main/packages/core/src/logger/console-logger.service.ts#L242) |
+| `stack?` | `string` | [packages/core/src/logger/console-logger.service.ts:244](https://github.com/kiyasov/nestelia/blob/main/packages/core/src/logger/console-logger.service.ts#L244) |
 
 ***
 
@@ -422,7 +422,7 @@ Defined in: [packages/core/src/logger/console-logger.service.ts:241](https://git
 getTimestamp(): string;
 ```
 
-Defined in: [packages/core/src/logger/console-logger.service.ts:31](https://github.com/kiyasov/elysia-nest/blob/main/packages/core/src/logger/console-logger.service.ts#L31)
+Defined in: [packages/core/src/logger/console-logger.service.ts:31](https://github.com/kiyasov/nestelia/blob/main/packages/core/src/logger/console-logger.service.ts#L31)
 
 #### Returns
 
@@ -436,7 +436,7 @@ Defined in: [packages/core/src/logger/console-logger.service.ts:31](https://gith
 isLevelEnabled(level): boolean;
 ```
 
-Defined in: [packages/core/src/logger/console-logger.service.ts:142](https://github.com/kiyasov/elysia-nest/blob/main/packages/core/src/logger/console-logger.service.ts#L142)
+Defined in: [packages/core/src/logger/console-logger.service.ts:142](https://github.com/kiyasov/nestelia/blob/main/packages/core/src/logger/console-logger.service.ts#L142)
 
 #### Parameters
 
@@ -458,7 +458,7 @@ Defined in: [packages/core/src/logger/console-logger.service.ts:142](https://git
 log(message, ...optionalParams): void;
 ```
 
-Defined in: [packages/core/src/logger/console-logger.service.ts:147](https://github.com/kiyasov/elysia-nest/blob/main/packages/core/src/logger/console-logger.service.ts#L147)
+Defined in: [packages/core/src/logger/console-logger.service.ts:147](https://github.com/kiyasov/nestelia/blob/main/packages/core/src/logger/console-logger.service.ts#L147)
 
 ##### Parameters
 
@@ -481,7 +481,7 @@ Defined in: [packages/core/src/logger/console-logger.service.ts:147](https://git
 log(message, context?): void;
 ```
 
-Defined in: [packages/core/src/logger/console-logger.service.ts:148](https://github.com/kiyasov/elysia-nest/blob/main/packages/core/src/logger/console-logger.service.ts#L148)
+Defined in: [packages/core/src/logger/console-logger.service.ts:148](https://github.com/kiyasov/nestelia/blob/main/packages/core/src/logger/console-logger.service.ts#L148)
 
 ##### Parameters
 
@@ -512,7 +512,7 @@ protected printMessages(
    writeStreamType?): void;
 ```
 
-Defined in: [packages/core/src/logger/console-logger.service.ts:65](https://github.com/kiyasov/elysia-nest/blob/main/packages/core/src/logger/console-logger.service.ts#L65)
+Defined in: [packages/core/src/logger/console-logger.service.ts:65](https://github.com/kiyasov/nestelia/blob/main/packages/core/src/logger/console-logger.service.ts#L65)
 
 #### Parameters
 
@@ -535,7 +535,7 @@ Defined in: [packages/core/src/logger/console-logger.service.ts:65](https://gith
 protected printStackTrace(stack): void;
 ```
 
-Defined in: [packages/core/src/logger/console-logger.service.ts:276](https://github.com/kiyasov/elysia-nest/blob/main/packages/core/src/logger/console-logger.service.ts#L276)
+Defined in: [packages/core/src/logger/console-logger.service.ts:276](https://github.com/kiyasov/nestelia/blob/main/packages/core/src/logger/console-logger.service.ts#L276)
 
 #### Parameters
 
@@ -555,7 +555,7 @@ Defined in: [packages/core/src/logger/console-logger.service.ts:276](https://git
 resetContext(): void;
 ```
 
-Defined in: [packages/core/src/logger/console-logger.service.ts:138](https://github.com/kiyasov/elysia-nest/blob/main/packages/core/src/logger/console-logger.service.ts#L138)
+Defined in: [packages/core/src/logger/console-logger.service.ts:138](https://github.com/kiyasov/nestelia/blob/main/packages/core/src/logger/console-logger.service.ts#L138)
 
 #### Returns
 
@@ -569,7 +569,7 @@ Defined in: [packages/core/src/logger/console-logger.service.ts:138](https://git
 setContext(context): void;
 ```
 
-Defined in: [packages/core/src/logger/console-logger.service.ts:134](https://github.com/kiyasov/elysia-nest/blob/main/packages/core/src/logger/console-logger.service.ts#L134)
+Defined in: [packages/core/src/logger/console-logger.service.ts:134](https://github.com/kiyasov/nestelia/blob/main/packages/core/src/logger/console-logger.service.ts#L134)
 
 #### Parameters
 
@@ -589,7 +589,7 @@ Defined in: [packages/core/src/logger/console-logger.service.ts:134](https://git
 setLogLevels(levels): void;
 ```
 
-Defined in: [packages/core/src/logger/console-logger.service.ts:127](https://github.com/kiyasov/elysia-nest/blob/main/packages/core/src/logger/console-logger.service.ts#L127)
+Defined in: [packages/core/src/logger/console-logger.service.ts:127](https://github.com/kiyasov/nestelia/blob/main/packages/core/src/logger/console-logger.service.ts#L127)
 
 #### Parameters
 
@@ -613,7 +613,7 @@ Defined in: [packages/core/src/logger/console-logger.service.ts:127](https://git
 protected updateAndGetTimestampDiff(): string;
 ```
 
-Defined in: [packages/core/src/logger/console-logger.service.ts:97](https://github.com/kiyasov/elysia-nest/blob/main/packages/core/src/logger/console-logger.service.ts#L97)
+Defined in: [packages/core/src/logger/console-logger.service.ts:97](https://github.com/kiyasov/nestelia/blob/main/packages/core/src/logger/console-logger.service.ts#L97)
 
 #### Returns
 
@@ -629,7 +629,7 @@ Defined in: [packages/core/src/logger/console-logger.service.ts:97](https://gith
 verbose(message, ...optionalParams): void;
 ```
 
-Defined in: [packages/core/src/logger/console-logger.service.ts:198](https://github.com/kiyasov/elysia-nest/blob/main/packages/core/src/logger/console-logger.service.ts#L198)
+Defined in: [packages/core/src/logger/console-logger.service.ts:198](https://github.com/kiyasov/nestelia/blob/main/packages/core/src/logger/console-logger.service.ts#L198)
 
 ##### Parameters
 
@@ -652,7 +652,7 @@ Defined in: [packages/core/src/logger/console-logger.service.ts:198](https://git
 verbose(message, context?): void;
 ```
 
-Defined in: [packages/core/src/logger/console-logger.service.ts:199](https://github.com/kiyasov/elysia-nest/blob/main/packages/core/src/logger/console-logger.service.ts#L199)
+Defined in: [packages/core/src/logger/console-logger.service.ts:199](https://github.com/kiyasov/nestelia/blob/main/packages/core/src/logger/console-logger.service.ts#L199)
 
 ##### Parameters
 
@@ -681,7 +681,7 @@ LoggerService.verbose
 warn(message, ...optionalParams): void;
 ```
 
-Defined in: [packages/core/src/logger/console-logger.service.ts:172](https://github.com/kiyasov/elysia-nest/blob/main/packages/core/src/logger/console-logger.service.ts#L172)
+Defined in: [packages/core/src/logger/console-logger.service.ts:172](https://github.com/kiyasov/nestelia/blob/main/packages/core/src/logger/console-logger.service.ts#L172)
 
 ##### Parameters
 
@@ -704,7 +704,7 @@ Defined in: [packages/core/src/logger/console-logger.service.ts:172](https://git
 warn(message, context?): void;
 ```
 
-Defined in: [packages/core/src/logger/console-logger.service.ts:173](https://github.com/kiyasov/elysia-nest/blob/main/packages/core/src/logger/console-logger.service.ts#L173)
+Defined in: [packages/core/src/logger/console-logger.service.ts:173](https://github.com/kiyasov/nestelia/blob/main/packages/core/src/logger/console-logger.service.ts#L173)
 
 ##### Parameters
 
@@ -727,5 +727,5 @@ LoggerService.warn
 
 | Property | Modifier | Type | Default value | Defined in |
 | ------ | ------ | ------ | ------ | ------ |
-| <a id="context"></a> `context?` | `protected` | `string` | `undefined` | [packages/core/src/logger/console-logger.service.ts:23](https://github.com/kiyasov/elysia-nest/blob/main/packages/core/src/logger/console-logger.service.ts#L23) |
-| <a id="options"></a> `options` | `protected` | [`ConsoleLoggerOptions`](../interfaces/ConsoleLoggerOptions.md) | `{}` | [packages/core/src/logger/console-logger.service.ts:24](https://github.com/kiyasov/elysia-nest/blob/main/packages/core/src/logger/console-logger.service.ts#L24) |
+| <a id="context"></a> `context?` | `protected` | `string` | `undefined` | [packages/core/src/logger/console-logger.service.ts:23](https://github.com/kiyasov/nestelia/blob/main/packages/core/src/logger/console-logger.service.ts#L23) |
+| <a id="options"></a> `options` | `protected` | [`ConsoleLoggerOptions`](../interfaces/ConsoleLoggerOptions.md) | `{}` | [packages/core/src/logger/console-logger.service.ts:24](https://github.com/kiyasov/nestelia/blob/main/packages/core/src/logger/console-logger.service.ts#L24) |

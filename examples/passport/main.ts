@@ -1,6 +1,6 @@
 import "reflect-metadata";
 
-import { createElysiaApplication } from "@kiyasov/elysia-nest";
+import { createElysiaApplication } from "nestelia";
 
 import { AppModule } from "./src/app.module";
 

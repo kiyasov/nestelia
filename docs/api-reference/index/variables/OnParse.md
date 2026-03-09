@@ -4,7 +4,7 @@
 const OnParse: (options?) => MethodDecorator;
 ```
 
-Defined in: [packages/core/src/decorators/lifecycle.decorators.ts:95](https://github.com/kiyasov/elysia-nest/blob/main/packages/core/src/decorators/lifecycle.decorators.ts#L95)
+Defined in: [packages/core/src/decorators/lifecycle.decorators.ts:95](https://github.com/kiyasov/nestelia/blob/main/packages/core/src/decorators/lifecycle.decorators.ts#L95)
 
 Hook called to parse request body
 

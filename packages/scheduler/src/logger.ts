@@ -1,3 +1,3 @@
-import { Logger } from "@kiyasov/elysia-nest";
+import { Logger } from "nestelia";
 
 export const packageLogger = new Logger("scheduler");

@@ -11,7 +11,7 @@ Middleware runs before the route handler and can modify the request, response, o
 Create a class that implements `ElysiaNestMiddleware`:
 
 ```typescript
-import { Injectable, ElysiaNestMiddleware } from "@kiyasov/elysia-nest";
+import { Injectable, ElysiaNestMiddleware } from "nestelia";
 
 @Injectable()
 class LoggerMiddleware implements ElysiaNestMiddleware {

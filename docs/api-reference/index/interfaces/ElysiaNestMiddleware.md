@@ -1,6 +1,6 @@
 # Interface: ElysiaNestMiddleware
 
-Defined in: [packages/core/src/interfaces/middleware.interface.ts:12](https://github.com/kiyasov/elysia-nest/blob/main/packages/core/src/interfaces/middleware.interface.ts#L12)
+Defined in: [packages/core/src/interfaces/middleware.interface.ts:12](https://github.com/kiyasov/nestelia/blob/main/packages/core/src/interfaces/middleware.interface.ts#L12)
 
 Interface for class-based middleware.
 Instances will be resolved from the DI container.
@@ -13,7 +13,7 @@ Instances will be resolved from the DI container.
 use(context, next): any;
 ```
 
-Defined in: [packages/core/src/interfaces/middleware.interface.ts:13](https://github.com/kiyasov/elysia-nest/blob/main/packages/core/src/interfaces/middleware.interface.ts#L13)
+Defined in: [packages/core/src/interfaces/middleware.interface.ts:13](https://github.com/kiyasov/nestelia/blob/main/packages/core/src/interfaces/middleware.interface.ts#L13)
 
 #### Parameters
 

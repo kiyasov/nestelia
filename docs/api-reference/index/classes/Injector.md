@@ -1,6 +1,6 @@
 # Class: Injector
 
-Defined in: [packages/core/src/di/injector.ts:12](https://github.com/kiyasov/elysia-nest/blob/main/packages/core/src/di/injector.ts#L12)
+Defined in: [packages/core/src/di/injector.ts:12](https://github.com/kiyasov/nestelia/blob/main/packages/core/src/di/injector.ts#L12)
 
 ## Constructors
 
@@ -10,7 +10,7 @@ Defined in: [packages/core/src/di/injector.ts:12](https://github.com/kiyasov/ely
 new Injector(container): Injector;
 ```
 
-Defined in: [packages/core/src/di/injector.ts:13](https://github.com/kiyasov/elysia-nest/blob/main/packages/core/src/di/injector.ts#L13)
+Defined in: [packages/core/src/di/injector.ts:13](https://github.com/kiyasov/nestelia/blob/main/packages/core/src/di/injector.ts#L13)
 
 #### Parameters
 
@@ -33,7 +33,7 @@ loadInstance(
 contextId?): Promise<void>;
 ```
 
-Defined in: [packages/core/src/di/injector.ts:15](https://github.com/kiyasov/elysia-nest/blob/main/packages/core/src/di/injector.ts#L15)
+Defined in: [packages/core/src/di/injector.ts:15](https://github.com/kiyasov/nestelia/blob/main/packages/core/src/di/injector.ts#L15)
 
 #### Parameters
 
@@ -55,7 +55,7 @@ Defined in: [packages/core/src/di/injector.ts:15](https://github.com/kiyasov/ely
 loadPrototype(wrapper, contextId?): Promise<void>;
 ```
 
-Defined in: [packages/core/src/di/injector.ts:46](https://github.com/kiyasov/elysia-nest/blob/main/packages/core/src/di/injector.ts#L46)
+Defined in: [packages/core/src/di/injector.ts:46](https://github.com/kiyasov/nestelia/blob/main/packages/core/src/di/injector.ts#L46)
 
 #### Parameters
 

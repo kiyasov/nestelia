@@ -12,7 +12,7 @@
  * @example
  * Quick start:
  * ```typescript
- * import { Test } from '@@kiyasov/elysia-nest/testing';
+ * import { Test } from '@nestelia/testing';
  *
  * describe('MyService', () => {
  *   let moduleRef: TestingModule;

@@ -11,7 +11,7 @@
     "noEmit": true,
     "types": ["bun", "reflect-metadata"],
     "paths": {
-      "@kiyasov/elysia-nest": ["./index.ts"],
+      "nestelia": ["./index.ts"],
       "~": ["./packages/core"],
       "~/*": ["./packages/core/*"]
     }

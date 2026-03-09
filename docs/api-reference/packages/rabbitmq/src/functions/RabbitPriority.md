@@ -4,7 +4,7 @@
 function RabbitPriority(priority): MethodDecorator;
 ```
 
-Defined in: [packages/rabbitmq/src/decorators/rabbitmq.decorators.ts:251](https://github.com/kiyasov/elysia-nest/blob/main/packages/rabbitmq/src/decorators/rabbitmq.decorators.ts#L251)
+Defined in: [packages/rabbitmq/src/decorators/rabbitmq.decorators.ts:251](https://github.com/kiyasov/nestelia/blob/main/packages/rabbitmq/src/decorators/rabbitmq.decorators.ts#L251)
 
 Decorator to configure message priority
 

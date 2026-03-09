@@ -4,7 +4,7 @@
 function Cookies(property?): ParameterDecorator;
 ```
 
-Defined in: [packages/core/src/decorators/http.decorators.ts:127](https://github.com/kiyasov/elysia-nest/blob/main/packages/core/src/decorators/http.decorators.ts#L127)
+Defined in: [packages/core/src/decorators/http.decorators.ts:127](https://github.com/kiyasov/nestelia/blob/main/packages/core/src/decorators/http.decorators.ts#L127)
 
 ## Parameters
 

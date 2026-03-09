@@ -7,7 +7,7 @@ function registerGraphQLRoutes(
    path): void;
 ```
 
-Defined in: [packages/apollo/src/graphql.controller.ts:60](https://github.com/kiyasov/elysia-nest/blob/main/packages/apollo/src/graphql.controller.ts#L60)
+Defined in: [packages/apollo/src/graphql.controller.ts:60](https://github.com/kiyasov/nestelia/blob/main/packages/apollo/src/graphql.controller.ts#L60)
 
 Registers GraphQL HTTP routes on the Elysia application.
 Handles GET, POST, and OPTIONS requests for the GraphQL endpoint.

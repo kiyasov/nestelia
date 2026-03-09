@@ -1,7 +1,7 @@
 import type { Channel, ChannelModel, ConsumeMessage, Replies } from "amqplib";
 import { randomUUID } from "crypto";
 
-import type { Logger } from "@kiyasov/elysia-nest";
+import type { Logger } from "nestelia";
 import type {
   RabbitMQConfig,
   RabbitMQExchangeConfig,

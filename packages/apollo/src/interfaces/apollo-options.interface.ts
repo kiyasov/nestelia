@@ -9,7 +9,7 @@ import type {
   GraphQLSchema,
 } from "graphql";
 
-import type { ExecutionContext } from "@kiyasov/elysia-nest";
+import type { ExecutionContext } from "nestelia";
 
 /** Date scalar serialization mode. */
 export type DateScalarMode = "isoDate" | "timestamp";

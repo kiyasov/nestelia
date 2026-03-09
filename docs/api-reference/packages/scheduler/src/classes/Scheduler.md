@@ -1,6 +1,6 @@
 # Class: Scheduler
 
-Defined in: [packages/scheduler/src/services/scheduler.service.ts:26](https://github.com/kiyasov/elysia-nest/blob/main/packages/scheduler/src/services/scheduler.service.ts#L26)
+Defined in: [packages/scheduler/src/services/scheduler.service.ts:26](https://github.com/kiyasov/nestelia/blob/main/packages/scheduler/src/services/scheduler.service.ts#L26)
 
 Service for scheduling tasks
 
@@ -16,7 +16,7 @@ Service for scheduling tasks
 new Scheduler(config?): Scheduler;
 ```
 
-Defined in: [packages/scheduler/src/services/scheduler.service.ts:45](https://github.com/kiyasov/elysia-nest/blob/main/packages/scheduler/src/services/scheduler.service.ts#L45)
+Defined in: [packages/scheduler/src/services/scheduler.service.ts:45](https://github.com/kiyasov/nestelia/blob/main/packages/scheduler/src/services/scheduler.service.ts#L45)
 
 Create a new scheduler
 
@@ -38,7 +38,7 @@ Create a new scheduler
 cancelAllTasks(): void;
 ```
 
-Defined in: [packages/scheduler/src/services/scheduler.service.ts:181](https://github.com/kiyasov/elysia-nest/blob/main/packages/scheduler/src/services/scheduler.service.ts#L181)
+Defined in: [packages/scheduler/src/services/scheduler.service.ts:181](https://github.com/kiyasov/nestelia/blob/main/packages/scheduler/src/services/scheduler.service.ts#L181)
 
 Cancel all scheduled tasks
 
@@ -58,7 +58,7 @@ Cancel all scheduled tasks
 getTasks(): TaskHandle[];
 ```
 
-Defined in: [packages/scheduler/src/services/scheduler.service.ts:192](https://github.com/kiyasov/elysia-nest/blob/main/packages/scheduler/src/services/scheduler.service.ts#L192)
+Defined in: [packages/scheduler/src/services/scheduler.service.ts:192](https://github.com/kiyasov/nestelia/blob/main/packages/scheduler/src/services/scheduler.service.ts#L192)
 
 Get all active tasks
 
@@ -81,7 +81,7 @@ scheduleAt(
    options?): TaskHandle;
 ```
 
-Defined in: [packages/scheduler/src/services/scheduler.service.ts:151](https://github.com/kiyasov/elysia-nest/blob/main/packages/scheduler/src/services/scheduler.service.ts#L151)
+Defined in: [packages/scheduler/src/services/scheduler.service.ts:151](https://github.com/kiyasov/nestelia/blob/main/packages/scheduler/src/services/scheduler.service.ts#L151)
 
 Schedule a task to run at a specific date
 
@@ -112,7 +112,7 @@ scheduleCron(
    options?): TaskHandle;
 ```
 
-Defined in: [packages/scheduler/src/services/scheduler.service.ts:77](https://github.com/kiyasov/elysia-nest/blob/main/packages/scheduler/src/services/scheduler.service.ts#L77)
+Defined in: [packages/scheduler/src/services/scheduler.service.ts:77](https://github.com/kiyasov/nestelia/blob/main/packages/scheduler/src/services/scheduler.service.ts#L77)
 
 Schedule a task to run at a cron time
 
@@ -143,7 +143,7 @@ scheduleInterval(
    options?): TaskHandle;
 ```
 
-Defined in: [packages/scheduler/src/services/scheduler.service.ts:102](https://github.com/kiyasov/elysia-nest/blob/main/packages/scheduler/src/services/scheduler.service.ts#L102)
+Defined in: [packages/scheduler/src/services/scheduler.service.ts:102](https://github.com/kiyasov/nestelia/blob/main/packages/scheduler/src/services/scheduler.service.ts#L102)
 
 Schedule a task to run at fixed intervals
 
@@ -174,7 +174,7 @@ scheduleTimeout(
    options?): TaskHandle;
 ```
 
-Defined in: [packages/scheduler/src/services/scheduler.service.ts:124](https://github.com/kiyasov/elysia-nest/blob/main/packages/scheduler/src/services/scheduler.service.ts#L124)
+Defined in: [packages/scheduler/src/services/scheduler.service.ts:124](https://github.com/kiyasov/nestelia/blob/main/packages/scheduler/src/services/scheduler.service.ts#L124)
 
 Schedule a task to run once after a delay
 

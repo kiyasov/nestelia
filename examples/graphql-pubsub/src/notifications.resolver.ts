@@ -1,4 +1,4 @@
-import { Injectable } from "@kiyasov/elysia-nest";
+import { Injectable } from "nestelia";
 import {
   Args,
   Mutation,
@@ -10,7 +10,7 @@ import {
   GRAPHQL_PUBSUB,
 } from "../../../packages/graphql-pubsub/src";
 import type { RedisPubSub } from "../../../packages/graphql-pubsub/src";
-import { Inject } from "@kiyasov/elysia-nest";
+import { Inject } from "nestelia";
 
 import { Notification } from "./notification.type";
 

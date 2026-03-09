@@ -4,7 +4,7 @@
 function Payload(property?): ParameterDecorator;
 ```
 
-Defined in: [packages/microservices/decorators/payload.decorator.ts:22](https://github.com/kiyasov/elysia-nest/blob/main/packages/microservices/decorators/payload.decorator.ts#L22)
+Defined in: [packages/microservices/decorators/payload.decorator.ts:22](https://github.com/kiyasov/nestelia/blob/main/packages/microservices/decorators/payload.decorator.ts#L22)
 
 Extracts the message payload (or a nested property of it) and injects it
 as a method parameter.

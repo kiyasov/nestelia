@@ -1,6 +1,6 @@
 # Class: Logger
 
-Defined in: [packages/core/src/logger/logger.service.ts:15](https://github.com/kiyasov/elysia-nest/blob/main/packages/core/src/logger/logger.service.ts#L15)
+Defined in: [packages/core/src/logger/logger.service.ts:15](https://github.com/kiyasov/nestelia/blob/main/packages/core/src/logger/logger.service.ts#L15)
 
 ## Implements
 
@@ -16,7 +16,7 @@ Defined in: [packages/core/src/logger/logger.service.ts:15](https://github.com/k
 get localInstance(): LoggerService;
 ```
 
-Defined in: [packages/core/src/logger/logger.service.ts:31](https://github.com/kiyasov/elysia-nest/blob/main/packages/core/src/logger/logger.service.ts#L31)
+Defined in: [packages/core/src/logger/logger.service.ts:31](https://github.com/kiyasov/nestelia/blob/main/packages/core/src/logger/logger.service.ts#L31)
 
 ##### Returns
 
@@ -30,7 +30,7 @@ Defined in: [packages/core/src/logger/logger.service.ts:31](https://github.com/k
 new Logger(): Logger;
 ```
 
-Defined in: [packages/core/src/logger/logger.service.ts:23](https://github.com/kiyasov/elysia-nest/blob/main/packages/core/src/logger/logger.service.ts#L23)
+Defined in: [packages/core/src/logger/logger.service.ts:23](https://github.com/kiyasov/nestelia/blob/main/packages/core/src/logger/logger.service.ts#L23)
 
 #### Returns
 
@@ -42,7 +42,7 @@ Defined in: [packages/core/src/logger/logger.service.ts:23](https://github.com/k
 new Logger(context): Logger;
 ```
 
-Defined in: [packages/core/src/logger/logger.service.ts:24](https://github.com/kiyasov/elysia-nest/blob/main/packages/core/src/logger/logger.service.ts#L24)
+Defined in: [packages/core/src/logger/logger.service.ts:24](https://github.com/kiyasov/nestelia/blob/main/packages/core/src/logger/logger.service.ts#L24)
 
 #### Parameters
 
@@ -60,7 +60,7 @@ Defined in: [packages/core/src/logger/logger.service.ts:24](https://github.com/k
 new Logger(context, options): Logger;
 ```
 
-Defined in: [packages/core/src/logger/logger.service.ts:25](https://github.com/kiyasov/elysia-nest/blob/main/packages/core/src/logger/logger.service.ts#L25)
+Defined in: [packages/core/src/logger/logger.service.ts:25](https://github.com/kiyasov/nestelia/blob/main/packages/core/src/logger/logger.service.ts#L25)
 
 #### Parameters
 
@@ -82,7 +82,7 @@ Defined in: [packages/core/src/logger/logger.service.ts:25](https://github.com/k
 debug(message, ...optionalParams): void;
 ```
 
-Defined in: [packages/core/src/logger/logger.service.ts:83](https://github.com/kiyasov/elysia-nest/blob/main/packages/core/src/logger/logger.service.ts#L83)
+Defined in: [packages/core/src/logger/logger.service.ts:83](https://github.com/kiyasov/nestelia/blob/main/packages/core/src/logger/logger.service.ts#L83)
 
 #### Parameters
 
@@ -107,7 +107,7 @@ Defined in: [packages/core/src/logger/logger.service.ts:83](https://github.com/k
 error(message, ...optionalParams): void;
 ```
 
-Defined in: [packages/core/src/logger/logger.service.ts:54](https://github.com/kiyasov/elysia-nest/blob/main/packages/core/src/logger/logger.service.ts#L54)
+Defined in: [packages/core/src/logger/logger.service.ts:54](https://github.com/kiyasov/nestelia/blob/main/packages/core/src/logger/logger.service.ts#L54)
 
 #### Parameters
 
@@ -132,7 +132,7 @@ Defined in: [packages/core/src/logger/logger.service.ts:54](https://github.com/k
 fatal(message, ...optionalParams): void;
 ```
 
-Defined in: [packages/core/src/logger/logger.service.ts:101](https://github.com/kiyasov/elysia-nest/blob/main/packages/core/src/logger/logger.service.ts#L101)
+Defined in: [packages/core/src/logger/logger.service.ts:101](https://github.com/kiyasov/nestelia/blob/main/packages/core/src/logger/logger.service.ts#L101)
 
 #### Parameters
 
@@ -157,7 +157,7 @@ Defined in: [packages/core/src/logger/logger.service.ts:101](https://github.com/
 log(message, ...optionalParams): void;
 ```
 
-Defined in: [packages/core/src/logger/logger.service.ts:65](https://github.com/kiyasov/elysia-nest/blob/main/packages/core/src/logger/logger.service.ts#L65)
+Defined in: [packages/core/src/logger/logger.service.ts:65](https://github.com/kiyasov/nestelia/blob/main/packages/core/src/logger/logger.service.ts#L65)
 
 #### Parameters
 
@@ -182,7 +182,7 @@ Defined in: [packages/core/src/logger/logger.service.ts:65](https://github.com/k
 verbose(message, ...optionalParams): void;
 ```
 
-Defined in: [packages/core/src/logger/logger.service.ts:92](https://github.com/kiyasov/elysia-nest/blob/main/packages/core/src/logger/logger.service.ts#L92)
+Defined in: [packages/core/src/logger/logger.service.ts:92](https://github.com/kiyasov/nestelia/blob/main/packages/core/src/logger/logger.service.ts#L92)
 
 #### Parameters
 
@@ -207,7 +207,7 @@ Defined in: [packages/core/src/logger/logger.service.ts:92](https://github.com/k
 warn(message, ...optionalParams): void;
 ```
 
-Defined in: [packages/core/src/logger/logger.service.ts:74](https://github.com/kiyasov/elysia-nest/blob/main/packages/core/src/logger/logger.service.ts#L74)
+Defined in: [packages/core/src/logger/logger.service.ts:74](https://github.com/kiyasov/nestelia/blob/main/packages/core/src/logger/logger.service.ts#L74)
 
 #### Parameters
 
@@ -232,7 +232,7 @@ Defined in: [packages/core/src/logger/logger.service.ts:74](https://github.com/k
 static attachBuffer(): void;
 ```
 
-Defined in: [packages/core/src/logger/logger.service.ts:154](https://github.com/kiyasov/elysia-nest/blob/main/packages/core/src/logger/logger.service.ts#L154)
+Defined in: [packages/core/src/logger/logger.service.ts:154](https://github.com/kiyasov/nestelia/blob/main/packages/core/src/logger/logger.service.ts#L154)
 
 #### Returns
 
@@ -246,7 +246,7 @@ Defined in: [packages/core/src/logger/logger.service.ts:154](https://github.com/
 static debug(message, ...optionalParams): void;
 ```
 
-Defined in: [packages/core/src/logger/logger.service.ts:128](https://github.com/kiyasov/elysia-nest/blob/main/packages/core/src/logger/logger.service.ts#L128)
+Defined in: [packages/core/src/logger/logger.service.ts:128](https://github.com/kiyasov/nestelia/blob/main/packages/core/src/logger/logger.service.ts#L128)
 
 #### Parameters
 
@@ -267,7 +267,7 @@ Defined in: [packages/core/src/logger/logger.service.ts:128](https://github.com/
 static detachBuffer(): void;
 ```
 
-Defined in: [packages/core/src/logger/logger.service.ts:158](https://github.com/kiyasov/elysia-nest/blob/main/packages/core/src/logger/logger.service.ts#L158)
+Defined in: [packages/core/src/logger/logger.service.ts:158](https://github.com/kiyasov/nestelia/blob/main/packages/core/src/logger/logger.service.ts#L158)
 
 #### Returns
 
@@ -281,7 +281,7 @@ Defined in: [packages/core/src/logger/logger.service.ts:158](https://github.com/
 static error(message, ...optionalParams): void;
 ```
 
-Defined in: [packages/core/src/logger/logger.service.ts:110](https://github.com/kiyasov/elysia-nest/blob/main/packages/core/src/logger/logger.service.ts#L110)
+Defined in: [packages/core/src/logger/logger.service.ts:110](https://github.com/kiyasov/nestelia/blob/main/packages/core/src/logger/logger.service.ts#L110)
 
 #### Parameters
 
@@ -302,7 +302,7 @@ Defined in: [packages/core/src/logger/logger.service.ts:110](https://github.com/
 static fatal(message, ...optionalParams): void;
 ```
 
-Defined in: [packages/core/src/logger/logger.service.ts:140](https://github.com/kiyasov/elysia-nest/blob/main/packages/core/src/logger/logger.service.ts#L140)
+Defined in: [packages/core/src/logger/logger.service.ts:140](https://github.com/kiyasov/nestelia/blob/main/packages/core/src/logger/logger.service.ts#L140)
 
 #### Parameters
 
@@ -323,7 +323,7 @@ Defined in: [packages/core/src/logger/logger.service.ts:140](https://github.com/
 static flush(): void;
 ```
 
-Defined in: [packages/core/src/logger/logger.service.ts:146](https://github.com/kiyasov/elysia-nest/blob/main/packages/core/src/logger/logger.service.ts#L146)
+Defined in: [packages/core/src/logger/logger.service.ts:146](https://github.com/kiyasov/nestelia/blob/main/packages/core/src/logger/logger.service.ts#L146)
 
 #### Returns
 
@@ -337,7 +337,7 @@ Defined in: [packages/core/src/logger/logger.service.ts:146](https://github.com/
 static getTimestamp(): string;
 ```
 
-Defined in: [packages/core/src/logger/logger.service.ts:162](https://github.com/kiyasov/elysia-nest/blob/main/packages/core/src/logger/logger.service.ts#L162)
+Defined in: [packages/core/src/logger/logger.service.ts:162](https://github.com/kiyasov/nestelia/blob/main/packages/core/src/logger/logger.service.ts#L162)
 
 #### Returns
 
@@ -351,7 +351,7 @@ Defined in: [packages/core/src/logger/logger.service.ts:162](https://github.com/
 static isLevelEnabled(level): boolean;
 ```
 
-Defined in: [packages/core/src/logger/logger.service.ts:183](https://github.com/kiyasov/elysia-nest/blob/main/packages/core/src/logger/logger.service.ts#L183)
+Defined in: [packages/core/src/logger/logger.service.ts:183](https://github.com/kiyasov/nestelia/blob/main/packages/core/src/logger/logger.service.ts#L183)
 
 #### Parameters
 
@@ -371,7 +371,7 @@ Defined in: [packages/core/src/logger/logger.service.ts:183](https://github.com/
 static log(message, ...optionalParams): void;
 ```
 
-Defined in: [packages/core/src/logger/logger.service.ts:116](https://github.com/kiyasov/elysia-nest/blob/main/packages/core/src/logger/logger.service.ts#L116)
+Defined in: [packages/core/src/logger/logger.service.ts:116](https://github.com/kiyasov/nestelia/blob/main/packages/core/src/logger/logger.service.ts#L116)
 
 #### Parameters
 
@@ -392,7 +392,7 @@ Defined in: [packages/core/src/logger/logger.service.ts:116](https://github.com/
 static overrideLogger(logger): void;
 ```
 
-Defined in: [packages/core/src/logger/logger.service.ts:166](https://github.com/kiyasov/elysia-nest/blob/main/packages/core/src/logger/logger.service.ts#L166)
+Defined in: [packages/core/src/logger/logger.service.ts:166](https://github.com/kiyasov/nestelia/blob/main/packages/core/src/logger/logger.service.ts#L166)
 
 #### Parameters
 
@@ -412,7 +412,7 @@ Defined in: [packages/core/src/logger/logger.service.ts:166](https://github.com/
 static verbose(message, ...optionalParams): void;
 ```
 
-Defined in: [packages/core/src/logger/logger.service.ts:134](https://github.com/kiyasov/elysia-nest/blob/main/packages/core/src/logger/logger.service.ts#L134)
+Defined in: [packages/core/src/logger/logger.service.ts:134](https://github.com/kiyasov/nestelia/blob/main/packages/core/src/logger/logger.service.ts#L134)
 
 #### Parameters
 
@@ -433,7 +433,7 @@ Defined in: [packages/core/src/logger/logger.service.ts:134](https://github.com/
 static warn(message, ...optionalParams): void;
 ```
 
-Defined in: [packages/core/src/logger/logger.service.ts:122](https://github.com/kiyasov/elysia-nest/blob/main/packages/core/src/logger/logger.service.ts#L122)
+Defined in: [packages/core/src/logger/logger.service.ts:122](https://github.com/kiyasov/nestelia/blob/main/packages/core/src/logger/logger.service.ts#L122)
 
 #### Parameters
 
@@ -450,10 +450,10 @@ Defined in: [packages/core/src/logger/logger.service.ts:122](https://github.com/
 
 | Property | Modifier | Type | Default value | Defined in |
 | ------ | ------ | ------ | ------ | ------ |
-| <a id="context"></a> `context?` | `protected` | `string` | `undefined` | [packages/core/src/logger/logger.service.ts:27](https://github.com/kiyasov/elysia-nest/blob/main/packages/core/src/logger/logger.service.ts#L27) |
-| <a id="localinstanceref"></a> `localInstanceRef?` | `protected` | [`LoggerService`](../interfaces/LoggerService.md) | `undefined` | [packages/core/src/logger/logger.service.ts:21](https://github.com/kiyasov/elysia-nest/blob/main/packages/core/src/logger/logger.service.ts#L21) |
-| <a id="options"></a> `options` | `protected` | \{ `timestamp?`: `boolean`; \} | `{}` | [packages/core/src/logger/logger.service.ts:28](https://github.com/kiyasov/elysia-nest/blob/main/packages/core/src/logger/logger.service.ts#L28) |
-| `options.timestamp?` | `public` | `boolean` | `undefined` | [packages/core/src/logger/logger.service.ts:28](https://github.com/kiyasov/elysia-nest/blob/main/packages/core/src/logger/logger.service.ts#L28) |
-| <a id="logbuffer"></a> `logBuffer` | `static` | `LogBufferRecord`[] | `undefined` | [packages/core/src/logger/logger.service.ts:16](https://github.com/kiyasov/elysia-nest/blob/main/packages/core/src/logger/logger.service.ts#L16) |
-| <a id="loglevels"></a> `logLevels?` | `static` | (`"error"` \| `"verbose"` \| `"debug"` \| `"log"` \| `"warn"` \| `"fatal"`)[] | `undefined` | [packages/core/src/logger/logger.service.ts:18](https://github.com/kiyasov/elysia-nest/blob/main/packages/core/src/logger/logger.service.ts#L18) |
-| <a id="staticinstanceref"></a> `staticInstanceRef?` | `static` | [`LoggerService`](../interfaces/LoggerService.md) | `DEFAULT_LOGGER` | [packages/core/src/logger/logger.service.ts:17](https://github.com/kiyasov/elysia-nest/blob/main/packages/core/src/logger/logger.service.ts#L17) |
+| <a id="context"></a> `context?` | `protected` | `string` | `undefined` | [packages/core/src/logger/logger.service.ts:27](https://github.com/kiyasov/nestelia/blob/main/packages/core/src/logger/logger.service.ts#L27) |
+| <a id="localinstanceref"></a> `localInstanceRef?` | `protected` | [`LoggerService`](../interfaces/LoggerService.md) | `undefined` | [packages/core/src/logger/logger.service.ts:21](https://github.com/kiyasov/nestelia/blob/main/packages/core/src/logger/logger.service.ts#L21) |
+| <a id="options"></a> `options` | `protected` | \{ `timestamp?`: `boolean`; \} | `{}` | [packages/core/src/logger/logger.service.ts:28](https://github.com/kiyasov/nestelia/blob/main/packages/core/src/logger/logger.service.ts#L28) |
+| `options.timestamp?` | `public` | `boolean` | `undefined` | [packages/core/src/logger/logger.service.ts:28](https://github.com/kiyasov/nestelia/blob/main/packages/core/src/logger/logger.service.ts#L28) |
+| <a id="logbuffer"></a> `logBuffer` | `static` | `LogBufferRecord`[] | `undefined` | [packages/core/src/logger/logger.service.ts:16](https://github.com/kiyasov/nestelia/blob/main/packages/core/src/logger/logger.service.ts#L16) |
+| <a id="loglevels"></a> `logLevels?` | `static` | (`"error"` \| `"verbose"` \| `"debug"` \| `"log"` \| `"warn"` \| `"fatal"`)[] | `undefined` | [packages/core/src/logger/logger.service.ts:18](https://github.com/kiyasov/nestelia/blob/main/packages/core/src/logger/logger.service.ts#L18) |
+| <a id="staticinstanceref"></a> `staticInstanceRef?` | `static` | [`LoggerService`](../interfaces/LoggerService.md) | `DEFAULT_LOGGER` | [packages/core/src/logger/logger.service.ts:17](https://github.com/kiyasov/nestelia/blob/main/packages/core/src/logger/logger.service.ts#L17) |

@@ -4,7 +4,7 @@ icon: puzzle
 description: Value, class, factory, and alias providers
 ---
 
-Beyond simple class providers, @kiyasov/elysia-nest supports several custom provider types for advanced dependency injection scenarios.
+Beyond simple class providers, nestelia supports several custom provider types for advanced dependency injection scenarios.
 
 ## Class Providers
 

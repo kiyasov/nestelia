@@ -4,7 +4,7 @@
 function Controller(prefix?): ClassDecorator;
 ```
 
-Defined in: [packages/core/src/decorators/controller.decorator.ts:21](https://github.com/kiyasov/elysia-nest/blob/main/packages/core/src/decorators/controller.decorator.ts#L21)
+Defined in: [packages/core/src/decorators/controller.decorator.ts:21](https://github.com/kiyasov/nestelia/blob/main/packages/core/src/decorators/controller.decorator.ts#L21)
 
 Controller decorator that defines a controller with a route prefix.
 

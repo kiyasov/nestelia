@@ -4,7 +4,7 @@
 function isForwardRef<T>(token): token is ForwardReference<T>;
 ```
 
-Defined in: [packages/core/src/di/provider.interface.ts:28](https://github.com/kiyasov/elysia-nest/blob/main/packages/core/src/di/provider.interface.ts#L28)
+Defined in: [packages/core/src/di/provider.interface.ts:28](https://github.com/kiyasov/nestelia/blob/main/packages/core/src/di/provider.interface.ts#L28)
 
 ## Type Parameters
 

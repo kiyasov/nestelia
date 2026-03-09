@@ -4,7 +4,7 @@
 function isFactoryProvider(provider): provider is FactoryProvider<unknown>;
 ```
 
-Defined in: [packages/core/src/di/provider.interface.ts:106](https://github.com/kiyasov/elysia-nest/blob/main/packages/core/src/di/provider.interface.ts#L106)
+Defined in: [packages/core/src/di/provider.interface.ts:106](https://github.com/kiyasov/nestelia/blob/main/packages/core/src/di/provider.interface.ts#L106)
 
 ## Parameters
 

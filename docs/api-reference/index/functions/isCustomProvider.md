@@ -4,7 +4,7 @@
 function isCustomProvider(provider): provider is ValueProvider | ClassProvider | ExistingProvider | FactoryProvider<unknown>;
 ```
 
-Defined in: [packages/core/src/di/provider.interface.ts:93](https://github.com/kiyasov/elysia-nest/blob/main/packages/core/src/di/provider.interface.ts#L93)
+Defined in: [packages/core/src/di/provider.interface.ts:93](https://github.com/kiyasov/nestelia/blob/main/packages/core/src/di/provider.interface.ts#L93)
 
 ## Parameters
 

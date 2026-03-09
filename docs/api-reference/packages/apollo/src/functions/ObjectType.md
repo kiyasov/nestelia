@@ -4,7 +4,7 @@
 function ObjectType(options?): ClassDecorator;
 ```
 
-Defined in: [packages/apollo/src/decorators/type.decorator.ts:37](https://github.com/kiyasov/elysia-nest/blob/main/packages/apollo/src/decorators/type.decorator.ts#L37)
+Defined in: [packages/apollo/src/decorators/type.decorator.ts:37](https://github.com/kiyasov/nestelia/blob/main/packages/apollo/src/decorators/type.decorator.ts#L37)
 
 Decorator for GraphQL Object Type.
 

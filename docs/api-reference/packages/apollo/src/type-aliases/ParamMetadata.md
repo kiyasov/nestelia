@@ -9,6 +9,6 @@ type ParamMetadata =
   | InfoMetadata;
 ```
 
-Defined in: [packages/apollo/src/decorators/types.ts:181](https://github.com/kiyasov/elysia-nest/blob/main/packages/apollo/src/decorators/types.ts#L181)
+Defined in: [packages/apollo/src/decorators/types.ts:181](https://github.com/kiyasov/nestelia/blob/main/packages/apollo/src/decorators/types.ts#L181)
 
 Union parameter metadata.

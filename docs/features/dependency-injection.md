@@ -4,14 +4,14 @@ icon: plug
 description: Constructor-based DI with multiple scopes
 ---
 
-@kiyasov/elysia-nest provides a full dependency injection system. Services are registered in modules and automatically injected into controllers and other services.
+nestelia provides a full dependency injection system. Services are registered in modules and automatically injected into controllers and other services.
 
 ## @Injectable()
 
 Mark a class as injectable so the DI container can manage it:
 
 ```typescript
-import { Injectable } from "@kiyasov/elysia-nest";
+import { Injectable } from "nestelia";
 
 @Injectable()
 class UserService {
@@ -47,7 +47,7 @@ constructor(
 Control the lifecycle of your services with scopes:
 
 ```typescript
-import { Injectable, Scope } from "@kiyasov/elysia-nest";
+import { Injectable, Scope } from "nestelia";
 
 // Default — one instance shared everywhere
 @Injectable()

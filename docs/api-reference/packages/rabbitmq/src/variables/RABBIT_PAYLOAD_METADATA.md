@@ -4,4 +4,4 @@
 const RABBIT_PAYLOAD_METADATA: "__rabbitPayload__" = "__rabbitPayload__";
 ```
 
-Defined in: [packages/rabbitmq/src/decorators/rabbitmq.decorators.ts:308](https://github.com/kiyasov/elysia-nest/blob/main/packages/rabbitmq/src/decorators/rabbitmq.decorators.ts#L308)
+Defined in: [packages/rabbitmq/src/decorators/rabbitmq.decorators.ts:308](https://github.com/kiyasov/nestelia/blob/main/packages/rabbitmq/src/decorators/rabbitmq.decorators.ts#L308)

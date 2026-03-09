@@ -1,6 +1,6 @@
 # Class: CacheInterceptor
 
-Defined in: [packages/cache/src/interceptors/cache.interceptor.ts:97](https://github.com/kiyasov/elysia-nest/blob/main/packages/cache/src/interceptors/cache.interceptor.ts#L97)
+Defined in: [packages/cache/src/interceptors/cache.interceptor.ts:97](https://github.com/kiyasov/nestelia/blob/main/packages/cache/src/interceptors/cache.interceptor.ts#L97)
 
 Interceptor that handles HTTP caching using cache-manager.
 
@@ -54,7 +54,7 @@ new CacheInterceptor(
    httpAdapterHost?): CacheInterceptor;
 ```
 
-Defined in: [packages/cache/src/interceptors/cache.interceptor.ts:108](https://github.com/kiyasov/elysia-nest/blob/main/packages/cache/src/interceptors/cache.interceptor.ts#L108)
+Defined in: [packages/cache/src/interceptors/cache.interceptor.ts:108](https://github.com/kiyasov/nestelia/blob/main/packages/cache/src/interceptors/cache.interceptor.ts#L108)
 
 #### Parameters
 
@@ -76,7 +76,7 @@ Defined in: [packages/cache/src/interceptors/cache.interceptor.ts:108](https://g
 intercept(context, next): Promise<Observable<unknown>>;
 ```
 
-Defined in: [packages/cache/src/interceptors/cache.interceptor.ts:123](https://github.com/kiyasov/elysia-nest/blob/main/packages/cache/src/interceptors/cache.interceptor.ts#L123)
+Defined in: [packages/cache/src/interceptors/cache.interceptor.ts:123](https://github.com/kiyasov/nestelia/blob/main/packages/cache/src/interceptors/cache.interceptor.ts#L123)
 
 Intercepts the request and handles caching logic.
 
@@ -105,7 +105,7 @@ An observable of the response.
 protected isRequestCacheable(context): boolean;
 ```
 
-Defined in: [packages/cache/src/interceptors/cache.interceptor.ts:246](https://github.com/kiyasov/elysia-nest/blob/main/packages/cache/src/interceptors/cache.interceptor.ts#L246)
+Defined in: [packages/cache/src/interceptors/cache.interceptor.ts:246](https://github.com/kiyasov/nestelia/blob/main/packages/cache/src/interceptors/cache.interceptor.ts#L246)
 
 Checks if the current request method is cacheable.
 
@@ -129,7 +129,7 @@ True if the request method is in allowedMethods.
 protected setHeadersWhenHttp(context, value): void;
 ```
 
-Defined in: [packages/cache/src/interceptors/cache.interceptor.ts:263](https://github.com/kiyasov/elysia-nest/blob/main/packages/cache/src/interceptors/cache.interceptor.ts#L263)
+Defined in: [packages/cache/src/interceptors/cache.interceptor.ts:263](https://github.com/kiyasov/nestelia/blob/main/packages/cache/src/interceptors/cache.interceptor.ts#L263)
 
 Sets cache headers (X-Cache: HIT/MISS) on HTTP response.
 
@@ -152,7 +152,7 @@ Sets cache headers (X-Cache: HIT/MISS) on HTTP response.
 protected trackBy(context): string | undefined;
 ```
 
-Defined in: [packages/cache/src/interceptors/cache.interceptor.ts:213](https://github.com/kiyasov/elysia-nest/blob/main/packages/cache/src/interceptors/cache.interceptor.ts#L213)
+Defined in: [packages/cache/src/interceptors/cache.interceptor.ts:213](https://github.com/kiyasov/nestelia/blob/main/packages/cache/src/interceptors/cache.interceptor.ts#L213)
 
 Generates a cache key for the current request.
 
@@ -172,7 +172,7 @@ The cache key or undefined if not cacheable.
 
 | Property | Modifier | Type | Description | Defined in |
 | ------ | ------ | ------ | ------ | ------ |
-| <a id="allowedmethods"></a> `allowedMethods` | `readonly` | readonly `string`[] | List of HTTP methods that are allowed to be cached. | [packages/cache/src/interceptors/cache.interceptor.ts:101](https://github.com/kiyasov/elysia-nest/blob/main/packages/cache/src/interceptors/cache.interceptor.ts#L101) |
-| <a id="cachemanager"></a> `cacheManager` | `readonly` | [`Cache`](Cache.md) | The cache manager instance. | [packages/cache/src/interceptors/cache.interceptor.ts:109](https://github.com/kiyasov/elysia-nest/blob/main/packages/cache/src/interceptors/cache.interceptor.ts#L109) |
-| <a id="httpadapterhost"></a> `httpAdapterHost?` | `readonly` | [`HttpAdapterHost`](../../../../index/classes/HttpAdapterHost.md) | Optional HTTP adapter host; absent in non-HTTP contexts. | [packages/cache/src/interceptors/cache.interceptor.ts:113](https://github.com/kiyasov/elysia-nest/blob/main/packages/cache/src/interceptors/cache.interceptor.ts#L113) |
-| <a id="reflector"></a> `reflector` | `readonly` | [`Reflector`](../../../../index/classes/Reflector.md) | The reflector for reading metadata. | [packages/cache/src/interceptors/cache.interceptor.ts:110](https://github.com/kiyasov/elysia-nest/blob/main/packages/cache/src/interceptors/cache.interceptor.ts#L110) |
+| <a id="allowedmethods"></a> `allowedMethods` | `readonly` | readonly `string`[] | List of HTTP methods that are allowed to be cached. | [packages/cache/src/interceptors/cache.interceptor.ts:101](https://github.com/kiyasov/nestelia/blob/main/packages/cache/src/interceptors/cache.interceptor.ts#L101) |
+| <a id="cachemanager"></a> `cacheManager` | `readonly` | [`Cache`](Cache.md) | The cache manager instance. | [packages/cache/src/interceptors/cache.interceptor.ts:109](https://github.com/kiyasov/nestelia/blob/main/packages/cache/src/interceptors/cache.interceptor.ts#L109) |
+| <a id="httpadapterhost"></a> `httpAdapterHost?` | `readonly` | [`HttpAdapterHost`](../../../../index/classes/HttpAdapterHost.md) | Optional HTTP adapter host; absent in non-HTTP contexts. | [packages/cache/src/interceptors/cache.interceptor.ts:113](https://github.com/kiyasov/nestelia/blob/main/packages/cache/src/interceptors/cache.interceptor.ts#L113) |
+| <a id="reflector"></a> `reflector` | `readonly` | [`Reflector`](../../../../index/classes/Reflector.md) | The reflector for reading metadata. | [packages/cache/src/interceptors/cache.interceptor.ts:110](https://github.com/kiyasov/nestelia/blob/main/packages/cache/src/interceptors/cache.interceptor.ts#L110) |

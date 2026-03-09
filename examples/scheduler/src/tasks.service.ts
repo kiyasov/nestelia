@@ -1,4 +1,4 @@
-import { Injectable } from "@kiyasov/elysia-nest";
+import { Injectable } from "nestelia";
 import { Cron, Interval, Timeout } from "../../../packages/scheduler/src";
 
 @Injectable()

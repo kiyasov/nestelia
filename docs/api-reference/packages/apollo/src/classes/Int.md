@@ -1,6 +1,6 @@
 # Abstract Class: Int
 
-Defined in: [packages/apollo/src/decorators/type.decorator.ts:399](https://github.com/kiyasov/elysia-nest/blob/main/packages/apollo/src/decorators/type.decorator.ts#L399)
+Defined in: [packages/apollo/src/decorators/type.decorator.ts:399](https://github.com/kiyasov/nestelia/blob/main/packages/apollo/src/decorators/type.decorator.ts#L399)
 
 Marker class for GraphQL Int scalar. Use with @Field(() => Int).
 

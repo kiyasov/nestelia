@@ -4,7 +4,7 @@
 function parseValidationError(error): ValidationErrorDetails;
 ```
 
-Defined in: [packages/core/src/exceptions/validation.exception.ts:22](https://github.com/kiyasov/elysia-nest/blob/main/packages/core/src/exceptions/validation.exception.ts#L22)
+Defined in: [packages/core/src/exceptions/validation.exception.ts:22](https://github.com/kiyasov/nestelia/blob/main/packages/core/src/exceptions/validation.exception.ts#L22)
 
 ## Parameters
 

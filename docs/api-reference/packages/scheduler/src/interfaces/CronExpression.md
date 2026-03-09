@@ -1,6 +1,6 @@
 # Interface: CronExpression
 
-Defined in: [packages/scheduler/src/interfaces/cron.interface.ts:4](https://github.com/kiyasov/elysia-nest/blob/main/packages/scheduler/src/interfaces/cron.interface.ts#L4)
+Defined in: [packages/scheduler/src/interfaces/cron.interface.ts:4](https://github.com/kiyasov/nestelia/blob/main/packages/scheduler/src/interfaces/cron.interface.ts#L4)
 
 Represents a cron expression for scheduled tasks
 
@@ -12,7 +12,7 @@ Represents a cron expression for scheduled tasks
 toString(): string;
 ```
 
-Defined in: [packages/scheduler/src/interfaces/cron.interface.ts:8](https://github.com/kiyasov/elysia-nest/blob/main/packages/scheduler/src/interfaces/cron.interface.ts#L8)
+Defined in: [packages/scheduler/src/interfaces/cron.interface.ts:8](https://github.com/kiyasov/nestelia/blob/main/packages/scheduler/src/interfaces/cron.interface.ts#L8)
 
 Convert to a string representation
 

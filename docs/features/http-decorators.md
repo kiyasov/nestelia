@@ -23,7 +23,7 @@ HTTP decorators bind controller methods to specific HTTP methods and paths.
 
 ```typescript
 import { t } from "elysia";
-import { Controller, Get, Post, Put, Delete, Body, Ctx } from "@kiyasov/elysia-nest";
+import { Controller, Get, Post, Put, Delete, Body, Ctx } from "nestelia";
 
 @Controller("/posts")
 class PostController {

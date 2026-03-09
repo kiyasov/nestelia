@@ -4,7 +4,7 @@
 function forwardRef<T>(fn): ForwardReference<T>;
 ```
 
-Defined in: [packages/core/src/di/provider.interface.ts:22](https://github.com/kiyasov/elysia-nest/blob/main/packages/core/src/di/provider.interface.ts#L22)
+Defined in: [packages/core/src/di/provider.interface.ts:22](https://github.com/kiyasov/nestelia/blob/main/packages/core/src/di/provider.interface.ts#L22)
 
 ## Type Parameters
 

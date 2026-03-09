@@ -1,6 +1,6 @@
 # Class: ClientFactory
 
-Defined in: [packages/microservices/client/client-factory.ts:17](https://github.com/kiyasov/elysia-nest/blob/main/packages/microservices/client/client-factory.ts#L17)
+Defined in: [packages/microservices/client/client-factory.ts:17](https://github.com/kiyasov/nestelia/blob/main/packages/microservices/client/client-factory.ts#L17)
 
 Factory that creates the correct [ClientProxy](ClientProxy.md) implementation for the
 given transport configuration.
@@ -25,7 +25,7 @@ new ClientFactory(): ClientFactory;
 static create(options): ClientProxy;
 ```
 
-Defined in: [packages/microservices/client/client-factory.ts:24](https://github.com/kiyasov/elysia-nest/blob/main/packages/microservices/client/client-factory.ts#L24)
+Defined in: [packages/microservices/client/client-factory.ts:24](https://github.com/kiyasov/nestelia/blob/main/packages/microservices/client/client-factory.ts#L24)
 
 Instantiates and returns a transport-specific [ClientProxy](ClientProxy.md).
 

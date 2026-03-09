@@ -1,6 +1,6 @@
 # Class: RedisPubSub
 
-Defined in: [packages/graphql-pubsub/src/redis-pubsub.ts:42](https://github.com/kiyasov/elysia-nest/blob/main/packages/graphql-pubsub/src/redis-pubsub.ts#L42)
+Defined in: [packages/graphql-pubsub/src/redis-pubsub.ts:42](https://github.com/kiyasov/nestelia/blob/main/packages/graphql-pubsub/src/redis-pubsub.ts#L42)
 
 Redis-backed implementation of the [PubSubEngine](../interfaces/PubSubEngine.md) contract.
 
@@ -42,7 +42,7 @@ await pubsub.close();
 new RedisPubSub(options?): RedisPubSub;
 ```
 
-Defined in: [packages/graphql-pubsub/src/redis-pubsub.ts:68](https://github.com/kiyasov/elysia-nest/blob/main/packages/graphql-pubsub/src/redis-pubsub.ts#L68)
+Defined in: [packages/graphql-pubsub/src/redis-pubsub.ts:68](https://github.com/kiyasov/nestelia/blob/main/packages/graphql-pubsub/src/redis-pubsub.ts#L68)
 
 #### Parameters
 
@@ -62,7 +62,7 @@ Defined in: [packages/graphql-pubsub/src/redis-pubsub.ts:68](https://github.com/
 asyncIterator<T>(triggers): AsyncIterator<T>;
 ```
 
-Defined in: [packages/graphql-pubsub/src/redis-pubsub.ts:292](https://github.com/kiyasov/elysia-nest/blob/main/packages/graphql-pubsub/src/redis-pubsub.ts#L292)
+Defined in: [packages/graphql-pubsub/src/redis-pubsub.ts:292](https://github.com/kiyasov/nestelia/blob/main/packages/graphql-pubsub/src/redis-pubsub.ts#L292)
 
 Creates an `AsyncIterator` over the given `triggers` for use in
 GraphQL subscription resolvers.
@@ -104,7 +104,7 @@ subscribe() {
 close(): Promise<void>;
 ```
 
-Defined in: [packages/graphql-pubsub/src/redis-pubsub.ts:317](https://github.com/kiyasov/elysia-nest/blob/main/packages/graphql-pubsub/src/redis-pubsub.ts#L317)
+Defined in: [packages/graphql-pubsub/src/redis-pubsub.ts:317](https://github.com/kiyasov/nestelia/blob/main/packages/graphql-pubsub/src/redis-pubsub.ts#L317)
 
 Gracefully closes both Redis connections.
 
@@ -122,7 +122,7 @@ Call this during application shutdown to allow open sockets to drain.
 getPublisher(): Redis;
 ```
 
-Defined in: [packages/graphql-pubsub/src/redis-pubsub.ts:308](https://github.com/kiyasov/elysia-nest/blob/main/packages/graphql-pubsub/src/redis-pubsub.ts#L308)
+Defined in: [packages/graphql-pubsub/src/redis-pubsub.ts:308](https://github.com/kiyasov/nestelia/blob/main/packages/graphql-pubsub/src/redis-pubsub.ts#L308)
 
 Returns the underlying publisher Redis client.
 
@@ -138,7 +138,7 @@ Returns the underlying publisher Redis client.
 getSubscriber(): Redis;
 ```
 
-Defined in: [packages/graphql-pubsub/src/redis-pubsub.ts:303](https://github.com/kiyasov/elysia-nest/blob/main/packages/graphql-pubsub/src/redis-pubsub.ts#L303)
+Defined in: [packages/graphql-pubsub/src/redis-pubsub.ts:303](https://github.com/kiyasov/nestelia/blob/main/packages/graphql-pubsub/src/redis-pubsub.ts#L303)
 
 Returns the underlying subscriber Redis client.
 
@@ -159,7 +159,7 @@ Do **not** issue regular Redis commands on this client — it is
 publish(trigger, payload): Promise<void>;
 ```
 
-Defined in: [packages/graphql-pubsub/src/redis-pubsub.ts:139](https://github.com/kiyasov/elysia-nest/blob/main/packages/graphql-pubsub/src/redis-pubsub.ts#L139)
+Defined in: [packages/graphql-pubsub/src/redis-pubsub.ts:139](https://github.com/kiyasov/nestelia/blob/main/packages/graphql-pubsub/src/redis-pubsub.ts#L139)
 
 Publishes `payload` to the Redis channel derived from `trigger`.
 
@@ -192,7 +192,7 @@ subscribe<T>(
 options?): Promise<number>;
 ```
 
-Defined in: [packages/graphql-pubsub/src/redis-pubsub.ts:156](https://github.com/kiyasov/elysia-nest/blob/main/packages/graphql-pubsub/src/redis-pubsub.ts#L156)
+Defined in: [packages/graphql-pubsub/src/redis-pubsub.ts:156](https://github.com/kiyasov/nestelia/blob/main/packages/graphql-pubsub/src/redis-pubsub.ts#L156)
 
 Subscribes to `trigger` and invokes `onMessage` for every incoming message.
 
@@ -232,7 +232,7 @@ A numeric subscription ID used with [unsubscribe](#unsubscribe).
 unsubscribe(subId): void;
 ```
 
-Defined in: [packages/graphql-pubsub/src/redis-pubsub.ts:244](https://github.com/kiyasov/elysia-nest/blob/main/packages/graphql-pubsub/src/redis-pubsub.ts#L244)
+Defined in: [packages/graphql-pubsub/src/redis-pubsub.ts:244](https://github.com/kiyasov/nestelia/blob/main/packages/graphql-pubsub/src/redis-pubsub.ts#L244)
 
 Cancels the subscription identified by `subId`.
 

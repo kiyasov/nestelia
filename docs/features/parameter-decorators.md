@@ -26,7 +26,7 @@ Parameter decorators allow you to extract specific parts of the incoming request
 
 ```typescript
 import { t } from "elysia";
-import { Controller, Post, Get, Body, Param, Query } from "@kiyasov/elysia-nest";
+import { Controller, Post, Get, Body, Param, Query } from "nestelia";
 
 @Controller("/users")
 class UserController {
@@ -151,7 +151,7 @@ handle(@Ip() ip: string) {
 Create reusable param decorators with `createParamDecorator`:
 
 ```typescript
-import { createParamDecorator, ExecutionContext } from "@kiyasov/elysia-nest";
+import { createParamDecorator, ExecutionContext } from "nestelia";
 
 const User = createParamDecorator((data: unknown, ctx: ExecutionContext) => {
   const request = ctx.switchToHttp().getRequest<any>();
@@ -170,7 +170,7 @@ The `@Schema()` decorator lets you define the complete Elysia route schema (body
 
 ```typescript
 import { t } from "elysia";
-import { Schema } from "@kiyasov/elysia-nest";
+import { Schema } from "nestelia";
 
 @Post("/")
 @Schema({

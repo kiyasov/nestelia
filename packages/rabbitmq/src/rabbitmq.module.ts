@@ -1,6 +1,6 @@
-import { Module } from "@kiyasov/elysia-nest";
-import type { DynamicModule, Provider, ProviderToken } from "@kiyasov/elysia-nest";
-import { Logger } from "@kiyasov/elysia-nest";
+import { Module } from "nestelia";
+import type { DynamicModule, Provider, ProviderToken } from "nestelia";
+import { Logger } from "nestelia";
 import { AmqpConnection, RABBITMQ_CONFIG } from "./connection";
 import type { RabbitMQConfig } from "./interfaces";
 
@@ -12,7 +12,7 @@ export interface RabbitMQModuleOptions extends RabbitMQConfig {
 }
 
 /**
- * RabbitMQ module for @@kiyasov/elysia-nest
+ * RabbitMQ module for @nestelia
  * Provides RabbitMQ integration with decorators for messaging
  *
  * @example

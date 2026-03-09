@@ -4,7 +4,7 @@
 function EventPattern(pattern, transport?): MethodDecorator;
 ```
 
-Defined in: [packages/microservices/decorators/event-pattern.decorator.ts:23](https://github.com/kiyasov/elysia-nest/blob/main/packages/microservices/decorators/event-pattern.decorator.ts#L23)
+Defined in: [packages/microservices/decorators/event-pattern.decorator.ts:23](https://github.com/kiyasov/nestelia/blob/main/packages/microservices/decorators/event-pattern.decorator.ts#L23)
 
 Marks a controller method as a **fire-and-forget** event handler.
 The method is called when a publisher emits an event matching `pattern`.

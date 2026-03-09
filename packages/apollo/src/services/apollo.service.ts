@@ -7,7 +7,7 @@ import { makeExecutableSchema } from "@graphql-tools/schema";
 import type { Context as ElysiaContext, Elysia } from "elysia";
 import { type GraphQLSchema, printSchema } from "graphql";
 
-import { Container } from "@kiyasov/elysia-nest";
+import { Container } from "nestelia";
 import type {
   ApolloContext,
   ApolloOptions,

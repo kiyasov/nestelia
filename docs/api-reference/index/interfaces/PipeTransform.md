@@ -1,6 +1,6 @@
 # Interface: PipeTransform
 
-Defined in: [packages/core/src/pipes/pipe.interface.ts:12](https://github.com/kiyasov/elysia-nest/blob/main/packages/core/src/pipes/pipe.interface.ts#L12)
+Defined in: [packages/core/src/pipes/pipe.interface.ts:12](https://github.com/kiyasov/nestelia/blob/main/packages/core/src/pipes/pipe.interface.ts#L12)
 
 Interface for pipes
 
@@ -12,7 +12,7 @@ Interface for pipes
 transform(value, metadata?): any;
 ```
 
-Defined in: [packages/core/src/pipes/pipe.interface.ts:18](https://github.com/kiyasov/elysia-nest/blob/main/packages/core/src/pipes/pipe.interface.ts#L18)
+Defined in: [packages/core/src/pipes/pipe.interface.ts:18](https://github.com/kiyasov/nestelia/blob/main/packages/core/src/pipes/pipe.interface.ts#L18)
 
 Method to transform input data
 

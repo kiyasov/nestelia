@@ -1,6 +1,6 @@
 # Interface: ExceptionFilter
 
-Defined in: [packages/core/src/exceptions/exceptions.filter.ts:15](https://github.com/kiyasov/elysia-nest/blob/main/packages/core/src/exceptions/exceptions.filter.ts#L15)
+Defined in: [packages/core/src/exceptions/exceptions.filter.ts:15](https://github.com/kiyasov/nestelia/blob/main/packages/core/src/exceptions/exceptions.filter.ts#L15)
 
 Interface for exception filters
 
@@ -12,7 +12,7 @@ Interface for exception filters
 catch(exception, context): any;
 ```
 
-Defined in: [packages/core/src/exceptions/exceptions.filter.ts:21](https://github.com/kiyasov/elysia-nest/blob/main/packages/core/src/exceptions/exceptions.filter.ts#L21)
+Defined in: [packages/core/src/exceptions/exceptions.filter.ts:21](https://github.com/kiyasov/nestelia/blob/main/packages/core/src/exceptions/exceptions.filter.ts#L21)
 
 Method to catch and handle exceptions
 

@@ -12,7 +12,7 @@ A comprehensive caching module for Elysia-Nest applications, providing:
 
 Quick start:
 ```typescript
-import { CacheModule } from '@@kiyasov/elysia-nest/cache-manager';
+import { CacheModule } from '@nestelia/cache-manager';
 
 @Module({
   imports: [CacheModule.register()],
@@ -26,7 +26,7 @@ export class AppModule {}
 | ------ | ------ |
 | [Cache](classes/Cache.md) | Empty base class that will be merged with the Cache interface. |
 | [CacheInterceptor](classes/CacheInterceptor.md) | Interceptor that handles HTTP caching using cache-manager. |
-| [CacheModule](classes/CacheModule.md) | Module that provides caching functionality for @kiyasov/elysia-nest. |
+| [CacheModule](classes/CacheModule.md) | Module that provides caching functionality for nestelia. |
 
 ## Functions
 

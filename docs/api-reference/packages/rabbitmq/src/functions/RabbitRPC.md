@@ -4,7 +4,7 @@
 function RabbitRPC(options): MethodDecorator;
 ```
 
-Defined in: [packages/rabbitmq/src/decorators/rabbitmq.decorators.ts:77](https://github.com/kiyasov/elysia-nest/blob/main/packages/rabbitmq/src/decorators/rabbitmq.decorators.ts#L77)
+Defined in: [packages/rabbitmq/src/decorators/rabbitmq.decorators.ts:77](https://github.com/kiyasov/nestelia/blob/main/packages/rabbitmq/src/decorators/rabbitmq.decorators.ts#L77)
 
 Decorator for RabbitMQ RPC handlers
 

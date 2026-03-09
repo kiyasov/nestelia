@@ -15,8 +15,8 @@ bun add amqplib
 ## Setup
 
 ```typescript
-import { Module } from "@kiyasov/elysia-nest";
-import { RabbitMQModule } from "@kiyasov/elysia-nest/rabbitmq";
+import { Module } from "nestelia";
+import { RabbitMQModule } from "nestelia/rabbitmq";
 
 @Module({
   imports: [
@@ -34,7 +34,7 @@ class AppModule {}
 ### Async Configuration
 
 ```typescript
-import { RabbitMQModule } from "@kiyasov/elysia-nest/rabbitmq";
+import { RabbitMQModule } from "nestelia/rabbitmq";
 
 RabbitMQModule.forRootAsync({
   useFactory: async (config: ConfigService) => ({
@@ -49,8 +49,8 @@ RabbitMQModule.forRootAsync({
 ## Subscribe to Messages
 
 ```typescript
-import { Injectable } from "@kiyasov/elysia-nest";
-import { RabbitSubscribe, RabbitMQMessage } from "@kiyasov/elysia-nest/rabbitmq";
+import { Injectable } from "nestelia";
+import { RabbitSubscribe, RabbitMQMessage } from "nestelia/rabbitmq";
 
 @Injectable()
 class OrdersHandler {
@@ -69,7 +69,7 @@ class OrdersHandler {
 ## RPC Pattern
 
 ```typescript
-import { RabbitRPC } from "@kiyasov/elysia-nest/rabbitmq";
+import { RabbitRPC } from "nestelia/rabbitmq";
 
 @RabbitRPC({
   exchange: "rpc",
@@ -85,8 +85,8 @@ async calculateTotal(data: { items: { price: number; qty: number }[] }) {
 ## Publishing Messages
 
 ```typescript
-import { Injectable } from "@kiyasov/elysia-nest";
-import { RabbitMQService } from "@kiyasov/elysia-nest/rabbitmq";
+import { Injectable } from "nestelia";
+import { RabbitMQService } from "nestelia/rabbitmq";
 
 @Injectable()
 class OrdersService {
@@ -111,7 +111,7 @@ class OrdersService {
 ### Retry
 
 ```typescript
-import { RabbitSubscribe, RabbitRetry } from "@kiyasov/elysia-nest/rabbitmq";
+import { RabbitSubscribe, RabbitRetry } from "nestelia/rabbitmq";
 
 @RabbitSubscribe({
   exchange: "orders",

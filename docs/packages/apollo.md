@@ -17,8 +17,8 @@ bun add @apollo/server graphql graphql-ws
 Register the GraphQL module in your application:
 
 ```typescript
-import { Module } from "@kiyasov/elysia-nest";
-import { GraphQLModule } from "@kiyasov/elysia-nest/apollo";
+import { Module } from "nestelia";
+import { GraphQLModule } from "nestelia/apollo";
 
 @Module({
   imports: [
@@ -36,7 +36,7 @@ class AppModule {}
 ### Object Types
 
 ```typescript
-import { ObjectType, Field } from "@kiyasov/elysia-nest/apollo";
+import { ObjectType, Field } from "nestelia/apollo";
 
 @ObjectType()
 class User {
@@ -54,7 +54,7 @@ class User {
 ### Input Types
 
 ```typescript
-import { InputType, Field } from "@kiyasov/elysia-nest/apollo";
+import { InputType, Field } from "nestelia/apollo";
 
 @InputType()
 class CreateUserInput {
@@ -73,7 +73,7 @@ TypeScript emits `String` or `Number` as `design:type` for enum fields, so the s
 cannot infer the enum type automatically.
 
 ```typescript
-import { registerEnumType } from "@kiyasov/elysia-nest/apollo";
+import { registerEnumType } from "nestelia/apollo";
 
 enum Role {
   ADMIN = "ADMIN",
@@ -99,7 +99,7 @@ Use `createUnionType` for code-first union types. The `resolveType` function can
 either a type name string or a class constructor.
 
 ```typescript
-import { createUnionType } from "@kiyasov/elysia-nest/apollo";
+import { createUnionType } from "nestelia/apollo";
 
 @ObjectType()
 class Cat {
@@ -131,7 +131,7 @@ class Owner {
 ### Custom Scalars
 
 ```typescript
-import { Scalar } from "@kiyasov/elysia-nest/apollo";
+import { Scalar } from "nestelia/apollo";
 
 @Scalar("DateTime")
 class DateTimeScalar {
@@ -152,8 +152,8 @@ class DateTimeScalar {
 Define GraphQL resolvers with the `@Resolver()` decorator:
 
 ```typescript
-import { Resolver, Query, Mutation, Args } from "@kiyasov/elysia-nest/apollo";
-import { Injectable, Inject } from "@kiyasov/elysia-nest";
+import { Resolver, Query, Mutation, Args } from "nestelia/apollo";
+import { Injectable, Inject } from "nestelia";
 
 @Resolver(() => User)
 @Injectable()
@@ -182,7 +182,7 @@ class UserResolver {
 Use `@FieldResolver()` (or the `@ResolveField()` alias) to resolve nested fields:
 
 ```typescript
-import { Resolver, FieldResolver, Parent } from "@kiyasov/elysia-nest/apollo";
+import { Resolver, FieldResolver, Parent } from "nestelia/apollo";
 
 @Resolver(() => Post)
 class PostResolver {
@@ -196,7 +196,7 @@ class PostResolver {
 ## Subscriptions
 
 ```typescript
-import { Resolver, Subscription } from "@kiyasov/elysia-nest/apollo";
+import { Resolver, Subscription } from "nestelia/apollo";
 
 @Resolver(() => User)
 class UserResolver {
@@ -210,7 +210,7 @@ class UserResolver {
 ## Context and Info
 
 ```typescript
-import { Context, Info } from "@kiyasov/elysia-nest/apollo";
+import { Context, Info } from "nestelia/apollo";
 
 @Query(() => User)
 async me(@Context("user") user: User, @Info() info: GraphQLResolveInfo) {
@@ -221,7 +221,7 @@ async me(@Context("user") user: User, @Info() info: GraphQLResolveInfo) {
 ## Guards on Resolvers
 
 ```typescript
-import { UseGuards } from "@kiyasov/elysia-nest";
+import { UseGuards } from "nestelia";
 
 @Resolver(() => User)
 class AdminResolver {

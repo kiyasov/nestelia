@@ -4,7 +4,7 @@
 function Catch(...exceptions): ClassDecorator;
 ```
 
-Defined in: [packages/core/src/exceptions/catch.decorator.ts:33](https://github.com/kiyasov/elysia-nest/blob/main/packages/core/src/exceptions/catch.decorator.ts#L33)
+Defined in: [packages/core/src/exceptions/catch.decorator.ts:33](https://github.com/kiyasov/nestelia/blob/main/packages/core/src/exceptions/catch.decorator.ts#L33)
 
 Decorator that marks a class as an exception filter.
 The decorated class must implement the `ExceptionFilter` interface.

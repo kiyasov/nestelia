@@ -1,6 +1,6 @@
 # Interface: ControllerMetadata
 
-Defined in: [packages/core/src/core/controller-metadata.interface.ts:6](https://github.com/kiyasov/elysia-nest/blob/main/packages/core/src/core/controller-metadata.interface.ts#L6)
+Defined in: [packages/core/src/core/controller-metadata.interface.ts:6](https://github.com/kiyasov/nestelia/blob/main/packages/core/src/core/controller-metadata.interface.ts#L6)
 
 Controller metadata type
 
@@ -8,5 +8,5 @@ Controller metadata type
 
 | Property | Type | Defined in |
 | ------ | ------ | ------ |
-| <a id="prefix"></a> `prefix` | `string` | [packages/core/src/core/controller-metadata.interface.ts:7](https://github.com/kiyasov/elysia-nest/blob/main/packages/core/src/core/controller-metadata.interface.ts#L7) |
-| <a id="routes"></a> `routes` | [`RouteMetadata`](RouteMetadata.md)[] | [packages/core/src/core/controller-metadata.interface.ts:8](https://github.com/kiyasov/elysia-nest/blob/main/packages/core/src/core/controller-metadata.interface.ts#L8) |
+| <a id="prefix"></a> `prefix` | `string` | [packages/core/src/core/controller-metadata.interface.ts:7](https://github.com/kiyasov/nestelia/blob/main/packages/core/src/core/controller-metadata.interface.ts#L7) |
+| <a id="routes"></a> `routes` | [`RouteMetadata`](RouteMetadata.md)[] | [packages/core/src/core/controller-metadata.interface.ts:8](https://github.com/kiyasov/nestelia/blob/main/packages/core/src/core/controller-metadata.interface.ts#L8) |

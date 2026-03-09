@@ -4,4 +4,4 @@
 const LOGGER_OPTIONS: typeof LOGGER_OPTIONS;
 ```
 
-Defined in: [packages/core/src/logger/logger.interface.ts:29](https://github.com/kiyasov/elysia-nest/blob/main/packages/core/src/logger/logger.interface.ts#L29)
+Defined in: [packages/core/src/logger/logger.interface.ts:29](https://github.com/kiyasov/nestelia/blob/main/packages/core/src/logger/logger.interface.ts#L29)

@@ -4,7 +4,7 @@
 function processMultipartRequest(body): Promise<Record<string, unknown>>;
 ```
 
-Defined in: [packages/apollo/src/upload.ts:232](https://github.com/kiyasov/elysia-nest/blob/main/packages/apollo/src/upload.ts#L232)
+Defined in: [packages/apollo/src/upload.ts:232](https://github.com/kiyasov/nestelia/blob/main/packages/apollo/src/upload.ts#L232)
 
 Processes a GraphQL multipart request per the
 [GraphQL multipart request spec](https://github.com/jaydenseric/graphql-multipart-request-spec).

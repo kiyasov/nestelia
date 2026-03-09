@@ -1,8 +1,8 @@
 import passport from "passport";
 
-import { Container } from "@kiyasov/elysia-nest";
-import type { CanActivate } from "@kiyasov/elysia-nest";
-import type { ExecutionContext } from "@kiyasov/elysia-nest";
+import { Container } from "nestelia";
+import type { CanActivate } from "nestelia";
+import type { ExecutionContext } from "nestelia";
 import {
   getRegisteredStrategyClass,
   getRegisteredStrategyInstance,

@@ -1,6 +1,6 @@
 # Class: InstanceWrapper\<T\>
 
-Defined in: [packages/core/src/di/instance-wrapper.ts:42](https://github.com/kiyasov/elysia-nest/blob/main/packages/core/src/di/instance-wrapper.ts#L42)
+Defined in: [packages/core/src/di/instance-wrapper.ts:42](https://github.com/kiyasov/nestelia/blob/main/packages/core/src/di/instance-wrapper.ts#L42)
 
 ## Type Parameters
 
@@ -18,7 +18,7 @@ Defined in: [packages/core/src/di/instance-wrapper.ts:42](https://github.com/kiy
 get instance(): T;
 ```
 
-Defined in: [packages/core/src/di/instance-wrapper.ts:102](https://github.com/kiyasov/elysia-nest/blob/main/packages/core/src/di/instance-wrapper.ts#L102)
+Defined in: [packages/core/src/di/instance-wrapper.ts:102](https://github.com/kiyasov/nestelia/blob/main/packages/core/src/di/instance-wrapper.ts#L102)
 
 ##### Returns
 
@@ -30,7 +30,7 @@ Defined in: [packages/core/src/di/instance-wrapper.ts:102](https://github.com/ki
 set instance(value): void;
 ```
 
-Defined in: [packages/core/src/di/instance-wrapper.ts:97](https://github.com/kiyasov/elysia-nest/blob/main/packages/core/src/di/instance-wrapper.ts#L97)
+Defined in: [packages/core/src/di/instance-wrapper.ts:97](https://github.com/kiyasov/nestelia/blob/main/packages/core/src/di/instance-wrapper.ts#L97)
 
 ##### Parameters
 
@@ -52,7 +52,7 @@ Defined in: [packages/core/src/di/instance-wrapper.ts:97](https://github.com/kiy
 get isFactory(): boolean;
 ```
 
-Defined in: [packages/core/src/di/instance-wrapper.ts:111](https://github.com/kiyasov/elysia-nest/blob/main/packages/core/src/di/instance-wrapper.ts#L111)
+Defined in: [packages/core/src/di/instance-wrapper.ts:111](https://github.com/kiyasov/nestelia/blob/main/packages/core/src/di/instance-wrapper.ts#L111)
 
 ##### Returns
 
@@ -68,7 +68,7 @@ Defined in: [packages/core/src/di/instance-wrapper.ts:111](https://github.com/ki
 get isTransient(): boolean;
 ```
 
-Defined in: [packages/core/src/di/instance-wrapper.ts:107](https://github.com/kiyasov/elysia-nest/blob/main/packages/core/src/di/instance-wrapper.ts#L107)
+Defined in: [packages/core/src/di/instance-wrapper.ts:107](https://github.com/kiyasov/nestelia/blob/main/packages/core/src/di/instance-wrapper.ts#L107)
 
 ##### Returns
 
@@ -84,7 +84,7 @@ Defined in: [packages/core/src/di/instance-wrapper.ts:107](https://github.com/ki
 get uuid(): string;
 ```
 
-Defined in: [packages/core/src/di/instance-wrapper.ts:93](https://github.com/kiyasov/elysia-nest/blob/main/packages/core/src/di/instance-wrapper.ts#L93)
+Defined in: [packages/core/src/di/instance-wrapper.ts:93](https://github.com/kiyasov/nestelia/blob/main/packages/core/src/di/instance-wrapper.ts#L93)
 
 ##### Returns
 
@@ -98,7 +98,7 @@ Defined in: [packages/core/src/di/instance-wrapper.ts:93](https://github.com/kiy
 new InstanceWrapper<T>(options): InstanceWrapper<T>;
 ```
 
-Defined in: [packages/core/src/di/instance-wrapper.ts:62](https://github.com/kiyasov/elysia-nest/blob/main/packages/core/src/di/instance-wrapper.ts#L62)
+Defined in: [packages/core/src/di/instance-wrapper.ts:62](https://github.com/kiyasov/nestelia/blob/main/packages/core/src/di/instance-wrapper.ts#L62)
 
 #### Parameters
 
@@ -118,7 +118,7 @@ Defined in: [packages/core/src/di/instance-wrapper.ts:62](https://github.com/kiy
 addCtorMetadata(index, wrapper): void;
 ```
 
-Defined in: [packages/core/src/di/instance-wrapper.ts:278](https://github.com/kiyasov/elysia-nest/blob/main/packages/core/src/di/instance-wrapper.ts#L278)
+Defined in: [packages/core/src/di/instance-wrapper.ts:278](https://github.com/kiyasov/nestelia/blob/main/packages/core/src/di/instance-wrapper.ts#L278)
 
 #### Parameters
 
@@ -139,7 +139,7 @@ Defined in: [packages/core/src/di/instance-wrapper.ts:278](https://github.com/ki
 addPropertiesMetadata(key, wrapper): void;
 ```
 
-Defined in: [packages/core/src/di/instance-wrapper.ts:289](https://github.com/kiyasov/elysia-nest/blob/main/packages/core/src/di/instance-wrapper.ts#L289)
+Defined in: [packages/core/src/di/instance-wrapper.ts:289](https://github.com/kiyasov/nestelia/blob/main/packages/core/src/di/instance-wrapper.ts#L289)
 
 #### Parameters
 
@@ -160,7 +160,7 @@ Defined in: [packages/core/src/di/instance-wrapper.ts:289](https://github.com/ki
 attachRootInquirer(inquirer): void;
 ```
 
-Defined in: [packages/core/src/di/instance-wrapper.ts:339](https://github.com/kiyasov/elysia-nest/blob/main/packages/core/src/di/instance-wrapper.ts#L339)
+Defined in: [packages/core/src/di/instance-wrapper.ts:339](https://github.com/kiyasov/nestelia/blob/main/packages/core/src/di/instance-wrapper.ts#L339)
 
 #### Parameters
 
@@ -180,7 +180,7 @@ Defined in: [packages/core/src/di/instance-wrapper.ts:339](https://github.com/ki
 cloneStaticInstance(contextId): InstancePerContext<T>;
 ```
 
-Defined in: [packages/core/src/di/instance-wrapper.ts:190](https://github.com/kiyasov/elysia-nest/blob/main/packages/core/src/di/instance-wrapper.ts#L190)
+Defined in: [packages/core/src/di/instance-wrapper.ts:190](https://github.com/kiyasov/nestelia/blob/main/packages/core/src/di/instance-wrapper.ts#L190)
 
 #### Parameters
 
@@ -200,7 +200,7 @@ Defined in: [packages/core/src/di/instance-wrapper.ts:190](https://github.com/ki
 cloneTransientInstance(contextId, inquirerId): InstancePerContext<T>;
 ```
 
-Defined in: [packages/core/src/di/instance-wrapper.ts:214](https://github.com/kiyasov/elysia-nest/blob/main/packages/core/src/di/instance-wrapper.ts#L214)
+Defined in: [packages/core/src/di/instance-wrapper.ts:214](https://github.com/kiyasov/nestelia/blob/main/packages/core/src/di/instance-wrapper.ts#L214)
 
 #### Parameters
 
@@ -221,7 +221,7 @@ Defined in: [packages/core/src/di/instance-wrapper.ts:214](https://github.com/ki
 createPrototype(contextId): object | undefined;
 ```
 
-Defined in: [packages/core/src/di/instance-wrapper.ts:237](https://github.com/kiyasov/elysia-nest/blob/main/packages/core/src/di/instance-wrapper.ts#L237)
+Defined in: [packages/core/src/di/instance-wrapper.ts:237](https://github.com/kiyasov/nestelia/blob/main/packages/core/src/di/instance-wrapper.ts#L237)
 
 #### Parameters
 
@@ -241,7 +241,7 @@ Defined in: [packages/core/src/di/instance-wrapper.ts:237](https://github.com/ki
 getCtorMetadata(): InstanceWrapper<unknown>[];
 ```
 
-Defined in: [packages/core/src/di/instance-wrapper.ts:285](https://github.com/kiyasov/elysia-nest/blob/main/packages/core/src/di/instance-wrapper.ts#L285)
+Defined in: [packages/core/src/di/instance-wrapper.ts:285](https://github.com/kiyasov/nestelia/blob/main/packages/core/src/di/instance-wrapper.ts#L285)
 
 #### Returns
 
@@ -255,7 +255,7 @@ Defined in: [packages/core/src/di/instance-wrapper.ts:285](https://github.com/ki
 getInstanceByContextId(contextId, inquirerId?): InstancePerContext<T>;
 ```
 
-Defined in: [packages/core/src/di/instance-wrapper.ts:115](https://github.com/kiyasov/elysia-nest/blob/main/packages/core/src/di/instance-wrapper.ts#L115)
+Defined in: [packages/core/src/di/instance-wrapper.ts:115](https://github.com/kiyasov/nestelia/blob/main/packages/core/src/di/instance-wrapper.ts#L115)
 
 #### Parameters
 
@@ -276,7 +276,7 @@ Defined in: [packages/core/src/di/instance-wrapper.ts:115](https://github.com/ki
 getInstanceByInquirerId(contextId, inquirerId): InstancePerContext<T>;
 ```
 
-Defined in: [packages/core/src/di/instance-wrapper.ts:140](https://github.com/kiyasov/elysia-nest/blob/main/packages/core/src/di/instance-wrapper.ts#L140)
+Defined in: [packages/core/src/di/instance-wrapper.ts:140](https://github.com/kiyasov/nestelia/blob/main/packages/core/src/di/instance-wrapper.ts#L140)
 
 #### Parameters
 
@@ -297,7 +297,7 @@ Defined in: [packages/core/src/di/instance-wrapper.ts:140](https://github.com/ki
 getPropertiesMetadata(): PropertyMetadata[];
 ```
 
-Defined in: [packages/core/src/di/instance-wrapper.ts:299](https://github.com/kiyasov/elysia-nest/blob/main/packages/core/src/di/instance-wrapper.ts#L299)
+Defined in: [packages/core/src/di/instance-wrapper.ts:299](https://github.com/kiyasov/nestelia/blob/main/packages/core/src/di/instance-wrapper.ts#L299)
 
 #### Returns
 
@@ -311,7 +311,7 @@ Defined in: [packages/core/src/di/instance-wrapper.ts:299](https://github.com/ki
 getRootInquirer(): InstanceWrapper<unknown> | undefined;
 ```
 
-Defined in: [packages/core/src/di/instance-wrapper.ts:346](https://github.com/kiyasov/elysia-nest/blob/main/packages/core/src/di/instance-wrapper.ts#L346)
+Defined in: [packages/core/src/di/instance-wrapper.ts:346](https://github.com/kiyasov/nestelia/blob/main/packages/core/src/di/instance-wrapper.ts#L346)
 
 #### Returns
 
@@ -325,7 +325,7 @@ Defined in: [packages/core/src/di/instance-wrapper.ts:346](https://github.com/ki
 isDependencyTreeStatic(visited?): boolean;
 ```
 
-Defined in: [packages/core/src/di/instance-wrapper.ts:245](https://github.com/kiyasov/elysia-nest/blob/main/packages/core/src/di/instance-wrapper.ts#L245)
+Defined in: [packages/core/src/di/instance-wrapper.ts:245](https://github.com/kiyasov/nestelia/blob/main/packages/core/src/di/instance-wrapper.ts#L245)
 
 #### Parameters
 
@@ -345,7 +345,7 @@ Defined in: [packages/core/src/di/instance-wrapper.ts:245](https://github.com/ki
 isInRequestScope(contextId, inquirer?): boolean;
 ```
 
-Defined in: [packages/core/src/di/instance-wrapper.ts:303](https://github.com/kiyasov/elysia-nest/blob/main/packages/core/src/di/instance-wrapper.ts#L303)
+Defined in: [packages/core/src/di/instance-wrapper.ts:303](https://github.com/kiyasov/nestelia/blob/main/packages/core/src/di/instance-wrapper.ts#L303)
 
 #### Parameters
 
@@ -366,7 +366,7 @@ Defined in: [packages/core/src/di/instance-wrapper.ts:303](https://github.com/ki
 isStatic(contextId, inquirer?): boolean;
 ```
 
-Defined in: [packages/core/src/di/instance-wrapper.ts:315](https://github.com/kiyasov/elysia-nest/blob/main/packages/core/src/di/instance-wrapper.ts#L315)
+Defined in: [packages/core/src/di/instance-wrapper.ts:315](https://github.com/kiyasov/nestelia/blob/main/packages/core/src/di/instance-wrapper.ts#L315)
 
 #### Parameters
 
@@ -390,7 +390,7 @@ setInstanceByContextId(
    inquirerId?): void;
 ```
 
-Defined in: [packages/core/src/di/instance-wrapper.ts:162](https://github.com/kiyasov/elysia-nest/blob/main/packages/core/src/di/instance-wrapper.ts#L162)
+Defined in: [packages/core/src/di/instance-wrapper.ts:162](https://github.com/kiyasov/nestelia/blob/main/packages/core/src/di/instance-wrapper.ts#L162)
 
 #### Parameters
 
@@ -415,7 +415,7 @@ setInstanceByInquirerId(
    value): void;
 ```
 
-Defined in: [packages/core/src/di/instance-wrapper.ts:173](https://github.com/kiyasov/elysia-nest/blob/main/packages/core/src/di/instance-wrapper.ts#L173)
+Defined in: [packages/core/src/di/instance-wrapper.ts:173](https://github.com/kiyasov/nestelia/blob/main/packages/core/src/di/instance-wrapper.ts#L173)
 
 #### Parameters
 
@@ -433,13 +433,13 @@ Defined in: [packages/core/src/di/instance-wrapper.ts:173](https://github.com/ki
 
 | Property | Modifier | Type | Default value | Defined in |
 | ------ | ------ | ------ | ------ | ------ |
-| <a id="aliastarget"></a> `aliasTarget?` | `readonly` | [`ProviderToken`](../type-aliases/ProviderToken.md) | `undefined` | [packages/core/src/di/instance-wrapper.ts:48](https://github.com/kiyasov/elysia-nest/blob/main/packages/core/src/di/instance-wrapper.ts#L48) |
-| <a id="durable"></a> `durable?` | `public` | `boolean` | `undefined` | [packages/core/src/di/instance-wrapper.ts:53](https://github.com/kiyasov/elysia-nest/blob/main/packages/core/src/di/instance-wrapper.ts#L53) |
-| <a id="host"></a> `host?` | `readonly` | `Module` | `undefined` | [packages/core/src/di/instance-wrapper.ts:45](https://github.com/kiyasov/elysia-nest/blob/main/packages/core/src/di/instance-wrapper.ts#L45) |
-| <a id="inject"></a> `inject` | `public` | `unknown`[] \| `null` | `null` | [packages/core/src/di/instance-wrapper.ts:52](https://github.com/kiyasov/elysia-nest/blob/main/packages/core/src/di/instance-wrapper.ts#L52) |
-| <a id="isalias"></a> `isAlias` | `readonly` | `boolean` | `undefined` | [packages/core/src/di/instance-wrapper.ts:46](https://github.com/kiyasov/elysia-nest/blob/main/packages/core/src/di/instance-wrapper.ts#L46) |
-| <a id="metatype"></a> `metatype` | `public` | `Function` \| [`Type`](../interfaces/Type.md)\<`T`\> \| `null` | `undefined` | [packages/core/src/di/instance-wrapper.ts:51](https://github.com/kiyasov/elysia-nest/blob/main/packages/core/src/di/instance-wrapper.ts#L51) |
-| <a id="name"></a> `name` | `readonly` | `string` \| `symbol` | `undefined` | [packages/core/src/di/instance-wrapper.ts:44](https://github.com/kiyasov/elysia-nest/blob/main/packages/core/src/di/instance-wrapper.ts#L44) |
-| <a id="scope"></a> `scope` | `public` | [`Scope`](../enumerations/Scope.md) | `undefined` | [packages/core/src/di/instance-wrapper.ts:50](https://github.com/kiyasov/elysia-nest/blob/main/packages/core/src/di/instance-wrapper.ts#L50) |
-| <a id="subtype"></a> `subtype?` | `readonly` | `string` | `undefined` | [packages/core/src/di/instance-wrapper.ts:47](https://github.com/kiyasov/elysia-nest/blob/main/packages/core/src/di/instance-wrapper.ts#L47) |
-| <a id="token"></a> `token` | `readonly` | [`ProviderToken`](../type-aliases/ProviderToken.md) | `undefined` | [packages/core/src/di/instance-wrapper.ts:43](https://github.com/kiyasov/elysia-nest/blob/main/packages/core/src/di/instance-wrapper.ts#L43) |
+| <a id="aliastarget"></a> `aliasTarget?` | `readonly` | [`ProviderToken`](../type-aliases/ProviderToken.md) | `undefined` | [packages/core/src/di/instance-wrapper.ts:48](https://github.com/kiyasov/nestelia/blob/main/packages/core/src/di/instance-wrapper.ts#L48) |
+| <a id="durable"></a> `durable?` | `public` | `boolean` | `undefined` | [packages/core/src/di/instance-wrapper.ts:53](https://github.com/kiyasov/nestelia/blob/main/packages/core/src/di/instance-wrapper.ts#L53) |
+| <a id="host"></a> `host?` | `readonly` | `Module` | `undefined` | [packages/core/src/di/instance-wrapper.ts:45](https://github.com/kiyasov/nestelia/blob/main/packages/core/src/di/instance-wrapper.ts#L45) |
+| <a id="inject"></a> `inject` | `public` | `unknown`[] \| `null` | `null` | [packages/core/src/di/instance-wrapper.ts:52](https://github.com/kiyasov/nestelia/blob/main/packages/core/src/di/instance-wrapper.ts#L52) |
+| <a id="isalias"></a> `isAlias` | `readonly` | `boolean` | `undefined` | [packages/core/src/di/instance-wrapper.ts:46](https://github.com/kiyasov/nestelia/blob/main/packages/core/src/di/instance-wrapper.ts#L46) |
+| <a id="metatype"></a> `metatype` | `public` | `Function` \| [`Type`](../interfaces/Type.md)\<`T`\> \| `null` | `undefined` | [packages/core/src/di/instance-wrapper.ts:51](https://github.com/kiyasov/nestelia/blob/main/packages/core/src/di/instance-wrapper.ts#L51) |
+| <a id="name"></a> `name` | `readonly` | `string` \| `symbol` | `undefined` | [packages/core/src/di/instance-wrapper.ts:44](https://github.com/kiyasov/nestelia/blob/main/packages/core/src/di/instance-wrapper.ts#L44) |
+| <a id="scope"></a> `scope` | `public` | [`Scope`](../enumerations/Scope.md) | `undefined` | [packages/core/src/di/instance-wrapper.ts:50](https://github.com/kiyasov/nestelia/blob/main/packages/core/src/di/instance-wrapper.ts#L50) |
+| <a id="subtype"></a> `subtype?` | `readonly` | `string` | `undefined` | [packages/core/src/di/instance-wrapper.ts:47](https://github.com/kiyasov/nestelia/blob/main/packages/core/src/di/instance-wrapper.ts#L47) |
+| <a id="token"></a> `token` | `readonly` | [`ProviderToken`](../type-aliases/ProviderToken.md) | `undefined` | [packages/core/src/di/instance-wrapper.ts:43](https://github.com/kiyasov/nestelia/blob/main/packages/core/src/di/instance-wrapper.ts#L43) |

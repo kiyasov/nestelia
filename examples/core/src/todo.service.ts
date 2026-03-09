@@ -1,4 +1,4 @@
-import { Injectable } from "@kiyasov/elysia-nest";
+import { Injectable } from "nestelia";
 
 export interface Todo {
   id: number;

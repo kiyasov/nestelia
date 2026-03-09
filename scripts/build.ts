@@ -1,6 +1,6 @@
 #!/usr/bin/env bun
 /**
- * Build script — compiles @kiyasov/elysia-nest to ESM + CJS + TypeScript declarations.
+ * Build script — compiles nestelia to ESM + CJS + TypeScript declarations.
  *
  * Output structure:
  *   dist/
@@ -32,7 +32,7 @@ const ENTRYPOINTS = [
 // All peer + optional dependencies — must NOT be bundled
 const EXTERNAL = [
   "elysia",
-  "@kiyasov/elysia-nest",      // self-import in sub-packages (e.g. apollo)
+  "nestelia",                  // self-import in sub-packages (e.g. apollo)
   "reflect-metadata",
   "@sinclair/typebox",
   "cron",

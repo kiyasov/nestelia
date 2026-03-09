@@ -1,6 +1,6 @@
 # Class: LifecycleManager
 
-Defined in: [packages/core/src/lifecycle/lifecycle-manager.ts:12](https://github.com/kiyasov/elysia-nest/blob/main/packages/core/src/lifecycle/lifecycle-manager.ts#L12)
+Defined in: [packages/core/src/lifecycle/lifecycle-manager.ts:12](https://github.com/kiyasov/nestelia/blob/main/packages/core/src/lifecycle/lifecycle-manager.ts#L12)
 
 Class to manage lifecycle hooks across the application
 
@@ -24,7 +24,7 @@ new LifecycleManager(): LifecycleManager;
 register(provider): void;
 ```
 
-Defined in: [packages/core/src/lifecycle/lifecycle-manager.ts:18](https://github.com/kiyasov/elysia-nest/blob/main/packages/core/src/lifecycle/lifecycle-manager.ts#L18)
+Defined in: [packages/core/src/lifecycle/lifecycle-manager.ts:18](https://github.com/kiyasov/nestelia/blob/main/packages/core/src/lifecycle/lifecycle-manager.ts#L18)
 
 Register a provider with lifecycle hooks
 
@@ -46,7 +46,7 @@ Register a provider with lifecycle hooks
 triggerBeforeApplicationShutdown(): void;
 ```
 
-Defined in: [packages/core/src/lifecycle/lifecycle-manager.ts:69](https://github.com/kiyasov/elysia-nest/blob/main/packages/core/src/lifecycle/lifecycle-manager.ts#L69)
+Defined in: [packages/core/src/lifecycle/lifecycle-manager.ts:69](https://github.com/kiyasov/nestelia/blob/main/packages/core/src/lifecycle/lifecycle-manager.ts#L69)
 
 Trigger beforeApplicationShutdown hooks for all registered providers
 
@@ -62,7 +62,7 @@ Trigger beforeApplicationShutdown hooks for all registered providers
 triggerOnApplicationBootstrap(): void;
 ```
 
-Defined in: [packages/core/src/lifecycle/lifecycle-manager.ts:41](https://github.com/kiyasov/elysia-nest/blob/main/packages/core/src/lifecycle/lifecycle-manager.ts#L41)
+Defined in: [packages/core/src/lifecycle/lifecycle-manager.ts:41](https://github.com/kiyasov/nestelia/blob/main/packages/core/src/lifecycle/lifecycle-manager.ts#L41)
 
 Trigger onApplicationBootstrap hooks for all registered providers
 
@@ -78,7 +78,7 @@ Trigger onApplicationBootstrap hooks for all registered providers
 triggerOnApplicationShutdown(): void;
 ```
 
-Defined in: [packages/core/src/lifecycle/lifecycle-manager.ts:83](https://github.com/kiyasov/elysia-nest/blob/main/packages/core/src/lifecycle/lifecycle-manager.ts#L83)
+Defined in: [packages/core/src/lifecycle/lifecycle-manager.ts:83](https://github.com/kiyasov/nestelia/blob/main/packages/core/src/lifecycle/lifecycle-manager.ts#L83)
 
 Trigger onApplicationShutdown hooks for all registered providers
 
@@ -94,7 +94,7 @@ Trigger onApplicationShutdown hooks for all registered providers
 triggerOnModuleDestroy(): void;
 ```
 
-Defined in: [packages/core/src/lifecycle/lifecycle-manager.ts:55](https://github.com/kiyasov/elysia-nest/blob/main/packages/core/src/lifecycle/lifecycle-manager.ts#L55)
+Defined in: [packages/core/src/lifecycle/lifecycle-manager.ts:55](https://github.com/kiyasov/nestelia/blob/main/packages/core/src/lifecycle/lifecycle-manager.ts#L55)
 
 Trigger onModuleDestroy hooks for all registered providers
 
@@ -110,7 +110,7 @@ Trigger onModuleDestroy hooks for all registered providers
 triggerOnModuleInit(): void;
 ```
 
-Defined in: [packages/core/src/lifecycle/lifecycle-manager.ts:27](https://github.com/kiyasov/elysia-nest/blob/main/packages/core/src/lifecycle/lifecycle-manager.ts#L27)
+Defined in: [packages/core/src/lifecycle/lifecycle-manager.ts:27](https://github.com/kiyasov/nestelia/blob/main/packages/core/src/lifecycle/lifecycle-manager.ts#L27)
 
 Trigger onModuleInit hooks for all registered providers
 

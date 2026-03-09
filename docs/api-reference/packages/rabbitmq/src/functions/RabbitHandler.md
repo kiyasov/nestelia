@@ -4,7 +4,7 @@
 function RabbitHandler(): ClassDecorator;
 ```
 
-Defined in: [packages/rabbitmq/src/decorators/rabbitmq.decorators.ts:148](https://github.com/kiyasov/elysia-nest/blob/main/packages/rabbitmq/src/decorators/rabbitmq.decorators.ts#L148)
+Defined in: [packages/rabbitmq/src/decorators/rabbitmq.decorators.ts:148](https://github.com/kiyasov/nestelia/blob/main/packages/rabbitmq/src/decorators/rabbitmq.decorators.ts#L148)
 
 Decorator to mark a class as a RabbitMQ handler
 Scans the class for

@@ -4,7 +4,7 @@
 function createElysiaApplication(rootModule): Promise<ElysiaNestApplication>;
 ```
 
-Defined in: [packages/core/src/core/application.factory.ts:37](https://github.com/kiyasov/elysia-nest/blob/main/packages/core/src/core/application.factory.ts#L37)
+Defined in: [packages/core/src/core/application.factory.ts:37](https://github.com/kiyasov/nestelia/blob/main/packages/core/src/core/application.factory.ts#L37)
 
 Creates an Elysia-Nest application with microservices support.
 

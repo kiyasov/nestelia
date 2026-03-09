@@ -1,6 +1,6 @@
 # Interface: PubSubEngine
 
-Defined in: [packages/graphql-pubsub/src/interfaces.ts:54](https://github.com/kiyasov/elysia-nest/blob/main/packages/graphql-pubsub/src/interfaces.ts#L54)
+Defined in: [packages/graphql-pubsub/src/interfaces.ts:54](https://github.com/kiyasov/nestelia/blob/main/packages/graphql-pubsub/src/interfaces.ts#L54)
 
 Core PubSub contract that [RedisPubSub](../classes/RedisPubSub.md) implements.
 
@@ -12,7 +12,7 @@ Core PubSub contract that [RedisPubSub](../classes/RedisPubSub.md) implements.
 asyncIterator<T>(triggers): AsyncIterator<T>;
 ```
 
-Defined in: [packages/graphql-pubsub/src/interfaces.ts:62](https://github.com/kiyasov/elysia-nest/blob/main/packages/graphql-pubsub/src/interfaces.ts#L62)
+Defined in: [packages/graphql-pubsub/src/interfaces.ts:62](https://github.com/kiyasov/nestelia/blob/main/packages/graphql-pubsub/src/interfaces.ts#L62)
 
 #### Type Parameters
 
@@ -38,7 +38,7 @@ Defined in: [packages/graphql-pubsub/src/interfaces.ts:62](https://github.com/ki
 publish(triggerName, payload): Promise<void>;
 ```
 
-Defined in: [packages/graphql-pubsub/src/interfaces.ts:55](https://github.com/kiyasov/elysia-nest/blob/main/packages/graphql-pubsub/src/interfaces.ts#L55)
+Defined in: [packages/graphql-pubsub/src/interfaces.ts:55](https://github.com/kiyasov/nestelia/blob/main/packages/graphql-pubsub/src/interfaces.ts#L55)
 
 #### Parameters
 
@@ -62,7 +62,7 @@ subscribe(
 options?): Promise<number>;
 ```
 
-Defined in: [packages/graphql-pubsub/src/interfaces.ts:56](https://github.com/kiyasov/elysia-nest/blob/main/packages/graphql-pubsub/src/interfaces.ts#L56)
+Defined in: [packages/graphql-pubsub/src/interfaces.ts:56](https://github.com/kiyasov/nestelia/blob/main/packages/graphql-pubsub/src/interfaces.ts#L56)
 
 #### Parameters
 
@@ -84,7 +84,7 @@ Defined in: [packages/graphql-pubsub/src/interfaces.ts:56](https://github.com/ki
 unsubscribe(subId): void;
 ```
 
-Defined in: [packages/graphql-pubsub/src/interfaces.ts:61](https://github.com/kiyasov/elysia-nest/blob/main/packages/graphql-pubsub/src/interfaces.ts#L61)
+Defined in: [packages/graphql-pubsub/src/interfaces.ts:61](https://github.com/kiyasov/nestelia/blob/main/packages/graphql-pubsub/src/interfaces.ts#L61)
 
 #### Parameters
 

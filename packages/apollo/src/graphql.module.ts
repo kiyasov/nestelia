@@ -1,13 +1,13 @@
 import type { Elysia } from "elysia";
 
-import { Module } from "@kiyasov/elysia-nest";
-import type { DynamicModule, ProviderToken } from "@kiyasov/elysia-nest";
+import { Module } from "nestelia";
+import type { DynamicModule, ProviderToken } from "nestelia";
 import { registerGraphQLRoutes } from "./graphql.controller";
 import type { ApolloOptions } from "./interfaces";
 import { ApolloService } from "./services";
 
 /**
- * GraphQL module for @kiyasov/elysia-nest backed by Apollo Server.
+ * GraphQL module for nestelia backed by Apollo Server.
  * Provides static and async configuration methods.
  *
  * @example
@@ -30,7 +30,7 @@ export class GraphQLModule {
    *
    * @example
    * ```typescript
-   * import { ElysiaFactory } from '@kiyasov/elysia-nest';
+   * import { ElysiaFactory } from 'nestelia';
    *
    * const app = await ElysiaFactory.create(AppModule);
    *

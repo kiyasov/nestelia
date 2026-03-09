@@ -4,7 +4,7 @@
 const File: (paramNameOrDtoOrOptions?, dtoTypeOrFileOptions?) => (target, propertyKey, parameterIndex) => void;
 ```
 
-Defined in: [packages/core/src/decorators/param.decorators.ts:458](https://github.com/kiyasov/elysia-nest/blob/main/packages/core/src/decorators/param.decorators.ts#L458)
+Defined in: [packages/core/src/decorators/param.decorators.ts:458](https://github.com/kiyasov/nestelia/blob/main/packages/core/src/decorators/param.decorators.ts#L458)
 
 ## Parameters
 

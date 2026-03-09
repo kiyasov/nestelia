@@ -1,6 +1,6 @@
 # Interface: Type\<T\>
 
-Defined in: [packages/core/src/di/provider.interface.ts:1](https://github.com/kiyasov/elysia-nest/blob/main/packages/core/src/di/provider.interface.ts#L1)
+Defined in: [packages/core/src/di/provider.interface.ts:1](https://github.com/kiyasov/nestelia/blob/main/packages/core/src/di/provider.interface.ts#L1)
 
 ## Type Parameters
 
@@ -16,7 +16,7 @@ Defined in: [packages/core/src/di/provider.interface.ts:1](https://github.com/ki
 new Type(...args): T;
 ```
 
-Defined in: [packages/core/src/di/provider.interface.ts:2](https://github.com/kiyasov/elysia-nest/blob/main/packages/core/src/di/provider.interface.ts#L2)
+Defined in: [packages/core/src/di/provider.interface.ts:2](https://github.com/kiyasov/nestelia/blob/main/packages/core/src/di/provider.interface.ts#L2)
 
 #### Parameters
 

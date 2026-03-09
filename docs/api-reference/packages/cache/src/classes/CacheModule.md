@@ -1,8 +1,8 @@
 # Class: CacheModule
 
-Defined in: [packages/cache/src/cache.module.ts:80](https://github.com/kiyasov/elysia-nest/blob/main/packages/cache/src/cache.module.ts#L80)
+Defined in: [packages/cache/src/cache.module.ts:80](https://github.com/kiyasov/nestelia/blob/main/packages/cache/src/cache.module.ts#L80)
 
-Module that provides caching functionality for @kiyasov/elysia-nest.
+Module that provides caching functionality for nestelia.
 
 This module wraps the cache-manager library and provides:
 - In-memory caching by default
@@ -55,7 +55,7 @@ export class AppModule {}
 new CacheModule(): CacheModule;
 ```
 
-Defined in: [packages/core/src/module-utils/interfaces/configurable-module-cls.interface.ts:23](https://github.com/kiyasov/elysia-nest/blob/main/packages/core/src/module-utils/interfaces/configurable-module-cls.interface.ts#L23)
+Defined in: [packages/core/src/module-utils/interfaces/configurable-module-cls.interface.ts:23](https://github.com/kiyasov/nestelia/blob/main/packages/core/src/module-utils/interfaces/configurable-module-cls.interface.ts#L23)
 
 #### Returns
 
@@ -75,7 +75,7 @@ ConfigurableModuleClass.constructor
 static forRoot<T>(options?): DynamicModule;
 ```
 
-Defined in: [packages/cache/src/cache.module.ts:93](https://github.com/kiyasov/elysia-nest/blob/main/packages/cache/src/cache.module.ts#L93)
+Defined in: [packages/cache/src/cache.module.ts:93](https://github.com/kiyasov/nestelia/blob/main/packages/cache/src/cache.module.ts#L93)
 
 #### Type Parameters
 
@@ -101,7 +101,7 @@ Defined in: [packages/cache/src/cache.module.ts:93](https://github.com/kiyasov/e
 static forRootAsync<T>(options): DynamicModule;
 ```
 
-Defined in: [packages/cache/src/cache.module.ts:99](https://github.com/kiyasov/elysia-nest/blob/main/packages/cache/src/cache.module.ts#L99)
+Defined in: [packages/cache/src/cache.module.ts:99](https://github.com/kiyasov/nestelia/blob/main/packages/cache/src/cache.module.ts#L99)
 
 #### Type Parameters
 
@@ -127,7 +127,7 @@ Defined in: [packages/cache/src/cache.module.ts:99](https://github.com/kiyasov/e
 static register<T>(options?): DynamicModule;
 ```
 
-Defined in: [packages/cache/src/cache.module.ts:81](https://github.com/kiyasov/elysia-nest/blob/main/packages/cache/src/cache.module.ts#L81)
+Defined in: [packages/cache/src/cache.module.ts:81](https://github.com/kiyasov/nestelia/blob/main/packages/cache/src/cache.module.ts#L81)
 
 #### Type Parameters
 
@@ -159,7 +159,7 @@ ConfigurableModuleClass.register
 static registerAsync<T>(options): DynamicModule;
 ```
 
-Defined in: [packages/cache/src/cache.module.ts:87](https://github.com/kiyasov/elysia-nest/blob/main/packages/cache/src/cache.module.ts#L87)
+Defined in: [packages/cache/src/cache.module.ts:87](https://github.com/kiyasov/nestelia/blob/main/packages/cache/src/cache.module.ts#L87)
 
 #### Type Parameters
 

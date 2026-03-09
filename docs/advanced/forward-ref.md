@@ -4,7 +4,7 @@ icon: link
 description: Resolve circular dependencies with forwardRef()
 ---
 
-Circular dependencies occur when two services depend on each other. @kiyasov/elysia-nest provides `forwardRef()` to handle these cases.
+Circular dependencies occur when two services depend on each other. nestelia provides `forwardRef()` to handle these cases.
 
 ## The Problem
 
@@ -28,7 +28,7 @@ At resolve time, `ServiceA` needs `ServiceB` which needs `ServiceA` — a deadlo
 Use `forwardRef()` on at least one side of the circular reference:
 
 ```typescript
-import { Injectable, Inject, forwardRef } from "@kiyasov/elysia-nest";
+import { Injectable, Inject, forwardRef } from "nestelia";
 
 @Injectable()
 class ServiceA {

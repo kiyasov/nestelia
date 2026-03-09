@@ -9,7 +9,7 @@ Controllers handle incoming HTTP requests and return responses. They are decorat
 ## Defining a Controller
 
 ```typescript
-import { Controller, Get } from "@kiyasov/elysia-nest";
+import { Controller, Get } from "nestelia";
 
 @Controller("/cats")
 class CatController {
@@ -52,7 +52,7 @@ class CatController {
 
 ## Route Methods
 
-@kiyasov/elysia-nest provides decorators for all standard HTTP methods:
+nestelia provides decorators for all standard HTTP methods:
 
 ```typescript
 @Controller("/items")

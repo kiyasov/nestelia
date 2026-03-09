@@ -1,6 +1,6 @@
 # Abstract Class: BaseServer
 
-Defined in: [packages/microservices/transports/server.ts:19](https://github.com/kiyasov/elysia-nest/blob/main/packages/microservices/transports/server.ts#L19)
+Defined in: [packages/microservices/transports/server.ts:19](https://github.com/kiyasov/nestelia/blob/main/packages/microservices/transports/server.ts#L19)
 
 Abstract base class for all built-in transport servers.
 
@@ -119,7 +119,7 @@ EventEmitter.[captureRejectionSymbol]
 addEventHandler(pattern, callback): void;
 ```
 
-Defined in: [packages/microservices/transports/server.ts:49](https://github.com/kiyasov/elysia-nest/blob/main/packages/microservices/transports/server.ts#L49)
+Defined in: [packages/microservices/transports/server.ts:49](https://github.com/kiyasov/nestelia/blob/main/packages/microservices/transports/server.ts#L49)
 
 Registers `callback` as a fire-and-forget event handler for `pattern`.
 The handler's return value is ignored.
@@ -143,7 +143,7 @@ The handler's return value is ignored.
 addHandler(pattern, callback): void;
 ```
 
-Defined in: [packages/microservices/transports/server.ts:32](https://github.com/kiyasov/elysia-nest/blob/main/packages/microservices/transports/server.ts#L32)
+Defined in: [packages/microservices/transports/server.ts:32](https://github.com/kiyasov/nestelia/blob/main/packages/microservices/transports/server.ts#L32)
 
 Registers `callback` as a request-response handler for `pattern`.
 Equivalent to [addMessageHandler](#addmessagehandler).
@@ -210,7 +210,7 @@ EventEmitter.addListener
 addMessageHandler(pattern, callback): void;
 ```
 
-Defined in: [packages/microservices/transports/server.ts:41](https://github.com/kiyasov/elysia-nest/blob/main/packages/microservices/transports/server.ts#L41)
+Defined in: [packages/microservices/transports/server.ts:41](https://github.com/kiyasov/nestelia/blob/main/packages/microservices/transports/server.ts#L41)
 
 Registers `callback` as a request-response handler for `pattern`.
 The handler is expected to return a value that will be sent back to
@@ -235,7 +235,7 @@ the caller.
 abstract close(): void;
 ```
 
-Defined in: [packages/microservices/transports/server.ts:60](https://github.com/kiyasov/elysia-nest/blob/main/packages/microservices/transports/server.ts#L60)
+Defined in: [packages/microservices/transports/server.ts:60](https://github.com/kiyasov/nestelia/blob/main/packages/microservices/transports/server.ts#L60)
 
 Shut down the transport and release all resources.
 
@@ -331,7 +331,7 @@ EventEmitter.emit
 abstract emitEvent<T>(pattern, data): void;
 ```
 
-Defined in: [packages/microservices/transports/server.ts:58](https://github.com/kiyasov/elysia-nest/blob/main/packages/microservices/transports/server.ts#L58)
+Defined in: [packages/microservices/transports/server.ts:58](https://github.com/kiyasov/nestelia/blob/main/packages/microservices/transports/server.ts#L58)
 
 Publish a fire-and-forget event.
 
@@ -436,7 +436,7 @@ protected handleEvent<T>(
    ctx): void;
 ```
 
-Defined in: [packages/microservices/transports/server.ts:86](https://github.com/kiyasov/elysia-nest/blob/main/packages/microservices/transports/server.ts#L86)
+Defined in: [packages/microservices/transports/server.ts:86](https://github.com/kiyasov/nestelia/blob/main/packages/microservices/transports/server.ts#L86)
 
 Dispatches an incoming event to the matching event handler.
 Silently ignores events without a registered handler.
@@ -470,7 +470,7 @@ protected handleMessage<T, R>(
    ctx): unknown;
 ```
 
-Defined in: [packages/microservices/transports/server.ts:70](https://github.com/kiyasov/elysia-nest/blob/main/packages/microservices/transports/server.ts#L70)
+Defined in: [packages/microservices/transports/server.ts:70](https://github.com/kiyasov/nestelia/blob/main/packages/microservices/transports/server.ts#L70)
 
 Dispatches an incoming request to the matching message handler.
 
@@ -505,7 +505,7 @@ When no handler is registered for `pattern`.
 abstract listen(callback?): void | Promise<void>;
 ```
 
-Defined in: [packages/microservices/transports/server.ts:62](https://github.com/kiyasov/elysia-nest/blob/main/packages/microservices/transports/server.ts#L62)
+Defined in: [packages/microservices/transports/server.ts:62](https://github.com/kiyasov/nestelia/blob/main/packages/microservices/transports/server.ts#L62)
 
 Start the transport server.
 
@@ -1115,7 +1115,7 @@ EventEmitter.removeListener
 abstract sendMessage<T>(pattern, data): Promise<unknown>;
 ```
 
-Defined in: [packages/microservices/transports/server.ts:53](https://github.com/kiyasov/elysia-nest/blob/main/packages/microservices/transports/server.ts#L53)
+Defined in: [packages/microservices/transports/server.ts:53](https://github.com/kiyasov/nestelia/blob/main/packages/microservices/transports/server.ts#L53)
 
 Send a request and wait for the response.
 
@@ -1182,5 +1182,5 @@ EventEmitter.setMaxListeners
 
 | Property | Modifier | Type | Description | Defined in |
 | ------ | ------ | ------ | ------ | ------ |
-| <a id="eventhandlers"></a> `eventHandlers` | `readonly` | `Map`\<`string`, [`MessageHandler`](../type-aliases/MessageHandler.md)\> | Handlers for fire-and-forget event patterns. | [packages/microservices/transports/server.ts:26](https://github.com/kiyasov/elysia-nest/blob/main/packages/microservices/transports/server.ts#L26) |
-| <a id="messagehandlers"></a> `messageHandlers` | `readonly` | `Map`\<`string`, [`MessageHandler`](../type-aliases/MessageHandler.md)\> | Handlers for request-response patterns. | [packages/microservices/transports/server.ts:24](https://github.com/kiyasov/elysia-nest/blob/main/packages/microservices/transports/server.ts#L24) |
+| <a id="eventhandlers"></a> `eventHandlers` | `readonly` | `Map`\<`string`, [`MessageHandler`](../type-aliases/MessageHandler.md)\> | Handlers for fire-and-forget event patterns. | [packages/microservices/transports/server.ts:26](https://github.com/kiyasov/nestelia/blob/main/packages/microservices/transports/server.ts#L26) |
+| <a id="messagehandlers"></a> `messageHandlers` | `readonly` | `Map`\<`string`, [`MessageHandler`](../type-aliases/MessageHandler.md)\> | Handlers for request-response patterns. | [packages/microservices/transports/server.ts:24](https://github.com/kiyasov/nestelia/blob/main/packages/microservices/transports/server.ts#L24) |

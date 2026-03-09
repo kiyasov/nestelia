@@ -4,7 +4,7 @@
 function isUndefined(value): value is undefined;
 ```
 
-Defined in: [packages/core/src/utils/shared.utils.ts:32](https://github.com/kiyasov/elysia-nest/blob/main/packages/core/src/utils/shared.utils.ts#L32)
+Defined in: [packages/core/src/utils/shared.utils.ts:32](https://github.com/kiyasov/nestelia/blob/main/packages/core/src/utils/shared.utils.ts#L32)
 
 Check if value is undefined
 

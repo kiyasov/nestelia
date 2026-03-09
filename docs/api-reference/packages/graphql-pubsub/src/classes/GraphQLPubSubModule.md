@@ -1,6 +1,6 @@
 # Class: GraphQLPubSubModule
 
-Defined in: [packages/graphql-pubsub/src/graphql-pubsub.module.ts:91](https://github.com/kiyasov/elysia-nest/blob/main/packages/graphql-pubsub/src/graphql-pubsub.module.ts#L91)
+Defined in: [packages/graphql-pubsub/src/graphql-pubsub.module.ts:91](https://github.com/kiyasov/nestelia/blob/main/packages/graphql-pubsub/src/graphql-pubsub.module.ts#L91)
 
 Feature module that provides a [RedisPubSub](RedisPubSub.md) instance for use with
 GraphQL subscriptions.
@@ -56,7 +56,7 @@ new GraphQLPubSubModule(): GraphQLPubSubModule;
 static forRoot(options?): typeof GraphQLPubSubModuleCore;
 ```
 
-Defined in: [packages/graphql-pubsub/src/graphql-pubsub.module.ts:98](https://github.com/kiyasov/elysia-nest/blob/main/packages/graphql-pubsub/src/graphql-pubsub.module.ts#L98)
+Defined in: [packages/graphql-pubsub/src/graphql-pubsub.module.ts:98](https://github.com/kiyasov/nestelia/blob/main/packages/graphql-pubsub/src/graphql-pubsub.module.ts#L98)
 
 Registers the module with a synchronous configuration.
 
@@ -81,7 +81,7 @@ The returned class is decorated with `@Global` by default (override with
 static forRootAsync(options): typeof GraphQLPubSubModuleCore;
 ```
 
-Defined in: [packages/graphql-pubsub/src/graphql-pubsub.module.ts:154](https://github.com/kiyasov/elysia-nest/blob/main/packages/graphql-pubsub/src/graphql-pubsub.module.ts#L154)
+Defined in: [packages/graphql-pubsub/src/graphql-pubsub.module.ts:154](https://github.com/kiyasov/nestelia/blob/main/packages/graphql-pubsub/src/graphql-pubsub.module.ts#L154)
 
 Registers the module with an asynchronous configuration.
 

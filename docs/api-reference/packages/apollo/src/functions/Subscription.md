@@ -4,7 +4,7 @@
 function Subscription(typeFn?, options?): MethodDecorator;
 ```
 
-Defined in: [packages/apollo/src/decorators/subscription.decorator.ts:82](https://github.com/kiyasov/elysia-nest/blob/main/packages/apollo/src/decorators/subscription.decorator.ts#L82)
+Defined in: [packages/apollo/src/decorators/subscription.decorator.ts:82](https://github.com/kiyasov/nestelia/blob/main/packages/apollo/src/decorators/subscription.decorator.ts#L82)
 
 Decorator for a GraphQL Subscription.
 

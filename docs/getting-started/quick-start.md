@@ -1,17 +1,17 @@
 ---
 title: Quick Start
 icon: zap
-description: Build a CRUD API with @kiyasov/elysia-nest in 5 minutes
+description: Build a CRUD API with nestelia in 5 minutes
 ---
 
-This guide walks you through building a simple Users API with @kiyasov/elysia-nest.
+This guide walks you through building a simple Users API with nestelia.
 
 ## 1. Create the Service
 
 Services hold your business logic and are marked with `@Injectable()` so the DI container can manage them.
 
 ```typescript
-import { Injectable } from "@kiyasov/elysia-nest";
+import { Injectable } from "nestelia";
 
 @Injectable()
 class UserService {
@@ -39,7 +39,7 @@ Controllers define HTTP routes. Use `@Controller` to set a route prefix and HTTP
 
 ```typescript
 import { t } from "elysia";
-import { Controller, Get, Post, Body, Param, Inject, Ctx } from "@kiyasov/elysia-nest";
+import { Controller, Get, Post, Body, Param, Inject, Ctx } from "nestelia";
 
 @Controller("/users")
 class UserController {
@@ -71,7 +71,7 @@ class UserController {
 Modules group controllers and providers together. Every application has at least one root module.
 
 ```typescript
-import { Module } from "@kiyasov/elysia-nest";
+import { Module } from "nestelia";
 
 @Module({
   controllers: [UserController],
@@ -83,7 +83,7 @@ class AppModule {}
 ## 4. Bootstrap the Application
 
 ```typescript
-import { createElysiaApplication } from "@kiyasov/elysia-nest";
+import { createElysiaApplication } from "nestelia";
 
 const app = await createElysiaApplication(AppModule);
 app.listen(3000, () => {
@@ -120,7 +120,7 @@ import {
   Ctx,
   Inject,
   Injectable,
-} from "@kiyasov/elysia-nest";
+} from "nestelia";
 
 @Injectable()
 class UserService {

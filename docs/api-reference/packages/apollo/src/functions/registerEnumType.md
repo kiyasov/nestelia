@@ -4,7 +4,7 @@
 function registerEnumType<TEnum>(enumObj, config): void;
 ```
 
-Defined in: [packages/apollo/src/helpers/register-enum-type.ts:33](https://github.com/kiyasov/elysia-nest/blob/main/packages/apollo/src/helpers/register-enum-type.ts#L33)
+Defined in: [packages/apollo/src/helpers/register-enum-type.ts:33](https://github.com/kiyasov/nestelia/blob/main/packages/apollo/src/helpers/register-enum-type.ts#L33)
 
 Registers an enum type with a custom name and description for GraphQL schema generation.
 Must be called before the schema is built (e.g., at module level).

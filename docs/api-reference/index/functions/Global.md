@@ -4,7 +4,7 @@
 function Global(): ClassDecorator;
 ```
 
-Defined in: [packages/core/src/decorators/index.ts:37](https://github.com/kiyasov/elysia-nest/blob/main/packages/core/src/decorators/index.ts#L37)
+Defined in: [packages/core/src/decorators/index.ts:37](https://github.com/kiyasov/nestelia/blob/main/packages/core/src/decorators/index.ts#L37)
 
 Marks a module as global, meaning its providers can be accessed from any other module
 without explicitly importing it.

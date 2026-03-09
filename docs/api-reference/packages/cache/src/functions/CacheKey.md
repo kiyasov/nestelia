@@ -4,7 +4,7 @@
 function CacheKey(key): MethodDecorator & ClassDecorator;
 ```
 
-Defined in: [packages/cache/src/decorators/cache-key.decorator.ts:61](https://github.com/kiyasov/elysia-nest/blob/main/packages/cache/src/decorators/cache-key.decorator.ts#L61)
+Defined in: [packages/cache/src/decorators/cache-key.decorator.ts:61](https://github.com/kiyasov/nestelia/blob/main/packages/cache/src/decorators/cache-key.decorator.ts#L61)
 
 Decorator that sets the caching key used to store/retrieve cached items.
 

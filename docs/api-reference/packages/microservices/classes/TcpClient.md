@@ -1,6 +1,6 @@
 # Class: TcpClient
 
-Defined in: [packages/microservices/client/tcp.client.ts:25](https://github.com/kiyasov/elysia-nest/blob/main/packages/microservices/client/tcp.client.ts#L25)
+Defined in: [packages/microservices/client/tcp.client.ts:25](https://github.com/kiyasov/nestelia/blob/main/packages/microservices/client/tcp.client.ts#L25)
 
 Client proxy that communicates over raw TCP with newline-delimited JSON
 framing.
@@ -20,7 +20,7 @@ framing.
 new TcpClient(options): TcpClient;
 ```
 
-Defined in: [packages/microservices/client/tcp.client.ts:37](https://github.com/kiyasov/elysia-nest/blob/main/packages/microservices/client/tcp.client.ts#L37)
+Defined in: [packages/microservices/client/tcp.client.ts:37](https://github.com/kiyasov/nestelia/blob/main/packages/microservices/client/tcp.client.ts#L37)
 
 #### Parameters
 
@@ -44,7 +44,7 @@ Defined in: [packages/microservices/client/tcp.client.ts:37](https://github.com/
 close(): void;
 ```
 
-Defined in: [packages/microservices/client/tcp.client.ts:141](https://github.com/kiyasov/elysia-nest/blob/main/packages/microservices/client/tcp.client.ts#L141)
+Defined in: [packages/microservices/client/tcp.client.ts:141](https://github.com/kiyasov/nestelia/blob/main/packages/microservices/client/tcp.client.ts#L141)
 
 Destroys the socket and clears pending requests.
 
@@ -64,7 +64,7 @@ Destroys the socket and clears pending requests.
 connect(): Promise<void>;
 ```
 
-Defined in: [packages/microservices/client/tcp.client.ts:42](https://github.com/kiyasov/elysia-nest/blob/main/packages/microservices/client/tcp.client.ts#L42)
+Defined in: [packages/microservices/client/tcp.client.ts:42](https://github.com/kiyasov/nestelia/blob/main/packages/microservices/client/tcp.client.ts#L42)
 
 Opens a TCP connection to the configured host/port.
 
@@ -84,7 +84,7 @@ Opens a TCP connection to the configured host/port.
 emit<T>(pattern, data): void;
 ```
 
-Defined in: [packages/microservices/client/tcp.client.ts:133](https://github.com/kiyasov/elysia-nest/blob/main/packages/microservices/client/tcp.client.ts#L133)
+Defined in: [packages/microservices/client/tcp.client.ts:133](https://github.com/kiyasov/nestelia/blob/main/packages/microservices/client/tcp.client.ts#L133)
 
 Writes a fire-and-forget event to the server.
 
@@ -117,7 +117,7 @@ Writes a fire-and-forget event to the server.
 send<T, R>(pattern, data): Observable<R>;
 ```
 
-Defined in: [packages/microservices/client/tcp.client.ts:104](https://github.com/kiyasov/elysia-nest/blob/main/packages/microservices/client/tcp.client.ts#L104)
+Defined in: [packages/microservices/client/tcp.client.ts:104](https://github.com/kiyasov/nestelia/blob/main/packages/microservices/client/tcp.client.ts#L104)
 
 Sends a request to `pattern` and returns an Observable that emits the
 response then completes. Times out after **5 seconds**.

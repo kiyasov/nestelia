@@ -4,7 +4,7 @@
 const OnBeforeHandle: (options?) => MethodDecorator;
 ```
 
-Defined in: [packages/core/src/decorators/lifecycle.decorators.ts:134](https://github.com/kiyasov/elysia-nest/blob/main/packages/core/src/decorators/lifecycle.decorators.ts#L134)
+Defined in: [packages/core/src/decorators/lifecycle.decorators.ts:134](https://github.com/kiyasov/nestelia/blob/main/packages/core/src/decorators/lifecycle.decorators.ts#L134)
 
 Hook called before request handler
 

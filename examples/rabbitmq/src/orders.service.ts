@@ -1,6 +1,6 @@
-import { Injectable } from "@kiyasov/elysia-nest";
+import { Injectable } from "nestelia";
 import { RabbitMQService } from "../../../packages/rabbitmq/src";
-import { Inject } from "@kiyasov/elysia-nest";
+import { Inject } from "nestelia";
 
 @Injectable()
 export class OrdersService {

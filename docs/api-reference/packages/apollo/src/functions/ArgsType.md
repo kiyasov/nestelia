@@ -4,7 +4,7 @@
 function ArgsType(): <T>(target) => T;
 ```
 
-Defined in: [packages/apollo/src/helpers/args-type.ts:29](https://github.com/kiyasov/elysia-nest/blob/main/packages/apollo/src/helpers/args-type.ts#L29)
+Defined in: [packages/apollo/src/helpers/args-type.ts:29](https://github.com/kiyasov/nestelia/blob/main/packages/apollo/src/helpers/args-type.ts#L29)
 
 Marks a class as GraphQL arguments DTO.
 Classes decorated with

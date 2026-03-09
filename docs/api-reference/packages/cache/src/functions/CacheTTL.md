@@ -4,7 +4,7 @@
 function CacheTTL(ttl): MethodDecorator & ClassDecorator;
 ```
 
-Defined in: [packages/cache/src/decorators/cache-ttl.decorator.ts:65](https://github.com/kiyasov/elysia-nest/blob/main/packages/cache/src/decorators/cache-ttl.decorator.ts#L65)
+Defined in: [packages/cache/src/decorators/cache-ttl.decorator.ts:65](https://github.com/kiyasov/nestelia/blob/main/packages/cache/src/decorators/cache-ttl.decorator.ts#L65)
 
 Decorator that sets the cache TTL (time-to-live) duration.
 

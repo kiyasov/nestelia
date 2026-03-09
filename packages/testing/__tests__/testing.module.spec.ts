@@ -1,6 +1,6 @@
 import { beforeEach, describe, expect, it } from "bun:test";
 
-import { Injectable } from "@kiyasov/elysia-nest";
+import { Injectable } from "nestelia";
 import { Test } from "../src/test";
 import type { TestingModule } from "../src/testing.module-builder";
 

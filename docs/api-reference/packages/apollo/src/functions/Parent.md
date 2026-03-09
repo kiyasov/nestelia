@@ -4,7 +4,7 @@
 function Parent(): ParameterDecorator;
 ```
 
-Defined in: [packages/apollo/src/decorators/parent.decorator.ts:39](https://github.com/kiyasov/elysia-nest/blob/main/packages/apollo/src/decorators/parent.decorator.ts#L39)
+Defined in: [packages/apollo/src/decorators/parent.decorator.ts:39](https://github.com/kiyasov/nestelia/blob/main/packages/apollo/src/decorators/parent.decorator.ts#L39)
 
 Decorator for the parent/root value in a field resolver.
 Provides access to the parent object from the field resolver.

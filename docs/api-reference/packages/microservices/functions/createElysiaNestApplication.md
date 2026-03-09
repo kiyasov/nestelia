@@ -4,7 +4,7 @@
 function createElysiaNestApplication(server?): ElysiaNestApplication;
 ```
 
-Defined in: [packages/microservices/factory.ts:37](https://github.com/kiyasov/elysia-nest/blob/main/packages/microservices/factory.ts#L37)
+Defined in: [packages/microservices/factory.ts:37](https://github.com/kiyasov/nestelia/blob/main/packages/microservices/factory.ts#L37)
 
 Creates a bare [ElysiaNestApplication](../classes/ElysiaNestApplication.md) that wraps an already-configured
 Elysia instance.

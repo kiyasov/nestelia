@@ -7,7 +7,7 @@ function processParameters(
 propertyKey): Promise<unknown[]>;
 ```
 
-Defined in: [packages/core/src/decorators/param.decorators.ts:200](https://github.com/kiyasov/elysia-nest/blob/main/packages/core/src/decorators/param.decorators.ts#L200)
+Defined in: [packages/core/src/decorators/param.decorators.ts:200](https://github.com/kiyasov/nestelia/blob/main/packages/core/src/decorators/param.decorators.ts#L200)
 
 Extract and validate parameters based on metadata
 

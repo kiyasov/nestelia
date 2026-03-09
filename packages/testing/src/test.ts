@@ -1,4 +1,4 @@
-import type { ModuleOptions } from "@kiyasov/elysia-nest";
+import type { ModuleOptions } from "nestelia";
 import { TestingModule, TestingModuleBuilder } from "./testing.module-builder";
 
 /**

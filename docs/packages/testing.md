@@ -4,14 +4,14 @@ icon: beaker
 description: Isolated test modules with provider overrides
 ---
 
-The testing package provides utilities for unit and integration testing of @kiyasov/elysia-nest applications.
+The testing package provides utilities for unit and integration testing of nestelia applications.
 
 ## Quick Start
 
 ```typescript
 import { describe, expect, it, beforeAll } from "bun:test";
-import { Injectable } from "@kiyasov/elysia-nest";
-import { Test, TestingModule } from "@kiyasov/elysia-nest/testing";
+import { Injectable } from "nestelia";
+import { Test, TestingModule } from "nestelia/testing";
 
 @Injectable()
 class UserService {

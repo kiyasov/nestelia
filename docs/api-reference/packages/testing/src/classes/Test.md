@@ -1,6 +1,6 @@
 # Class: Test
 
-Defined in: [packages/testing/src/test.ts:30](https://github.com/kiyasov/elysia-nest/blob/main/packages/testing/src/test.ts#L30)
+Defined in: [packages/testing/src/test.ts:30](https://github.com/kiyasov/nestelia/blob/main/packages/testing/src/test.ts#L30)
 
 Test utilities for creating testing modules.
 
@@ -48,7 +48,7 @@ new Test(): Test;
 static createTestingModule(metadata): TestingModuleBuilder;
 ```
 
-Defined in: [packages/testing/src/test.ts:34](https://github.com/kiyasov/elysia-nest/blob/main/packages/testing/src/test.ts#L34)
+Defined in: [packages/testing/src/test.ts:34](https://github.com/kiyasov/nestelia/blob/main/packages/testing/src/test.ts#L34)
 
 Create a testing module builder with the given metadata
 
@@ -70,7 +70,7 @@ Create a testing module builder with the given metadata
 static createTestingModuleAndCompile(metadata): Promise<TestingModule>;
 ```
 
-Defined in: [packages/testing/src/test.ts:41](https://github.com/kiyasov/elysia-nest/blob/main/packages/testing/src/test.ts#L41)
+Defined in: [packages/testing/src/test.ts:41](https://github.com/kiyasov/nestelia/blob/main/packages/testing/src/test.ts#L41)
 
 Create a testing module and compile it immediately
 

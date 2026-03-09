@@ -1,4 +1,4 @@
-import { Inject } from "@kiyasov/elysia-nest";
+import { Inject } from "nestelia";
 import { GRAPHQL_PUBSUB } from "../graphql-pubsub.module";
 
 /**

@@ -4,7 +4,7 @@
 function Mutation(typeFn?, options?): MethodDecorator;
 ```
 
-Defined in: [packages/apollo/src/decorators/mutation.decorator.ts:66](https://github.com/kiyasov/elysia-nest/blob/main/packages/apollo/src/decorators/mutation.decorator.ts#L66)
+Defined in: [packages/apollo/src/decorators/mutation.decorator.ts:66](https://github.com/kiyasov/nestelia/blob/main/packages/apollo/src/decorators/mutation.decorator.ts#L66)
 
 Decorator for a GraphQL Mutation.
 

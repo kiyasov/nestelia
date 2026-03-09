@@ -4,7 +4,7 @@
 function Field(typeFnOrOptions?, fieldOptions?): PropertyDecorator;
 ```
 
-Defined in: [packages/apollo/src/decorators/type.decorator.ts:131](https://github.com/kiyasov/elysia-nest/blob/main/packages/apollo/src/decorators/type.decorator.ts#L131)
+Defined in: [packages/apollo/src/decorators/type.decorator.ts:131](https://github.com/kiyasov/nestelia/blob/main/packages/apollo/src/decorators/type.decorator.ts#L131)
 
 Decorator for a GraphQL field.
 

@@ -4,7 +4,7 @@ icon: file-code
 description: TypeBox-driven schema documentation via Elysia
 ---
 
-@kiyasov/elysia-nest uses [TypeBox](https://github.com/sinclairzx81/typebox) schemas — the same schemas Elysia uses natively — for request validation. Because Elysia already has first-class Swagger/OpenAPI support through the `@elysiajs/swagger` plugin, you can add full API documentation with minimal configuration.
+nestelia uses [TypeBox](https://github.com/sinclairzx81/typebox) schemas — the same schemas Elysia uses natively — for request validation. Because Elysia already has first-class Swagger/OpenAPI support through the `@elysiajs/swagger` plugin, you can add full API documentation with minimal configuration.
 
 ## Setup
 
@@ -17,7 +17,7 @@ bun add @elysiajs/swagger
 Register it as functional middleware in your root module:
 
 ```typescript
-import { Module } from "@kiyasov/elysia-nest";
+import { Module } from "nestelia";
 import swagger from "@elysiajs/swagger";
 
 @Module({
@@ -36,7 +36,7 @@ Use `@Body`, `@Param`, and `@Query` with TypeBox schemas — these are automatic
 
 ```typescript
 import { t } from "elysia";
-import { Controller, Post, Get, Body, Param, Query } from "@kiyasov/elysia-nest";
+import { Controller, Post, Get, Body, Param, Query } from "nestelia";
 
 @Controller("/users")
 class UserController {
@@ -61,7 +61,7 @@ The `@Schema()` decorator lets you define the complete route schema including re
 
 ```typescript
 import { t } from "elysia";
-import { Schema } from "@kiyasov/elysia-nest";
+import { Schema } from "nestelia";
 
 @Get("/users")
 @Schema({

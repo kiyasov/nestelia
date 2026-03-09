@@ -1,4 +1,4 @@
-import { ConfigurableModuleBuilder } from "@kiyasov/elysia-nest";
+import { ConfigurableModuleBuilder } from "nestelia";
 import {
   CacheModuleOptions,
   CacheOptionsFactory,

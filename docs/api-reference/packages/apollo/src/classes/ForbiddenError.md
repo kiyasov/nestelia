@@ -1,6 +1,6 @@
 # Class: ForbiddenError
 
-Defined in: [packages/apollo/src/errors/forbidden.error.ts:20](https://github.com/kiyasov/elysia-nest/blob/main/packages/apollo/src/errors/forbidden.error.ts#L20)
+Defined in: [packages/apollo/src/errors/forbidden.error.ts:20](https://github.com/kiyasov/nestelia/blob/main/packages/apollo/src/errors/forbidden.error.ts#L20)
 
 Error thrown when the user is not authorized to access a resource.
 
@@ -53,7 +53,7 @@ GraphQLError.[toStringTag]
 new ForbiddenError(message, options?): ForbiddenError;
 ```
 
-Defined in: [packages/apollo/src/errors/forbidden.error.ts:26](https://github.com/kiyasov/elysia-nest/blob/main/packages/apollo/src/errors/forbidden.error.ts#L26)
+Defined in: [packages/apollo/src/errors/forbidden.error.ts:26](https://github.com/kiyasov/nestelia/blob/main/packages/apollo/src/errors/forbidden.error.ts#L26)
 
 Creates a new ForbiddenError.
 

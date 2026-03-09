@@ -15,7 +15,7 @@ bun add ioredis
 ## Basic Usage
 
 ```typescript
-import { RedisPubSub } from "@kiyasov/elysia-nest/graphql-pubsub";
+import { RedisPubSub } from "nestelia/graphql-pubsub";
 
 const pubsub = new RedisPubSub({
   connection: {
@@ -45,8 +45,8 @@ await pubsub.close();
 ### Static Configuration
 
 ```typescript
-import { Module } from "@kiyasov/elysia-nest";
-import { GraphQLPubSubModule } from "@kiyasov/elysia-nest/graphql-pubsub";
+import { Module } from "nestelia";
+import { GraphQLPubSubModule } from "nestelia/graphql-pubsub";
 
 @Module({
   imports: [
@@ -84,7 +84,7 @@ GraphQLPubSubModule.forRoot({
 ### Async Configuration
 
 ```typescript
-import { GraphQLPubSubModule } from "@kiyasov/elysia-nest/graphql-pubsub";
+import { GraphQLPubSubModule } from "nestelia/graphql-pubsub";
 
 GraphQLPubSubModule.forRootAsync({
   useFactory: async (config: ConfigService) => ({
@@ -102,8 +102,8 @@ GraphQLPubSubModule.forRootAsync({
 ## Using with GraphQL Resolvers
 
 ```typescript
-import { Resolver, Query, Mutation, Subscription } from "@kiyasov/elysia-nest/apollo";
-import { InjectPubSub, RedisPubSub } from "@kiyasov/elysia-nest/graphql-pubsub";
+import { Resolver, Query, Mutation, Subscription } from "nestelia/apollo";
+import { InjectPubSub, RedisPubSub } from "nestelia/graphql-pubsub";
 
 @Resolver("User")
 class UserResolver {

@@ -4,7 +4,7 @@
 type MessageHandler<T, R> = (data, ctx) => Promise<R> | Observable<R> | R;
 ```
 
-Defined in: [packages/microservices/interfaces/server.interface.ts:30](https://github.com/kiyasov/elysia-nest/blob/main/packages/microservices/interfaces/server.interface.ts#L30)
+Defined in: [packages/microservices/interfaces/server.interface.ts:30](https://github.com/kiyasov/nestelia/blob/main/packages/microservices/interfaces/server.interface.ts#L30)
 
 Function signature for pattern handlers registered on a [Server](../interfaces/Server.md).
 

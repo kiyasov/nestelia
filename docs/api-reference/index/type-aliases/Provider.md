@@ -9,4 +9,4 @@ type Provider =
   | ExistingProvider;
 ```
 
-Defined in: [packages/core/src/di/provider.interface.ts:66](https://github.com/kiyasov/elysia-nest/blob/main/packages/core/src/di/provider.interface.ts#L66)
+Defined in: [packages/core/src/di/provider.interface.ts:66](https://github.com/kiyasov/nestelia/blob/main/packages/core/src/di/provider.interface.ts#L66)

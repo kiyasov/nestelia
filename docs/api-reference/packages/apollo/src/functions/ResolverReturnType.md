@@ -4,7 +4,7 @@
 function ResolverReturnType(typeFn, options?): MethodDecorator;
 ```
 
-Defined in: [packages/apollo/src/decorators/field-resolver.decorator.ts:149](https://github.com/kiyasov/elysia-nest/blob/main/packages/apollo/src/decorators/field-resolver.decorator.ts#L149)
+Defined in: [packages/apollo/src/decorators/field-resolver.decorator.ts:149](https://github.com/kiyasov/nestelia/blob/main/packages/apollo/src/decorators/field-resolver.decorator.ts#L149)
 
 Decorator to explicitly specify the return type of a field resolver.
 

@@ -1,16 +1,16 @@
 <div align="center">
 
-# elysia-nest
+# nestelia
 
 **Modular framework with decorators, dependency injection, modules, and lifecycle hooks for [Elysia](https://elysiajs.com/).**
 
-[![npm version](https://img.shields.io/npm/v/@kiyasov/elysia-nest?style=flat-square&color=cb3837&logo=npm)](https://www.npmjs.com/package/@kiyasov/elysia-nest)
-[![npm downloads](https://img.shields.io/npm/dm/@kiyasov/elysia-nest?style=flat-square&color=cb3837&logo=npm)](https://www.npmjs.com/package/@kiyasov/elysia-nest)
-[![GitHub stars](https://img.shields.io/github/stars/kiyasov/elysia-nest?style=flat-square&logo=github)](https://github.com/kiyasov/elysia-nest)
-[![License: MIT](https://img.shields.io/badge/license-MIT-blue?style=flat-square)](https://github.com/kiyasov/elysia-nest/blob/main/LICENSE)
-[![Status](https://img.shields.io/badge/status-active%20development-orange?style=flat-square)](https://github.com/kiyasov/elysia-nest)
+[![npm version](https://img.shields.io/npm/v/nestelia?style=flat-square&color=cb3837&logo=npm)](https://www.npmjs.com/package/nestelia)
+[![npm downloads](https://img.shields.io/npm/dm/nestelia?style=flat-square&color=cb3837&logo=npm)](https://www.npmjs.com/package/nestelia)
+[![GitHub stars](https://img.shields.io/github/stars/kiyasov/nestelia?style=flat-square&logo=github)](https://github.com/kiyasov/nestelia)
+[![License: MIT](https://img.shields.io/badge/license-MIT-blue?style=flat-square)](https://github.com/kiyasov/nestelia/blob/main/LICENSE)
+[![Status](https://img.shields.io/badge/status-active%20development-orange?style=flat-square)](https://github.com/kiyasov/nestelia)
 
-[Documentation](https://kiyasov.github.io/elysia-nest/) · [npm](https://www.npmjs.com/package/@kiyasov/elysia-nest) · [GitHub](https://github.com/kiyasov/elysia-nest)
+[Documentation](https://kiyasov.github.io/nestelia/) · [npm](https://www.npmjs.com/package/nestelia) · [GitHub](https://github.com/kiyasov/nestelia)
 
 </div>
 
@@ -32,14 +32,14 @@
 Requires [Elysia](https://elysiajs.com/) as a peer dependency.
 
 ```bash
-bun add @kiyasov/elysia-nest elysia
+bun add nestelia elysia
 ```
 
 ## Quick Start
 
 ```typescript
 import "reflect-metadata";
-import { Controller, Get, Injectable, Module, createElysiaApplication } from "@kiyasov/elysia-nest";
+import { Controller, Get, Injectable, Module, createElysiaApplication } from "nestelia";
 
 @Injectable()
 class GreetingService {
@@ -70,22 +70,22 @@ app.listen(3000, () => console.log("Listening on http://localhost:3000"));
 
 ## Packages
 
-All subpath exports are part of the single `@kiyasov/elysia-nest` package.
+All subpath exports are part of the single `nestelia` package.
 
 | Import path | Description |
 |-------------|-------------|
-| `@kiyasov/elysia-nest/scheduler` | Cron jobs, intervals, and timeouts |
-| `@kiyasov/elysia-nest/microservices` | Redis, RabbitMQ, TCP transports |
-| `@kiyasov/elysia-nest/apollo` | Apollo GraphQL code-first |
-| `@kiyasov/elysia-nest/passport` | Passport.js authentication |
-| `@kiyasov/elysia-nest/testing` | Isolated test modules with provider overrides |
-| `@kiyasov/elysia-nest/cache` | Response caching with decorators |
-| `@kiyasov/elysia-nest/rabbitmq` | Advanced RabbitMQ messaging |
-| `@kiyasov/elysia-nest/graphql-pubsub` | Redis PubSub for GraphQL subscriptions |
+| `nestelia/scheduler` | Cron jobs, intervals, and timeouts |
+| `nestelia/microservices` | Redis, RabbitMQ, TCP transports |
+| `nestelia/apollo` | Apollo GraphQL code-first |
+| `nestelia/passport` | Passport.js authentication |
+| `nestelia/testing` | Isolated test modules with provider overrides |
+| `nestelia/cache` | Response caching with decorators |
+| `nestelia/rabbitmq` | Advanced RabbitMQ messaging |
+| `nestelia/graphql-pubsub` | Redis PubSub for GraphQL subscriptions |
 
 ## Documentation
 
-Full documentation is available at **[kiyasov.github.io/elysia-nest](https://kiyasov.github.io/elysia-nest/)** (powered by [VitePress](https://vitepress.dev/)).
+Full documentation is available at **[kiyasov.github.io/nestelia](https://kiyasov.github.io/nestelia/)** (powered by [VitePress](https://vitepress.dev/)).
 
 To run docs locally:
 
@@ -95,14 +95,14 @@ bun run docs:dev
 
 ## Claude Code Skill
 
-A [Claude Code](https://claude.ai/claude-code) skill is available for elysia-nest. It provides scaffolding templates, decorator usage, and best practices directly in your AI assistant.
+A [Claude Code](https://claude.ai/claude-code) skill is available for nestelia. It provides scaffolding templates, decorator usage, and best practices directly in your AI assistant.
 
 ```bash
-npx skills add kiyasov/elysia-nest
+npx skills add kiyasov/nestelia
 ```
 
-Once installed, Claude Code will automatically use the correct patterns when working with `@kiyasov/elysia-nest`.
+Once installed, Claude Code will automatically use the correct patterns when working with `nestelia`.
 
 ## License
 
-[MIT](https://github.com/kiyasov/elysia-nest/blob/main/LICENSE) © [Islam Kiiasov](https://github.com/kiyasov)
+[MIT](https://github.com/kiyasov/nestelia/blob/main/LICENSE) © [Islam Kiiasov](https://github.com/kiyasov)

@@ -4,7 +4,7 @@
 const GraphQLUpload: GraphQLScalarType<Promise<UploadedFile>, never>;
 ```
 
-Defined in: [packages/apollo/src/upload.ts:121](https://github.com/kiyasov/elysia-nest/blob/main/packages/apollo/src/upload.ts#L121)
+Defined in: [packages/apollo/src/upload.ts:121](https://github.com/kiyasov/nestelia/blob/main/packages/apollo/src/upload.ts#L121)
 
 GraphQL scalar type for handling file uploads.
 Implements the GraphQL multipart request specification.

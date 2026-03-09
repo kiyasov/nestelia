@@ -1,5 +1,5 @@
-import type { FactoryProvider, Provider, Type } from "@kiyasov/elysia-nest";
-import type { ConfigurableModuleAsyncOptions } from "@kiyasov/elysia-nest";
+import type { FactoryProvider, Provider, Type } from "nestelia";
+import type { ConfigurableModuleAsyncOptions } from "nestelia";
 import { CacheManagerOptions } from "./cache-manager.interface";
 
 /**

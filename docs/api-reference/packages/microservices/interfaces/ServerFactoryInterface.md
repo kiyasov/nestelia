@@ -1,6 +1,6 @@
 # Interface: ServerFactoryInterface
 
-Defined in: [packages/microservices/interfaces/server.interface.ts:36](https://github.com/kiyasov/elysia-nest/blob/main/packages/microservices/interfaces/server.interface.ts#L36)
+Defined in: [packages/microservices/interfaces/server.interface.ts:36](https://github.com/kiyasov/nestelia/blob/main/packages/microservices/interfaces/server.interface.ts#L36)
 
 Factory interface for creating transport servers.
 
@@ -14,7 +14,7 @@ create(options):
   | Server;
 ```
 
-Defined in: [packages/microservices/interfaces/server.interface.ts:37](https://github.com/kiyasov/elysia-nest/blob/main/packages/microservices/interfaces/server.interface.ts#L37)
+Defined in: [packages/microservices/interfaces/server.interface.ts:37](https://github.com/kiyasov/nestelia/blob/main/packages/microservices/interfaces/server.interface.ts#L37)
 
 #### Parameters
 

@@ -1,6 +1,6 @@
 # Abstract Class: ClientProxy
 
-Defined in: [packages/microservices/client/client-proxy.ts:10](https://github.com/kiyasov/elysia-nest/blob/main/packages/microservices/client/client-proxy.ts#L10)
+Defined in: [packages/microservices/client/client-proxy.ts:10](https://github.com/kiyasov/nestelia/blob/main/packages/microservices/client/client-proxy.ts#L10)
 
 Abstract base class for all microservice client proxies.
 
@@ -34,7 +34,7 @@ new ClientProxy(): ClientProxy;
 abstract close(): void;
 ```
 
-Defined in: [packages/microservices/client/client-proxy.ts:18](https://github.com/kiyasov/elysia-nest/blob/main/packages/microservices/client/client-proxy.ts#L18)
+Defined in: [packages/microservices/client/client-proxy.ts:18](https://github.com/kiyasov/nestelia/blob/main/packages/microservices/client/client-proxy.ts#L18)
 
 Closes the transport connection and releases resources.
 
@@ -50,7 +50,7 @@ Closes the transport connection and releases resources.
 abstract connect(): Promise<void>;
 ```
 
-Defined in: [packages/microservices/client/client-proxy.ts:15](https://github.com/kiyasov/elysia-nest/blob/main/packages/microservices/client/client-proxy.ts#L15)
+Defined in: [packages/microservices/client/client-proxy.ts:15](https://github.com/kiyasov/nestelia/blob/main/packages/microservices/client/client-proxy.ts#L15)
 
 Opens the underlying transport connection.
 Must be called before invoking [send](#send) or [emit](#emit).
@@ -67,7 +67,7 @@ Must be called before invoking [send](#send) or [emit](#emit).
 abstract emit<T>(pattern, data): void;
 ```
 
-Defined in: [packages/microservices/client/client-proxy.ts:45](https://github.com/kiyasov/elysia-nest/blob/main/packages/microservices/client/client-proxy.ts#L45)
+Defined in: [packages/microservices/client/client-proxy.ts:45](https://github.com/kiyasov/nestelia/blob/main/packages/microservices/client/client-proxy.ts#L45)
 
 Publishes a fire-and-forget event matching `pattern`.
 
@@ -96,7 +96,7 @@ Publishes a fire-and-forget event matching `pattern`.
 abstract send<T, R>(pattern, data): Observable<R>;
 ```
 
-Defined in: [packages/microservices/client/client-proxy.ts:34](https://github.com/kiyasov/elysia-nest/blob/main/packages/microservices/client/client-proxy.ts#L34)
+Defined in: [packages/microservices/client/client-proxy.ts:34](https://github.com/kiyasov/nestelia/blob/main/packages/microservices/client/client-proxy.ts#L34)
 
 Sends a request matching `pattern` and returns an Observable that emits
 the server's response then completes.

@@ -1,5 +1,5 @@
-import { Injectable } from "@kiyasov/elysia-nest";
-import type { CanActivate, ExecutionContext } from "@kiyasov/elysia-nest";
+import { Injectable } from "nestelia";
+import type { CanActivate, ExecutionContext } from "nestelia";
 
 /**
  * Checks that the X-Role header equals "admin".

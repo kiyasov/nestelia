@@ -15,8 +15,8 @@ bun add cache-manager
 ## Setup
 
 ```typescript
-import { Module } from "@kiyasov/elysia-nest";
-import { CacheModule } from "@kiyasov/elysia-nest/cache";
+import { Module } from "nestelia";
+import { CacheModule } from "nestelia/cache";
 
 @Module({
   imports: [
@@ -31,7 +31,7 @@ class AppModule {}
 ### Async Configuration
 
 ```typescript
-import { CacheModule } from "@kiyasov/elysia-nest/cache";
+import { CacheModule } from "nestelia/cache";
 
 CacheModule.registerAsync({
   useFactory: async (config: ConfigService) => ({
@@ -49,7 +49,7 @@ CacheModule.registerAsync({
 Set a custom cache key for a route:
 
 ```typescript
-import { CacheKey } from "@kiyasov/elysia-nest/cache";
+import { CacheKey } from "nestelia/cache";
 
 @Controller("/users")
 class UserController {
@@ -64,7 +64,7 @@ class UserController {
 Dynamic cache keys using a factory function:
 
 ```typescript
-import { CacheKey } from "@kiyasov/elysia-nest/cache";
+import { CacheKey } from "nestelia/cache";
 
 @Get("/:id")
 @CacheKey((context: ExecutionContext) => {
@@ -81,7 +81,7 @@ findOne(@Ctx() ctx: any) {
 Override the default TTL for a specific route. The value is in **milliseconds**:
 
 ```typescript
-import { CacheTTL } from "@kiyasov/elysia-nest/cache";
+import { CacheTTL } from "nestelia/cache";
 
 @Get("/stats")
 @CacheTTL(300000) // cache for 5 minutes (300,000 ms)
@@ -109,7 +109,7 @@ getData() {
 Apply the `CacheInterceptor` to automatically cache responses:
 
 ```typescript
-import { CacheInterceptor } from "@kiyasov/elysia-nest/cache";
+import { CacheInterceptor } from "nestelia/cache";
 
 @Controller("/products")
 @UseInterceptors(CacheInterceptor)
@@ -127,8 +127,8 @@ class ProductController {
 Inject the cache instance directly for manual cache operations:
 
 ```typescript
-import { Injectable, Inject } from "@kiyasov/elysia-nest";
-import { CACHE_MANAGER, Cache } from "@kiyasov/elysia-nest/cache";
+import { Injectable, Inject } from "nestelia";
+import { CACHE_MANAGER, Cache } from "nestelia/cache";
 
 @Injectable()
 class UserService {

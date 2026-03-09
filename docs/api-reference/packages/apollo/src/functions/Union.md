@@ -7,7 +7,7 @@ function Union(
    options?): ClassDecorator;
 ```
 
-Defined in: [packages/apollo/src/decorators/type.decorator.ts:348](https://github.com/kiyasov/elysia-nest/blob/main/packages/apollo/src/decorators/type.decorator.ts#L348)
+Defined in: [packages/apollo/src/decorators/type.decorator.ts:348](https://github.com/kiyasov/nestelia/blob/main/packages/apollo/src/decorators/type.decorator.ts#L348)
 
 Decorator for GraphQL Union.
 

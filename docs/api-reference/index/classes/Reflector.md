@@ -1,6 +1,6 @@
 # Class: Reflector
 
-Defined in: [packages/core/src/di/reflector.ts:13](https://github.com/kiyasov/elysia-nest/blob/main/packages/core/src/di/reflector.ts#L13)
+Defined in: [packages/core/src/di/reflector.ts:13](https://github.com/kiyasov/nestelia/blob/main/packages/core/src/di/reflector.ts#L13)
 
 Helper class for retrieving metadata from classes and methods using reflect-metadata.
 
@@ -28,7 +28,7 @@ new Reflector(): Reflector;
 get<T>(metadataKey, target): T | undefined;
 ```
 
-Defined in: [packages/core/src/di/reflector.ts:23](https://github.com/kiyasov/elysia-nest/blob/main/packages/core/src/di/reflector.ts#L23)
+Defined in: [packages/core/src/di/reflector.ts:23](https://github.com/kiyasov/nestelia/blob/main/packages/core/src/di/reflector.ts#L23)
 
 Retrieve metadata for a specified key from a target object.
 
@@ -62,7 +62,7 @@ get<T>(
    propertyKey): T | undefined;
 ```
 
-Defined in: [packages/core/src/di/reflector.ts:38](https://github.com/kiyasov/elysia-nest/blob/main/packages/core/src/di/reflector.ts#L38)
+Defined in: [packages/core/src/di/reflector.ts:38](https://github.com/kiyasov/nestelia/blob/main/packages/core/src/di/reflector.ts#L38)
 
 Retrieve metadata for a specified key from a target object's method.
 
@@ -96,7 +96,7 @@ the metadata value
 getAllAndMerge<T>(metadataKey, targets): T | undefined;
 ```
 
-Defined in: [packages/core/src/di/reflector.ts:124](https://github.com/kiyasov/elysia-nest/blob/main/packages/core/src/di/reflector.ts#L124)
+Defined in: [packages/core/src/di/reflector.ts:124](https://github.com/kiyasov/nestelia/blob/main/packages/core/src/di/reflector.ts#L124)
 
 Retrieve metadata for a specified key from multiple targets and merge the results.
 Arrays will be concatenated, objects will be merged, and primitive values will be
@@ -131,7 +131,7 @@ merged metadata value
 getAllAndOverride<T>(metadataKey, targets): T | undefined;
 ```
 
-Defined in: [packages/core/src/di/reflector.ts:100](https://github.com/kiyasov/elysia-nest/blob/main/packages/core/src/di/reflector.ts#L100)
+Defined in: [packages/core/src/di/reflector.ts:100](https://github.com/kiyasov/nestelia/blob/main/packages/core/src/di/reflector.ts#L100)
 
 Retrieve metadata for a specified key from multiple targets and return the first defined value.
 This method is useful when you want to get metadata from both class and method, where method
@@ -168,7 +168,7 @@ the first defined metadata value
 getMetadataKeys(target): (string | symbol)[];
 ```
 
-Defined in: [packages/core/src/di/reflector.ts:63](https://github.com/kiyasov/elysia-nest/blob/main/packages/core/src/di/reflector.ts#L63)
+Defined in: [packages/core/src/di/reflector.ts:63](https://github.com/kiyasov/nestelia/blob/main/packages/core/src/di/reflector.ts#L63)
 
 Retrieve all metadata keys from a target object.
 
@@ -192,7 +192,7 @@ array of metadata keys
 getMetadataKeys(target, propertyKey): (string | symbol)[];
 ```
 
-Defined in: [packages/core/src/di/reflector.ts:74](https://github.com/kiyasov/elysia-nest/blob/main/packages/core/src/di/reflector.ts#L74)
+Defined in: [packages/core/src/di/reflector.ts:74](https://github.com/kiyasov/nestelia/blob/main/packages/core/src/di/reflector.ts#L74)
 
 Retrieve all metadata keys from a target object's method.
 

@@ -4,7 +4,7 @@
 type CacheKeyFactory = (ctx) => string;
 ```
 
-Defined in: [packages/cache/src/decorators/cache-key.decorator.ts:24](https://github.com/kiyasov/elysia-nest/blob/main/packages/cache/src/decorators/cache-key.decorator.ts#L24)
+Defined in: [packages/cache/src/decorators/cache-key.decorator.ts:24](https://github.com/kiyasov/nestelia/blob/main/packages/cache/src/decorators/cache-key.decorator.ts#L24)
 
 Factory function type for generating cache keys dynamically.
 

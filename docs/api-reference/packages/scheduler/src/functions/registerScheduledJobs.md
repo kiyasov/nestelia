@@ -4,7 +4,7 @@
 function registerScheduledJobs(instance): TaskHandle[];
 ```
 
-Defined in: [packages/scheduler/src/utils/scheduler.utils.ts:42](https://github.com/kiyasov/elysia-nest/blob/main/packages/scheduler/src/utils/scheduler.utils.ts#L42)
+Defined in: [packages/scheduler/src/utils/scheduler.utils.ts:42](https://github.com/kiyasov/nestelia/blob/main/packages/scheduler/src/utils/scheduler.utils.ts#L42)
 
 Scans `instance` for methods decorated with [Cron](Cron.md), [Interval](Interval.md),
 [Timeout](Timeout.md), or [ScheduleAt](ScheduleAt.md) and registers them with the global

@@ -2,7 +2,7 @@ import { type Cache as CacheManagerInstance, createCache } from "cache-manager";
 import type { Cacheable } from "cacheable";
 import Keyv, { type KeyvStoreAdapter } from "keyv";
 
-import type { Provider } from "@kiyasov/elysia-nest";
+import type { Provider } from "nestelia";
 import { CACHE_MANAGER } from "./cache.constants";
 import { MODULE_OPTIONS_TOKEN } from "./cache.module-definition";
 import { CacheManagerOptions } from "./interfaces/cache-manager.interface";

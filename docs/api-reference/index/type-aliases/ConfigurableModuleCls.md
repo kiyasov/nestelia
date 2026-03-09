@@ -4,7 +4,7 @@
 type ConfigurableModuleCls<ModuleOptions, MethodKey, FactoryClassMethodKey, ExtraModuleDefinitionOptions> = () => any & Record<`${MethodKey}`, (options) => DynamicModule> & Record<`${MethodKey}Async`, (options) => DynamicModule>;
 ```
 
-Defined in: [packages/core/src/module-utils/interfaces/configurable-module-cls.interface.ts:16](https://github.com/kiyasov/elysia-nest/blob/main/packages/core/src/module-utils/interfaces/configurable-module-cls.interface.ts#L16)
+Defined in: [packages/core/src/module-utils/interfaces/configurable-module-cls.interface.ts:16](https://github.com/kiyasov/nestelia/blob/main/packages/core/src/module-utils/interfaces/configurable-module-cls.interface.ts#L16)
 
 Class that represents a blueprint/prototype for a configurable Nest module.
 This class provides static methods for constructing dynamic modules. Their names

@@ -1,6 +1,6 @@
 # Class: ValidationError
 
-Defined in: [packages/apollo/src/errors/validation.error.ts:21](https://github.com/kiyasov/elysia-nest/blob/main/packages/apollo/src/errors/validation.error.ts#L21)
+Defined in: [packages/apollo/src/errors/validation.error.ts:21](https://github.com/kiyasov/nestelia/blob/main/packages/apollo/src/errors/validation.error.ts#L21)
 
 Error thrown when the user input does not pass validation.
 
@@ -53,7 +53,7 @@ GraphQLError.[toStringTag]
 new ValidationError(message, options?): ValidationError;
 ```
 
-Defined in: [packages/apollo/src/errors/validation.error.ts:27](https://github.com/kiyasov/elysia-nest/blob/main/packages/apollo/src/errors/validation.error.ts#L27)
+Defined in: [packages/apollo/src/errors/validation.error.ts:27](https://github.com/kiyasov/nestelia/blob/main/packages/apollo/src/errors/validation.error.ts#L27)
 
 Creates a new ValidationError.
 

@@ -1,6 +1,6 @@
 # Interface: IScheduler
 
-Defined in: [packages/scheduler/src/interfaces/scheduler.interface.ts:116](https://github.com/kiyasov/elysia-nest/blob/main/packages/scheduler/src/interfaces/scheduler.interface.ts#L116)
+Defined in: [packages/scheduler/src/interfaces/scheduler.interface.ts:116](https://github.com/kiyasov/nestelia/blob/main/packages/scheduler/src/interfaces/scheduler.interface.ts#L116)
 
 The scheduler interface defining scheduling operations
 
@@ -12,7 +12,7 @@ The scheduler interface defining scheduling operations
 cancelAllTasks(): void;
 ```
 
-Defined in: [packages/scheduler/src/interfaces/scheduler.interface.ts:156](https://github.com/kiyasov/elysia-nest/blob/main/packages/scheduler/src/interfaces/scheduler.interface.ts#L156)
+Defined in: [packages/scheduler/src/interfaces/scheduler.interface.ts:156](https://github.com/kiyasov/nestelia/blob/main/packages/scheduler/src/interfaces/scheduler.interface.ts#L156)
 
 Cancel all scheduled tasks
 
@@ -28,7 +28,7 @@ Cancel all scheduled tasks
 getTasks(): TaskHandle[];
 ```
 
-Defined in: [packages/scheduler/src/interfaces/scheduler.interface.ts:161](https://github.com/kiyasov/elysia-nest/blob/main/packages/scheduler/src/interfaces/scheduler.interface.ts#L161)
+Defined in: [packages/scheduler/src/interfaces/scheduler.interface.ts:161](https://github.com/kiyasov/nestelia/blob/main/packages/scheduler/src/interfaces/scheduler.interface.ts#L161)
 
 Get all active tasks
 
@@ -47,7 +47,7 @@ scheduleAt(
    options?): TaskHandle;
 ```
 
-Defined in: [packages/scheduler/src/interfaces/scheduler.interface.ts:147](https://github.com/kiyasov/elysia-nest/blob/main/packages/scheduler/src/interfaces/scheduler.interface.ts#L147)
+Defined in: [packages/scheduler/src/interfaces/scheduler.interface.ts:147](https://github.com/kiyasov/nestelia/blob/main/packages/scheduler/src/interfaces/scheduler.interface.ts#L147)
 
 Schedule a task to run at a specific date
 
@@ -74,7 +74,7 @@ scheduleCron(
    options?): TaskHandle;
 ```
 
-Defined in: [packages/scheduler/src/interfaces/scheduler.interface.ts:120](https://github.com/kiyasov/elysia-nest/blob/main/packages/scheduler/src/interfaces/scheduler.interface.ts#L120)
+Defined in: [packages/scheduler/src/interfaces/scheduler.interface.ts:120](https://github.com/kiyasov/nestelia/blob/main/packages/scheduler/src/interfaces/scheduler.interface.ts#L120)
 
 Schedule a task to run at a cron time
 
@@ -101,7 +101,7 @@ scheduleInterval(
    options?): TaskHandle;
 ```
 
-Defined in: [packages/scheduler/src/interfaces/scheduler.interface.ts:129](https://github.com/kiyasov/elysia-nest/blob/main/packages/scheduler/src/interfaces/scheduler.interface.ts#L129)
+Defined in: [packages/scheduler/src/interfaces/scheduler.interface.ts:129](https://github.com/kiyasov/nestelia/blob/main/packages/scheduler/src/interfaces/scheduler.interface.ts#L129)
 
 Schedule a task to run at fixed intervals
 
@@ -128,7 +128,7 @@ scheduleTimeout(
    options?): TaskHandle;
 ```
 
-Defined in: [packages/scheduler/src/interfaces/scheduler.interface.ts:138](https://github.com/kiyasov/elysia-nest/blob/main/packages/scheduler/src/interfaces/scheduler.interface.ts#L138)
+Defined in: [packages/scheduler/src/interfaces/scheduler.interface.ts:138](https://github.com/kiyasov/nestelia/blob/main/packages/scheduler/src/interfaces/scheduler.interface.ts#L138)
 
 Schedule a task to run once after a delay
 

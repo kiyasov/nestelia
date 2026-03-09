@@ -8,7 +8,7 @@ Interceptors run before route handler execution. They can check the request, sho
 
 ## Interceptor Interface
 
-@kiyasov/elysia-nest provides a simple interceptor interface:
+nestelia provides a simple interceptor interface:
 
 ```typescript
 interface Interceptor {
@@ -25,7 +25,7 @@ Returning `false` prevents the route handler from executing.
 ### Auth Interceptor
 
 ```typescript
-import { Injectable } from "@kiyasov/elysia-nest";
+import { Injectable } from "nestelia";
 
 @Injectable()
 class AuthInterceptor implements Interceptor {
@@ -59,7 +59,7 @@ class LoggingInterceptor implements Interceptor {
 Apply interceptors with `@UseInterceptors()` at the controller or method level:
 
 ```typescript
-import { UseInterceptors } from "@kiyasov/elysia-nest";
+import { UseInterceptors } from "nestelia";
 
 @Controller("/users")
 @UseInterceptors(LoggingInterceptor)

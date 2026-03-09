@@ -1,6 +1,6 @@
 import { t } from "elysia";
 
-import { Body, Controller, Delete, Get, Param, Post, Put } from "@kiyasov/elysia-nest";
+import { Body, Controller, Delete, Get, Param, Post, Put } from "nestelia";
 
 import { TodoService } from "./todo.service";
 

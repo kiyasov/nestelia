@@ -1,6 +1,6 @@
 # Interface: Interceptor
 
-Defined in: [packages/core/src/interceptors/interceptor.interface.ts:8](https://github.com/kiyasov/elysia-nest/blob/main/packages/core/src/interceptors/interceptor.interface.ts#L8)
+Defined in: [packages/core/src/interceptors/interceptor.interface.ts:8](https://github.com/kiyasov/nestelia/blob/main/packages/core/src/interceptors/interceptor.interface.ts#L8)
 
 Interface for request interceptors
 
@@ -12,7 +12,7 @@ Interface for request interceptors
 intercept(context): boolean | void | Promise<boolean | void>;
 ```
 
-Defined in: [packages/core/src/interceptors/interceptor.interface.ts:13](https://github.com/kiyasov/elysia-nest/blob/main/packages/core/src/interceptors/interceptor.interface.ts#L13)
+Defined in: [packages/core/src/interceptors/interceptor.interface.ts:13](https://github.com/kiyasov/nestelia/blob/main/packages/core/src/interceptors/interceptor.interface.ts#L13)
 
 Method to intercept incoming requests
 

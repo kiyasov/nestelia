@@ -4,7 +4,7 @@
 function Middleware(options?): ClassDecorator;
 ```
 
-Defined in: [packages/core/src/decorators/middleware.decorator.ts:25](https://github.com/kiyasov/elysia-nest/blob/main/packages/core/src/decorators/middleware.decorator.ts#L25)
+Defined in: [packages/core/src/decorators/middleware.decorator.ts:25](https://github.com/kiyasov/nestelia/blob/main/packages/core/src/decorators/middleware.decorator.ts#L25)
 
 Marks a class as middleware. Implies `@Injectable()`.
 

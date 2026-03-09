@@ -1,6 +1,6 @@
 # Class: UserInputError
 
-Defined in: [packages/apollo/src/errors/user-input.error.ts:21](https://github.com/kiyasov/elysia-nest/blob/main/packages/apollo/src/errors/user-input.error.ts#L21)
+Defined in: [packages/apollo/src/errors/user-input.error.ts:21](https://github.com/kiyasov/nestelia/blob/main/packages/apollo/src/errors/user-input.error.ts#L21)
 
 Error thrown when the user input is invalid.
 
@@ -53,7 +53,7 @@ GraphQLError.[toStringTag]
 new UserInputError(message, options?): UserInputError;
 ```
 
-Defined in: [packages/apollo/src/errors/user-input.error.ts:27](https://github.com/kiyasov/elysia-nest/blob/main/packages/apollo/src/errors/user-input.error.ts#L27)
+Defined in: [packages/apollo/src/errors/user-input.error.ts:27](https://github.com/kiyasov/nestelia/blob/main/packages/apollo/src/errors/user-input.error.ts#L27)
 
 Creates a new UserInputError.
 

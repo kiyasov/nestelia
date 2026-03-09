@@ -1,6 +1,6 @@
 # Interface: IAuthGuard
 
-Defined in: [packages/passport/src/auth.guard.ts:22](https://github.com/kiyasov/elysia-nest/blob/main/packages/passport/src/auth.guard.ts#L22)
+Defined in: [packages/passport/src/auth.guard.ts:22](https://github.com/kiyasov/nestelia/blob/main/packages/passport/src/auth.guard.ts#L22)
 
 Interface for guards
 
@@ -16,7 +16,7 @@ Interface for guards
 canActivate(context): boolean | Promise<boolean>;
 ```
 
-Defined in: [packages/core/src/guards/guard.interface.ts:16](https://github.com/kiyasov/elysia-nest/blob/main/packages/core/src/guards/guard.interface.ts#L16)
+Defined in: [packages/core/src/guards/guard.interface.ts:16](https://github.com/kiyasov/nestelia/blob/main/packages/core/src/guards/guard.interface.ts#L16)
 
 Method to determine if a request should proceed
 
@@ -42,7 +42,7 @@ Method to determine if a request should proceed
 getRequest(context): unknown;
 ```
 
-Defined in: [packages/passport/src/auth.guard.ts:23](https://github.com/kiyasov/elysia-nest/blob/main/packages/passport/src/auth.guard.ts#L23)
+Defined in: [packages/passport/src/auth.guard.ts:23](https://github.com/kiyasov/nestelia/blob/main/packages/passport/src/auth.guard.ts#L23)
 
 #### Parameters
 
@@ -66,7 +66,7 @@ handleRequest<TUser>(
    rest): unknown;
 ```
 
-Defined in: [packages/passport/src/auth.guard.ts:24](https://github.com/kiyasov/elysia-nest/blob/main/packages/passport/src/auth.guard.ts#L24)
+Defined in: [packages/passport/src/auth.guard.ts:24](https://github.com/kiyasov/nestelia/blob/main/packages/passport/src/auth.guard.ts#L24)
 
 #### Type Parameters
 

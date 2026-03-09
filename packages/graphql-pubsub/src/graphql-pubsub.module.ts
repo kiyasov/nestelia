@@ -1,8 +1,8 @@
 import type { Redis } from "ioredis";
 
-import { Module } from "@kiyasov/elysia-nest";
-import { Global } from "@kiyasov/elysia-nest";
-import type { Provider, ProviderToken } from "@kiyasov/elysia-nest";
+import { Module } from "nestelia";
+import { Global } from "nestelia";
+import type { Provider, ProviderToken } from "nestelia";
 import type { RedisPubSubOptions } from "./interfaces";
 import { RedisPubSub } from "./redis-pubsub";
 

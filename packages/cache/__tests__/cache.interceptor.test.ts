@@ -288,7 +288,7 @@ describe("CacheInterceptor.intercept — cache error", () => {
 describe("CacheInterceptor.intercept — StreamableFile", () => {
   it("does not cache StreamableFile responses", async () => {
     // Import StreamableFile at runtime to avoid circular dep issues
-    const { StreamableFile } = await import("@kiyasov/elysia-nest");
+    const { StreamableFile } = await import("nestelia");
     const streamable = new StreamableFile(new Uint8Array([1, 2, 3]));
 
     const cacheManager = makeCacheManager(undefined);

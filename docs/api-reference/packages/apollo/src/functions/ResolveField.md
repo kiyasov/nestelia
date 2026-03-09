@@ -4,7 +4,7 @@
 function ResolveField(typeFn?, options?): MethodDecorator;
 ```
 
-Defined in: [packages/apollo/src/decorators/field-resolver.decorator.ts:69](https://github.com/kiyasov/elysia-nest/blob/main/packages/apollo/src/decorators/field-resolver.decorator.ts#L69)
+Defined in: [packages/apollo/src/decorators/field-resolver.decorator.ts:69](https://github.com/kiyasov/nestelia/blob/main/packages/apollo/src/decorators/field-resolver.decorator.ts#L69)
 
 Decorator for a field resolver.
 Used to resolve individual fields of a type.

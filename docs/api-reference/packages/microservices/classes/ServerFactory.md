@@ -1,6 +1,6 @@
 # Class: ServerFactory
 
-Defined in: [packages/microservices/transports/server.factory.ts:22](https://github.com/kiyasov/elysia-nest/blob/main/packages/microservices/transports/server.factory.ts#L22)
+Defined in: [packages/microservices/transports/server.factory.ts:22](https://github.com/kiyasov/nestelia/blob/main/packages/microservices/transports/server.factory.ts#L22)
 
 Factory that instantiates the correct transport server based on the
 provided [MicroserviceOptions](../type-aliases/MicroserviceOptions.md).
@@ -30,7 +30,7 @@ static create(options):
   | Server;
 ```
 
-Defined in: [packages/microservices/transports/server.factory.ts:30](https://github.com/kiyasov/elysia-nest/blob/main/packages/microservices/transports/server.factory.ts#L30)
+Defined in: [packages/microservices/transports/server.factory.ts:30](https://github.com/kiyasov/nestelia/blob/main/packages/microservices/transports/server.factory.ts#L30)
 
 Creates and returns the appropriate transport server.
 

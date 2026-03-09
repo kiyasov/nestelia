@@ -9,7 +9,7 @@ The `DIContainer` singleton provides low-level access to the dependency injectio
 ## Getting an Instance
 
 ```typescript
-import { DIContainer } from "@kiyasov/elysia-nest";
+import { DIContainer } from "nestelia";
 
 const service = await DIContainer.get(UserService, UserModule);
 ```
@@ -35,7 +35,7 @@ Useful for test isolation — removes all registered modules and providers:
 
 ```typescript
 import { beforeEach } from "bun:test";
-import { DIContainer } from "@kiyasov/elysia-nest";
+import { DIContainer } from "nestelia";
 
 beforeEach(() => {
   DIContainer.clear();

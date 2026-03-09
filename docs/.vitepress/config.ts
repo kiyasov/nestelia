@@ -3,13 +3,13 @@ import { fileURLToPath } from "node:url";
 import tailwindcss from "@tailwindcss/vite";
 
 export default defineConfig({
-  title: "@kiyasov/elysia-nest",
+  title: "nestelia",
   description: "A modular, decorator-driven framework built on top of Elysia and Bun",
-  base: "/elysia-nest/",
+  base: "/nestelia/",
   ignoreDeadLinks: true,
 
   head: [
-    ["link", { rel: "icon", href: "/elysia-nest/favicon.svg" }],
+    ["link", { rel: "icon", href: "/nestelia/favicon.svg" }],
     [
       "link",
       {
@@ -32,7 +32,7 @@ export default defineConfig({
       dark: "/logo/dark.svg",
     },
 
-    // SVG logo already contains "elysia-nest" text — hide the duplicate title
+    // SVG logo already contains "nestelia" text — hide the duplicate title
     siteTitle: false,
 
     nav: [
@@ -40,7 +40,7 @@ export default defineConfig({
       { text: "API Reference", link: "/api-reference/index/README" },
       {
         text: "GitHub",
-        link: "https://github.com/kiyasov/elysia-nest",
+        link: "https://github.com/kiyasov/nestelia",
       },
     ],
 
@@ -633,14 +633,14 @@ export default defineConfig({
       ],
     },
 
-    socialLinks: [{ icon: "github", link: "https://github.com/kiyasov/elysia-nest" }],
+    socialLinks: [{ icon: "github", link: "https://github.com/kiyasov/nestelia" }],
 
     footer: {
       message: "Released under the MIT License.",
     },
 
     editLink: {
-      pattern: "https://github.com/kiyasov/elysia-nest/edit/main/docs/:path",
+      pattern: "https://github.com/kiyasov/nestelia/edit/main/docs/:path",
       text: "Edit this page on GitHub",
     },
 

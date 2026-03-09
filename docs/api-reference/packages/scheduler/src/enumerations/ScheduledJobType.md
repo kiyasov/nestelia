@@ -1,6 +1,6 @@
 # Enumeration: ScheduledJobType
 
-Defined in: [packages/scheduler/src/decorators/scheduler.decorators.ts:16](https://github.com/kiyasov/elysia-nest/blob/main/packages/scheduler/src/decorators/scheduler.decorators.ts#L16)
+Defined in: [packages/scheduler/src/decorators/scheduler.decorators.ts:16](https://github.com/kiyasov/nestelia/blob/main/packages/scheduler/src/decorators/scheduler.decorators.ts#L16)
 
 Scheduled job types
 
@@ -12,7 +12,7 @@ Scheduled job types
 CRON: "cron";
 ```
 
-Defined in: [packages/scheduler/src/decorators/scheduler.decorators.ts:17](https://github.com/kiyasov/elysia-nest/blob/main/packages/scheduler/src/decorators/scheduler.decorators.ts#L17)
+Defined in: [packages/scheduler/src/decorators/scheduler.decorators.ts:17](https://github.com/kiyasov/nestelia/blob/main/packages/scheduler/src/decorators/scheduler.decorators.ts#L17)
 
 ***
 
@@ -22,7 +22,7 @@ Defined in: [packages/scheduler/src/decorators/scheduler.decorators.ts:17](https
 DATE: "date";
 ```
 
-Defined in: [packages/scheduler/src/decorators/scheduler.decorators.ts:20](https://github.com/kiyasov/elysia-nest/blob/main/packages/scheduler/src/decorators/scheduler.decorators.ts#L20)
+Defined in: [packages/scheduler/src/decorators/scheduler.decorators.ts:20](https://github.com/kiyasov/nestelia/blob/main/packages/scheduler/src/decorators/scheduler.decorators.ts#L20)
 
 ***
 
@@ -32,7 +32,7 @@ Defined in: [packages/scheduler/src/decorators/scheduler.decorators.ts:20](https
 INTERVAL: "interval";
 ```
 
-Defined in: [packages/scheduler/src/decorators/scheduler.decorators.ts:18](https://github.com/kiyasov/elysia-nest/blob/main/packages/scheduler/src/decorators/scheduler.decorators.ts#L18)
+Defined in: [packages/scheduler/src/decorators/scheduler.decorators.ts:18](https://github.com/kiyasov/nestelia/blob/main/packages/scheduler/src/decorators/scheduler.decorators.ts#L18)
 
 ***
 
@@ -42,4 +42,4 @@ Defined in: [packages/scheduler/src/decorators/scheduler.decorators.ts:18](https
 TIMEOUT: "timeout";
 ```
 
-Defined in: [packages/scheduler/src/decorators/scheduler.decorators.ts:19](https://github.com/kiyasov/elysia-nest/blob/main/packages/scheduler/src/decorators/scheduler.decorators.ts#L19)
+Defined in: [packages/scheduler/src/decorators/scheduler.decorators.ts:19](https://github.com/kiyasov/nestelia/blob/main/packages/scheduler/src/decorators/scheduler.decorators.ts#L19)

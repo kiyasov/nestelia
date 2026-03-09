@@ -4,4 +4,4 @@
 const LOG_LEVELS: readonly ["verbose", "debug", "log", "warn", "error", "fatal"];
 ```
 
-Defined in: [packages/core/src/logger/logger.interface.ts:1](https://github.com/kiyasov/elysia-nest/blob/main/packages/core/src/logger/logger.interface.ts#L1)
+Defined in: [packages/core/src/logger/logger.interface.ts:1](https://github.com/kiyasov/nestelia/blob/main/packages/core/src/logger/logger.interface.ts#L1)

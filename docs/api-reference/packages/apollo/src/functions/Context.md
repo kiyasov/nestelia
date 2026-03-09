@@ -4,7 +4,7 @@
 function Context(property?): ParameterDecorator;
 ```
 
-Defined in: [packages/apollo/src/decorators/ctx.decorator.ts:40](https://github.com/kiyasov/elysia-nest/blob/main/packages/apollo/src/decorators/ctx.decorator.ts#L40)
+Defined in: [packages/apollo/src/decorators/ctx.decorator.ts:40](https://github.com/kiyasov/nestelia/blob/main/packages/apollo/src/decorators/ctx.decorator.ts#L40)
 
 Decorator for the GraphQL context.
 Provides access to the GraphQL request context.

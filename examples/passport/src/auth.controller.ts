@@ -1,4 +1,4 @@
-import { Controller, Get, UseGuards } from "@kiyasov/elysia-nest";
+import { Controller, Get, UseGuards } from "nestelia";
 import { AuthGuard } from "../../../packages/passport/src";
 
 @Controller("/auth")

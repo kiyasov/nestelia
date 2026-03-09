@@ -4,7 +4,7 @@
 const CACHE_MANAGER: "CACHE_MANAGER" = "CACHE_MANAGER";
 ```
 
-Defined in: [packages/cache/src/cache.constants.ts:11](https://github.com/kiyasov/elysia-nest/blob/main/packages/cache/src/cache.constants.ts#L11)
+Defined in: [packages/cache/src/cache.constants.ts:11](https://github.com/kiyasov/nestelia/blob/main/packages/cache/src/cache.constants.ts#L11)
 
 Injection token for the CacheManager provider.
 

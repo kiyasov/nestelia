@@ -309,7 +309,7 @@ export const RABBIT_PAYLOAD_METADATA = "__rabbitPayload__";
 
 /**
  * Parameter decorator to extract the message payload
- * In @@kiyasov/elysia-nest/rabbitmq this extracts the actual message content
+ * In @nestelia/rabbitmq this extracts the actual message content
  *
  * @example
  * ```typescript

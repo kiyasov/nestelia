@@ -1,6 +1,6 @@
 {
   "$schema": "https://mintlify.com/docs.json",
-  "name": "@kiyasov/elysia-nest",
+  "name": "nestelia",
   "theme": "aspen",
   "colors": {
     "primary": "#4f46e5",
@@ -42,7 +42,7 @@
     }
   },
   "banner": {
-    "content": "@kiyasov/elysia-nest is under active development. APIs may change before the stable release.",
+    "content": "nestelia is under active development. APIs may change before the stable release.",
     "dismissible": false
   },
   "navigation": {
@@ -51,7 +51,7 @@
         {
           "anchor": "GitHub",
           "icon": "github",
-          "href": "https://github.com/kiyasov/@kiyasov/elysia-nest"
+          "href": "https://github.com/kiyasov/nestelia"
         },
         {
           "anchor": "Elysia",

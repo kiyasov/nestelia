@@ -1,5 +1,5 @@
-import { SetMetadata } from "@kiyasov/elysia-nest";
-import { ExecutionContext } from "@kiyasov/elysia-nest";
+import { SetMetadata } from "nestelia";
+import { ExecutionContext } from "nestelia";
 import { CACHE_KEY_METADATA } from "../cache.constants";
 
 /**

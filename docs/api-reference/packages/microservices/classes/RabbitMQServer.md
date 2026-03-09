@@ -1,6 +1,6 @@
 # Class: RabbitMQServer
 
-Defined in: [packages/microservices/transports/rabbitmq.server.ts:99](https://github.com/kiyasov/elysia-nest/blob/main/packages/microservices/transports/rabbitmq.server.ts#L99)
+Defined in: [packages/microservices/transports/rabbitmq.server.ts:99](https://github.com/kiyasov/nestelia/blob/main/packages/microservices/transports/rabbitmq.server.ts#L99)
 
 Transport server that uses RabbitMQ (AMQP via amqplib).
 
@@ -23,7 +23,7 @@ Requires the optional peer dependency `amqplib`.
 new RabbitMQServer(options): RabbitMQServer;
 ```
 
-Defined in: [packages/microservices/transports/rabbitmq.server.ts:112](https://github.com/kiyasov/elysia-nest/blob/main/packages/microservices/transports/rabbitmq.server.ts#L112)
+Defined in: [packages/microservices/transports/rabbitmq.server.ts:112](https://github.com/kiyasov/nestelia/blob/main/packages/microservices/transports/rabbitmq.server.ts#L112)
 
 #### Parameters
 
@@ -105,7 +105,7 @@ v13.4.0, v12.16.0
 addEventHandler(pattern, callback): void;
 ```
 
-Defined in: [packages/microservices/transports/rabbitmq.server.ts:312](https://github.com/kiyasov/elysia-nest/blob/main/packages/microservices/transports/rabbitmq.server.ts#L312)
+Defined in: [packages/microservices/transports/rabbitmq.server.ts:312](https://github.com/kiyasov/nestelia/blob/main/packages/microservices/transports/rabbitmq.server.ts#L312)
 
 Registers `callback` as a fire-and-forget event handler for `pattern`.
 The handler's return value is ignored.
@@ -133,7 +133,7 @@ The handler's return value is ignored.
 addHandler(pattern, callback): void;
 ```
 
-Defined in: [packages/microservices/transports/server.ts:32](https://github.com/kiyasov/elysia-nest/blob/main/packages/microservices/transports/server.ts#L32)
+Defined in: [packages/microservices/transports/server.ts:32](https://github.com/kiyasov/nestelia/blob/main/packages/microservices/transports/server.ts#L32)
 
 Registers `callback` as a request-response handler for `pattern`.
 Equivalent to [addMessageHandler](BaseServer.md#addmessagehandler).
@@ -198,7 +198,7 @@ v0.1.26
 addMessageHandler(pattern, callback): void;
 ```
 
-Defined in: [packages/microservices/transports/rabbitmq.server.ts:302](https://github.com/kiyasov/elysia-nest/blob/main/packages/microservices/transports/rabbitmq.server.ts#L302)
+Defined in: [packages/microservices/transports/rabbitmq.server.ts:302](https://github.com/kiyasov/nestelia/blob/main/packages/microservices/transports/rabbitmq.server.ts#L302)
 
 Registers `callback` as a request-response handler for `pattern`.
 The handler is expected to return a value that will be sent back to
@@ -227,7 +227,7 @@ the caller.
 close(): void;
 ```
 
-Defined in: [packages/microservices/transports/rabbitmq.server.ts:395](https://github.com/kiyasov/elysia-nest/blob/main/packages/microservices/transports/rabbitmq.server.ts#L395)
+Defined in: [packages/microservices/transports/rabbitmq.server.ts:395](https://github.com/kiyasov/nestelia/blob/main/packages/microservices/transports/rabbitmq.server.ts#L395)
 
 Cancels consumers, closes the channel and connection.
 
@@ -321,7 +321,7 @@ v0.1.26
 emitEvent<T>(pattern, data): void;
 ```
 
-Defined in: [packages/microservices/transports/rabbitmq.server.ts:377](https://github.com/kiyasov/elysia-nest/blob/main/packages/microservices/transports/rabbitmq.server.ts#L377)
+Defined in: [packages/microservices/transports/rabbitmq.server.ts:377](https://github.com/kiyasov/nestelia/blob/main/packages/microservices/transports/rabbitmq.server.ts#L377)
 
 Publishes a fire-and-forget event to `pattern`.
 
@@ -422,7 +422,7 @@ protected handleEvent<T>(
    ctx): void;
 ```
 
-Defined in: [packages/microservices/transports/server.ts:86](https://github.com/kiyasov/elysia-nest/blob/main/packages/microservices/transports/server.ts#L86)
+Defined in: [packages/microservices/transports/server.ts:86](https://github.com/kiyasov/nestelia/blob/main/packages/microservices/transports/server.ts#L86)
 
 Dispatches an incoming event to the matching event handler.
 Silently ignores events without a registered handler.
@@ -460,7 +460,7 @@ protected handleMessage<T, R>(
    ctx): unknown;
 ```
 
-Defined in: [packages/microservices/transports/server.ts:70](https://github.com/kiyasov/elysia-nest/blob/main/packages/microservices/transports/server.ts#L70)
+Defined in: [packages/microservices/transports/server.ts:70](https://github.com/kiyasov/nestelia/blob/main/packages/microservices/transports/server.ts#L70)
 
 Dispatches an incoming request to the matching message handler.
 
@@ -499,7 +499,7 @@ When no handler is registered for `pattern`.
 listen(callback?): Promise<void>;
 ```
 
-Defined in: [packages/microservices/transports/rabbitmq.server.ts:126](https://github.com/kiyasov/elysia-nest/blob/main/packages/microservices/transports/rabbitmq.server.ts#L126)
+Defined in: [packages/microservices/transports/rabbitmq.server.ts:126](https://github.com/kiyasov/nestelia/blob/main/packages/microservices/transports/rabbitmq.server.ts#L126)
 
 Connects to one of the configured AMQP URLs, declares the queue /
 exchange, and immediately begins consuming messages.
@@ -1090,7 +1090,7 @@ v0.1.26
 sendMessage<T>(pattern, data): Promise<unknown>;
 ```
 
-Defined in: [packages/microservices/transports/rabbitmq.server.ts:336](https://github.com/kiyasov/elysia-nest/blob/main/packages/microservices/transports/rabbitmq.server.ts#L336)
+Defined in: [packages/microservices/transports/rabbitmq.server.ts:336](https://github.com/kiyasov/nestelia/blob/main/packages/microservices/transports/rabbitmq.server.ts#L336)
 
 Publishes a request to `pattern` and waits for a reply.
 The default timeout is **5 seconds**.
@@ -1156,5 +1156,5 @@ v0.3.5
 
 | Property | Modifier | Type | Description | Inherited from | Defined in |
 | ------ | ------ | ------ | ------ | ------ | ------ |
-| <a id="eventhandlers"></a> `eventHandlers` | `readonly` | `Map`\<`string`, [`MessageHandler`](../type-aliases/MessageHandler.md)\> | Handlers for fire-and-forget event patterns. | [`BaseServer`](BaseServer.md).[`eventHandlers`](BaseServer.md#eventhandlers) | [packages/microservices/transports/server.ts:26](https://github.com/kiyasov/elysia-nest/blob/main/packages/microservices/transports/server.ts#L26) |
-| <a id="messagehandlers"></a> `messageHandlers` | `readonly` | `Map`\<`string`, [`MessageHandler`](../type-aliases/MessageHandler.md)\> | Handlers for request-response patterns. | [`BaseServer`](BaseServer.md).[`messageHandlers`](BaseServer.md#messagehandlers) | [packages/microservices/transports/server.ts:24](https://github.com/kiyasov/elysia-nest/blob/main/packages/microservices/transports/server.ts#L24) |
+| <a id="eventhandlers"></a> `eventHandlers` | `readonly` | `Map`\<`string`, [`MessageHandler`](../type-aliases/MessageHandler.md)\> | Handlers for fire-and-forget event patterns. | [`BaseServer`](BaseServer.md).[`eventHandlers`](BaseServer.md#eventhandlers) | [packages/microservices/transports/server.ts:26](https://github.com/kiyasov/nestelia/blob/main/packages/microservices/transports/server.ts#L26) |
+| <a id="messagehandlers"></a> `messageHandlers` | `readonly` | `Map`\<`string`, [`MessageHandler`](../type-aliases/MessageHandler.md)\> | Handlers for request-response patterns. | [`BaseServer`](BaseServer.md).[`messageHandlers`](BaseServer.md#messagehandlers) | [packages/microservices/transports/server.ts:24](https://github.com/kiyasov/nestelia/blob/main/packages/microservices/transports/server.ts#L24) |

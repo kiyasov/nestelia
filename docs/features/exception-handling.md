@@ -4,7 +4,7 @@ icon: circle-alert
 description: Handle errors with built-in HTTP exceptions
 ---
 
-@kiyasov/elysia-nest provides built-in exception classes that automatically produce structured error responses.
+nestelia provides built-in exception classes that automatically produce structured error responses.
 
 ## Built-In Exceptions
 
@@ -15,7 +15,7 @@ import {
   NotFoundException,
   UnauthorizedException,
   ForbiddenException,
-} from "@kiyasov/elysia-nest";
+} from "nestelia";
 ```
 
 ## Usage
@@ -89,7 +89,7 @@ Exception filters let you intercept and transform thrown exceptions globally.
 Implement the `ExceptionFilter` interface and use `@Catch()` to specify which exception types to handle:
 
 ```typescript
-import { Catch, ExceptionFilter, ExceptionContext, HttpException } from "@kiyasov/elysia-nest";
+import { Catch, ExceptionFilter, ExceptionContext, HttpException } from "nestelia";
 
 @Catch(HttpException)
 class HttpExceptionFilter implements ExceptionFilter {
@@ -128,7 +128,7 @@ class GlobalExceptionFilter implements ExceptionFilter {
 Register a global exception filter using the `APP_FILTER` token in the root module's `providers`:
 
 ```typescript
-import { Module, APP_FILTER } from "@kiyasov/elysia-nest";
+import { Module, APP_FILTER } from "nestelia";
 
 @Module({
   providers: [
