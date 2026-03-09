@@ -297,7 +297,7 @@ pre,
 
 /* ── Getting Started — green → cyan ─── */
 #VPSidebarNav > .group:nth-child(1) > .VPSidebarItem > .item > .text::before {
-  background-image: url(/elysia-nest/assets/icons/getting-started.svg);
+  background-image: url(/assets/icons/getting-started.svg);
 }
 #VPSidebarNav > .group:nth-child(1) > .VPSidebarItem > .item > .text::after {
   background: linear-gradient(135deg, #22c55e, #06b6d4);
@@ -305,7 +305,7 @@ pre,
 
 /* ── Core Concepts — teal → blue ─── */
 #VPSidebarNav > .group:nth-child(2) > .VPSidebarItem > .item > .text::before {
-  background-image: url(/elysia-nest/assets/icons/core-concepts.svg);
+  background-image: url(/assets/icons/core-concepts.svg);
 }
 #VPSidebarNav > .group:nth-child(2) > .VPSidebarItem > .item > .text::after {
   background: linear-gradient(135deg, #2dd4bf, #60a5fa);
@@ -313,7 +313,7 @@ pre,
 
 /* ── Features — sky → violet ─── */
 #VPSidebarNav > .group:nth-child(3) > .VPSidebarItem > .item > .text::before {
-  background-image: url(/elysia-nest/assets/icons/features.svg);
+  background-image: url(/assets/icons/features.svg);
 }
 #VPSidebarNav > .group:nth-child(3) > .VPSidebarItem > .item > .text::after {
   background: linear-gradient(135deg, #38bdf8, #a78bfa);
@@ -321,7 +321,7 @@ pre,
 
 /* ── Packages — indigo → fuchsia ─── */
 #VPSidebarNav > .group:nth-child(4) > .VPSidebarItem > .item > .text::before {
-  background-image: url(/elysia-nest/assets/icons/packages.svg);
+  background-image: url(/assets/icons/packages.svg);
 }
 #VPSidebarNav > .group:nth-child(4) > .VPSidebarItem > .item > .text::after {
   background: linear-gradient(135deg, #818cf8, #e879f9);
@@ -329,7 +329,7 @@ pre,
 
 /* ── Advanced — purple → rose ─── */
 #VPSidebarNav > .group:nth-child(5) > .VPSidebarItem > .item > .text::before {
-  background-image: url(/elysia-nest/assets/icons/advanced.svg);
+  background-image: url(/assets/icons/advanced.svg);
 }
 #VPSidebarNav > .group:nth-child(5) > .VPSidebarItem > .item > .text::after {
   background: linear-gradient(135deg, #c084fc, #fb7185);
