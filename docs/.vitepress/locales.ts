@@ -194,6 +194,7 @@ const enDocs = [
     ["RabbitMQ",         "packages/rabbitmq"],
     ["GraphQL PubSub",   "packages/graphql-pubsub"],
     ["Drizzle ORM",      "packages/drizzle"],
+    ["Event Emitter",    "packages/event-emitter"],
   ]),
   docSection("Advanced", [
     ["Custom Providers",   "advanced/custom-providers"],
@@ -256,6 +257,7 @@ const ruDocs = [
     ["RabbitMQ",         "packages/rabbitmq"],
     ["GraphQL PubSub",   "packages/graphql-pubsub"],
     ["Drizzle ORM",      "packages/drizzle"],
+    ["Event Emitter",    "packages/event-emitter"],
   ], "/ru"),
   docSection("Продвинутые темы", [
     ["Пользовательские провайдеры", "advanced/custom-providers"],
@@ -300,6 +302,7 @@ const zhDocs = [
     ["RabbitMQ",       "packages/rabbitmq"],
     ["GraphQL PubSub", "packages/graphql-pubsub"],
     ["Drizzle ORM",    "packages/drizzle"],
+    ["Event Emitter",  "packages/event-emitter"],
   ], "/zh"),
   docSection("进阶", [
     ["自定义提供者",  "advanced/custom-providers"],
@@ -363,6 +366,7 @@ const jaDocs = [
     ["RabbitMQ",       "packages/rabbitmq"],
     ["GraphQL PubSub", "packages/graphql-pubsub"],
     ["Drizzle ORM",    "packages/drizzle"],
+    ["Event Emitter",  "packages/event-emitter"],
   ], "/ja"),
   docSection("応用", [
     ["カスタムプロバイダー","advanced/custom-providers"],
@@ -426,6 +430,7 @@ const ptDocs = [
     ["RabbitMQ",       "packages/rabbitmq"],
     ["GraphQL PubSub", "packages/graphql-pubsub"],
     ["Drizzle ORM",    "packages/drizzle"],
+    ["Event Emitter",  "packages/event-emitter"],
   ], "/pt"),
   docSection("Avançado", [
     ["Provedores Customizados","advanced/custom-providers"],
@@ -489,6 +494,7 @@ const koDocs = [
     ["RabbitMQ",       "packages/rabbitmq"],
     ["GraphQL PubSub", "packages/graphql-pubsub"],
     ["Drizzle ORM",    "packages/drizzle"],
+    ["Event Emitter",  "packages/event-emitter"],
   ], "/ko"),
   docSection("고급", [
     ["커스텀 프로바이더","advanced/custom-providers"],
@@ -552,6 +558,7 @@ const esDocs = [
     ["RabbitMQ",       "packages/rabbitmq"],
     ["GraphQL PubSub", "packages/graphql-pubsub"],
     ["Drizzle ORM",    "packages/drizzle"],
+    ["Event Emitter",  "packages/event-emitter"],
   ], "/es"),
   docSection("Avanzado", [
     ["Proveedores Personalizados","advanced/custom-providers"],

@@ -28,6 +28,7 @@ const ENTRYPOINTS = [
   "./packages/rabbitmq/src/index.ts",
   "./packages/graphql-pubsub/src/index.ts",
   "./packages/drizzle/src/index.ts",
+  "./packages/event-emitter/src/index.ts",
 ];
 
 // All peer + optional dependencies — must NOT be bundled

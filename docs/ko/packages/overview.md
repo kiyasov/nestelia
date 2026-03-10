@@ -19,6 +19,7 @@ nestelia는 코어 프레임워크를 확장하는 선택적 패키지 세트를
 | `nestelia/rabbitmq` | 고급 RabbitMQ 메시징 | `amqplib` |
 | `nestelia/graphql-pubsub` | GraphQL 구독을 위한 Redis PubSub | `ioredis` |
 | `nestelia/drizzle` | Drizzle ORM — type-safe SQL | `drizzle-orm` |
+| `nestelia/event-emitter` | 와일드카드 지원 타입 안전 비동기 이벤트 이미터 | — |
 
 ## 설치
 
@@ -58,4 +59,5 @@ import { CacheModule } from "nestelia/cache";
 import { RabbitMQModule } from "nestelia/rabbitmq";
 import { GraphQLPubSubModule } from "nestelia/graphql-pubsub";
 import { DrizzleModule } from "nestelia/drizzle";
+import { EventEmitterModule } from "nestelia/event-emitter";
 ```

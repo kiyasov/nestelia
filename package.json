@@ -65,6 +65,11 @@
       "import": "./dist/esm/packages/drizzle/src/index.js",
       "require": "./dist/cjs/packages/drizzle/src/index.js",
       "types": "./dist/types/packages/drizzle/src/index.d.ts"
+    },
+    "./event-emitter": {
+      "import": "./dist/esm/packages/event-emitter/src/index.js",
+      "require": "./dist/cjs/packages/event-emitter/src/index.js",
+      "types": "./dist/types/packages/event-emitter/src/index.d.ts"
     }
   },
   "publishConfig": {
