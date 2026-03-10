@@ -7,6 +7,8 @@
 | [index](index/README.md) | - |
 | [packages/apollo/src](packages/apollo/src/README.md) | - |
 | [packages/cache/src](packages/cache/src/README.md) | Elysia-Nest Cache Manager Module |
+| [packages/drizzle/src](packages/drizzle/src/README.md) | Nestelia Drizzle ORM Module |
+| [packages/event-emitter/src](packages/event-emitter/src/README.md) | Nestelia EventEmitter Module |
 | [packages/graphql-pubsub/src](packages/graphql-pubsub/src/README.md) | - |
 | [packages/microservices](packages/microservices/README.md) | - |
 | [packages/passport/src](packages/passport/src/README.md) | - |

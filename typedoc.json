@@ -8,7 +8,9 @@
     "./packages/testing/src/index.ts",
     "./packages/cache/src/index.ts",
     "./packages/rabbitmq/src/index.ts",
-    "./packages/graphql-pubsub/src/index.ts"
+    "./packages/graphql-pubsub/src/index.ts",
+    "./packages/drizzle/src/index.ts",
+    "./packages/event-emitter/src/index.ts"
   ],
   "entryPointStrategy": "resolve",
   "out": "./docs/api-reference",
