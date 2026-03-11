@@ -23,6 +23,9 @@ export default defineConfig({
   },
 
   head: [
+    // Anti-FOUC: set dark background immediately before any stylesheet loads
+    ["style", {}, `html.dark,html.dark body{background:#1b1b1f;color-scheme:dark}`],
+
     // Favicon
     ["link", { rel: "icon", href: "/favicon.svg", type: "image/svg+xml" }],
 
