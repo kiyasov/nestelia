@@ -1,10 +1,8 @@
 # Interface: WsArgumentsHost
 
-Defined in: [packages/core/src/interfaces/execution-context.interface.ts:27](https://github.com/kiyasov/nestelia/blob/main/packages/core/src/interfaces/execution-context.interface.ts#L27)
+Defined in: [packages/core/src/interfaces/execution-context.interface.ts:24](https://github.com/kiyasov/nestelia/blob/main/packages/core/src/interfaces/execution-context.interface.ts#L24)
 
 WebSocket context interface
-
-## Public Api
 
 ## Methods
 
@@ -14,7 +12,7 @@ WebSocket context interface
 getClient<T>(): T;
 ```
 
-Defined in: [packages/core/src/interfaces/execution-context.interface.ts:29](https://github.com/kiyasov/nestelia/blob/main/packages/core/src/interfaces/execution-context.interface.ts#L29)
+Defined in: [packages/core/src/interfaces/execution-context.interface.ts:26](https://github.com/kiyasov/nestelia/blob/main/packages/core/src/interfaces/execution-context.interface.ts#L26)
 
 #### Type Parameters
 
@@ -34,7 +32,7 @@ Defined in: [packages/core/src/interfaces/execution-context.interface.ts:29](htt
 getData<T>(): T;
 ```
 
-Defined in: [packages/core/src/interfaces/execution-context.interface.ts:28](https://github.com/kiyasov/nestelia/blob/main/packages/core/src/interfaces/execution-context.interface.ts#L28)
+Defined in: [packages/core/src/interfaces/execution-context.interface.ts:25](https://github.com/kiyasov/nestelia/blob/main/packages/core/src/interfaces/execution-context.interface.ts#L25)
 
 #### Type Parameters
 
@@ -54,7 +52,7 @@ Defined in: [packages/core/src/interfaces/execution-context.interface.ts:28](htt
 getPattern<T>(): T;
 ```
 
-Defined in: [packages/core/src/interfaces/execution-context.interface.ts:30](https://github.com/kiyasov/nestelia/blob/main/packages/core/src/interfaces/execution-context.interface.ts#L30)
+Defined in: [packages/core/src/interfaces/execution-context.interface.ts:27](https://github.com/kiyasov/nestelia/blob/main/packages/core/src/interfaces/execution-context.interface.ts#L27)
 
 #### Type Parameters
 

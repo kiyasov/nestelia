@@ -4,7 +4,7 @@
 type ConfigurableModuleOptionsFactory<ModuleOptions, FactoryClassMethodKey> = Record<`${FactoryClassMethodKey}`, () => Promise<ModuleOptions> | ModuleOptions>;
 ```
 
-Defined in: [packages/core/src/module-utils/interfaces/configurable-module-async-options.interface.ts:15](https://github.com/kiyasov/nestelia/blob/main/packages/core/src/module-utils/interfaces/configurable-module-async-options.interface.ts#L15)
+Defined in: [packages/core/src/module-utils/interfaces/configurable-module-async-options.interface.ts:14](https://github.com/kiyasov/nestelia/blob/main/packages/core/src/module-utils/interfaces/configurable-module-async-options.interface.ts#L14)
 
 Interface that must be implemented by the module options factory class.
 Method key varies depending on the "FactoryClassMethodKey" type argument.
@@ -15,5 +15,3 @@ Method key varies depending on the "FactoryClassMethodKey" type argument.
 | ------ |
 | `ModuleOptions` |
 | `FactoryClassMethodKey` *extends* `string` |
-
-## Public Api

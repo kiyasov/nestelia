@@ -6,7 +6,6 @@ import { MODULE_OPTIONS_TOKEN } from "./cache.module-definition";
  * Use this token to inject the cache manager instance:
  * `@Inject(CACHE_MANAGER) private cacheManager: Cache`
  *
- * @publicApi
  */
 export const CACHE_MANAGER = "CACHE_MANAGER";
 
@@ -36,6 +35,5 @@ export const CACHE_TTL_METADATA = "cache_module:cache_ttl";
  * This token provides access to the raw cache module options
  * used during module initialization.
  *
- * @publicApi
  */
 export const CACHE_MODULE_OPTIONS = MODULE_OPTIONS_TOKEN;

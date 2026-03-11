@@ -51,7 +51,6 @@ import type { EventEmitterModuleOptions } from "./interfaces";
  * }
  * ```
  *
- * @publicApi
  */
 @Module({})
 export class EventEmitterModule {

@@ -14,7 +14,6 @@ import { createCacheManager } from "./cache.providers";
  *
  * This class can be used as a provider token for dependency injection.
  *
- * @publicApi
  */
 // eslint-disable-next-line @typescript-eslint/no-unsafe-declaration-merging
 export class Cache {}
@@ -26,7 +25,6 @@ export class Cache {}
  * created by cache-manager library. Can be used for injection:
  * `@Inject(CACHE_MANAGER) private cacheManager: Cache`
  *
- * @publicApi
  */
 // eslint-disable-next-line @typescript-eslint/no-unsafe-declaration-merging
 export interface Cache extends ReturnType<typeof createCache> {}
@@ -65,7 +63,6 @@ export interface Cache extends ReturnType<typeof createCache> {}
  * export class AppModule {}
  * ```
  *
- * @publicApi
  */
 @Module({
   providers: [

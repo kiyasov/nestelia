@@ -55,7 +55,6 @@ function matchWildcard(pattern: string, event: string, delimiter: string): boole
  * }
  * ```
  *
- * @publicApi
  */
 @Injectable()
 export class EventEmitterService {

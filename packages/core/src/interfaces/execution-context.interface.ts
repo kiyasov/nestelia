@@ -1,7 +1,6 @@
 /**
  * HTTP context interface for request/response access
  *
- * @publicApi
  */
 export interface HttpArgumentsHost {
   getRequest<T = any>(): T;
@@ -12,7 +11,6 @@ export interface HttpArgumentsHost {
 /**
  * RPC context interface
  *
- * @publicApi
  */
 export interface RpcArgumentsHost {
   getData<T = any>(): T;
@@ -22,7 +20,6 @@ export interface RpcArgumentsHost {
 /**
  * WebSocket context interface
  *
- * @publicApi
  */
 export interface WsArgumentsHost {
   getData<T = any>(): T;
@@ -34,7 +31,6 @@ export interface WsArgumentsHost {
  * Execution context interface providing access to
  * the request/response and handler information
  *
- * @publicApi
  */
 export interface ExecutionContext {
   /**

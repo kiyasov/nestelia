@@ -10,7 +10,6 @@ import { DEFAULT_FACTORY_CLASS_METHOD_KEY } from "../constants";
  * Interface that must be implemented by the module options factory class.
  * Method key varies depending on the "FactoryClassMethodKey" type argument.
  *
- * @publicApi
  */
 export type ConfigurableModuleOptionsFactory<
   ModuleOptions,
@@ -24,7 +23,6 @@ export type ConfigurableModuleOptionsFactory<
  * Interface that represents the module async options object
  * Factory method name varies depending on the "FactoryClassMethodKey" type argument.
  *
- * @publicApi
  */
 export interface ConfigurableModuleAsyncOptions<
   ModuleOptions,

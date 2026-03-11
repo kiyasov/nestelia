@@ -3,7 +3,6 @@ import { Injectable } from "../di";
 /**
  * Interface for HTTP adapter - abstracts HTTP server operations
  *
- * @publicApi
  */
 export interface HttpAdapter {
   getRequestMethod(request: unknown): string;
@@ -15,7 +14,6 @@ export interface HttpAdapter {
  * Host class for accessing the HTTP adapter.
  * Used to abstract the underlying HTTP server.
  *
- * @publicApi
  */
 @Injectable()
 export class HttpAdapterHost {

@@ -17,7 +17,6 @@ type StoreConfigRecord = Record<string, unknown>;
  *
  * @template T - Store-specific configuration type.
  *
- * @publicApi
  */
 export type CacheOptions<T extends StoreConfigRecord = StoreConfigRecord> =
   CacheManagerOptions & T;
@@ -27,7 +26,6 @@ export type CacheOptions<T extends StoreConfigRecord = StoreConfigRecord> =
  *
  * @template T - Store-specific configuration type.
  *
- * @publicApi
  */
 export type CacheModuleOptions<
   T extends StoreConfigRecord = StoreConfigRecord,
@@ -48,7 +46,6 @@ export type CacheModuleOptions<
  *
  * @template T - Store-specific configuration type.
  *
- * @publicApi
  */
 export interface CacheOptionsFactory<
   T extends StoreConfigRecord = StoreConfigRecord,
@@ -71,7 +68,6 @@ export interface CacheOptionsFactory<
  *
  * @template T - Store-specific configuration type.
  *
- * @publicApi
  */
 export interface CacheModuleAsyncOptions<
   T extends StoreConfigRecord = StoreConfigRecord,

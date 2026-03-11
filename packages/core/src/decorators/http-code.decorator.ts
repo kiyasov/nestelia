@@ -22,7 +22,6 @@ export const HTTP_CODE_METADATA = "__httpCode__";
  * }
  * ```
  *
- * @publicApi
  */
 export function HttpCode(statusCode: number): MethodDecorator {
   return <T>(

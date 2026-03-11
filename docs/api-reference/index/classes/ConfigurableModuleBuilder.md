@@ -1,11 +1,9 @@
 # Class: ConfigurableModuleBuilder\<ModuleOptions, StaticMethodKey, FactoryClassMethodKey, ExtraModuleDefinitionOptions\>
 
-Defined in: [packages/core/src/module-utils/configurable-module.builder.ts:53](https://github.com/kiyasov/nestelia/blob/main/packages/core/src/module-utils/configurable-module.builder.ts#L53)
+Defined in: [packages/core/src/module-utils/configurable-module.builder.ts:51](https://github.com/kiyasov/nestelia/blob/main/packages/core/src/module-utils/configurable-module.builder.ts#L51)
 
 Factory that lets you create configurable modules and
 provides a way to reduce the majority of dynamic module boilerplate.
-
-## Public Api
 
 ## Type Parameters
 
@@ -24,7 +22,7 @@ provides a way to reduce the majority of dynamic module boilerplate.
 new ConfigurableModuleBuilder<ModuleOptions, StaticMethodKey, FactoryClassMethodKey, ExtraModuleDefinitionOptions>(options?, parentBuilder?): ConfigurableModuleBuilder<ModuleOptions, StaticMethodKey, FactoryClassMethodKey, ExtraModuleDefinitionOptions>;
 ```
 
-Defined in: [packages/core/src/module-utils/configurable-module.builder.ts:70](https://github.com/kiyasov/nestelia/blob/main/packages/core/src/module-utils/configurable-module.builder.ts#L70)
+Defined in: [packages/core/src/module-utils/configurable-module.builder.ts:68](https://github.com/kiyasov/nestelia/blob/main/packages/core/src/module-utils/configurable-module.builder.ts#L68)
 
 #### Parameters
 
@@ -45,7 +43,7 @@ Defined in: [packages/core/src/module-utils/configurable-module.builder.ts:70](h
 build(): ConfigurableModuleHost<ModuleOptions, StaticMethodKey, FactoryClassMethodKey, ExtraModuleDefinitionOptions>;
 ```
 
-Defined in: [packages/core/src/module-utils/configurable-module.builder.ts:170](https://github.com/kiyasov/nestelia/blob/main/packages/core/src/module-utils/configurable-module.builder.ts#L170)
+Defined in: [packages/core/src/module-utils/configurable-module.builder.ts:168](https://github.com/kiyasov/nestelia/blob/main/packages/core/src/module-utils/configurable-module.builder.ts#L168)
 
 Returns an object consisting of multiple properties that lets you
 easily construct dynamic configurable modules. See "ConfigurableModuleHost" interface for more details.
@@ -62,7 +60,7 @@ easily construct dynamic configurable modules. See "ConfigurableModuleHost" inte
 setClassMethodName<StaticMethodKey>(key): ConfigurableModuleBuilder<ModuleOptions, StaticMethodKey, FactoryClassMethodKey, ExtraModuleDefinitionOptions>;
 ```
 
-Defined in: [packages/core/src/module-utils/configurable-module.builder.ts:131](https://github.com/kiyasov/nestelia/blob/main/packages/core/src/module-utils/configurable-module.builder.ts#L131)
+Defined in: [packages/core/src/module-utils/configurable-module.builder.ts:129](https://github.com/kiyasov/nestelia/blob/main/packages/core/src/module-utils/configurable-module.builder.ts#L129)
 
 Dynamic modules must expose public static methods that let you pass in
 configuration parameters (control the module's behavior from the outside).
@@ -96,7 +94,7 @@ method that will be auto-generated.
 setExtras<ExtraModuleDefinitionOptions>(extras, transformDefinition?): ConfigurableModuleBuilder<ModuleOptions, StaticMethodKey, FactoryClassMethodKey, ExtraModuleDefinitionOptions>;
 ```
 
-Defined in: [packages/core/src/module-utils/configurable-module.builder.ts:102](https://github.com/kiyasov/nestelia/blob/main/packages/core/src/module-utils/configurable-module.builder.ts#L102)
+Defined in: [packages/core/src/module-utils/configurable-module.builder.ts:100](https://github.com/kiyasov/nestelia/blob/main/packages/core/src/module-utils/configurable-module.builder.ts#L100)
 
 Registers the "extras" object (a set of extra options that can be used to modify the dynamic module definition).
 Values you specify within the "extras" object will be used as default values (that can be overridden by module consumers).
@@ -138,7 +136,7 @@ The "extras" object consists of values explicitly specified by module consumers 
 setFactoryMethodName<FactoryClassMethodKey>(key): ConfigurableModuleBuilder<ModuleOptions, StaticMethodKey, FactoryClassMethodKey, ExtraModuleDefinitionOptions>;
 ```
 
-Defined in: [packages/core/src/module-utils/configurable-module.builder.ts:153](https://github.com/kiyasov/nestelia/blob/main/packages/core/src/module-utils/configurable-module.builder.ts#L153)
+Defined in: [packages/core/src/module-utils/configurable-module.builder.ts:151](https://github.com/kiyasov/nestelia/blob/main/packages/core/src/module-utils/configurable-module.builder.ts#L151)
 
 Asynchronously configured modules (that rely on other modules, i.e. "ConfigModule")
 let you pass the configuration factory class that will be registered and instantiated as a provider.
@@ -168,9 +166,9 @@ implemented by the config factory (default is "create").
 
 | Property | Modifier | Type | Default value | Defined in |
 | ------ | ------ | ------ | ------ | ------ |
-| <a id="extras"></a> `extras` | `protected` | `ExtraModuleDefinitionOptions` | `undefined` | [packages/core/src/module-utils/configurable-module.builder.ts:62](https://github.com/kiyasov/nestelia/blob/main/packages/core/src/module-utils/configurable-module.builder.ts#L62) |
-| <a id="factoryclassmethodkey-1"></a> `factoryClassMethodKey` | `protected` | `FactoryClassMethodKey` | `undefined` | [packages/core/src/module-utils/configurable-module.builder.ts:61](https://github.com/kiyasov/nestelia/blob/main/packages/core/src/module-utils/configurable-module.builder.ts#L61) |
-| <a id="logger"></a> `logger` | `readonly` | [`Logger`](Logger.md) | `undefined` | [packages/core/src/module-utils/configurable-module.builder.ts:68](https://github.com/kiyasov/nestelia/blob/main/packages/core/src/module-utils/configurable-module.builder.ts#L68) |
-| <a id="options"></a> `options` | `readonly` | [`ConfigurableModuleBuilderOptions`](../interfaces/ConfigurableModuleBuilderOptions.md) | `{}` | [packages/core/src/module-utils/configurable-module.builder.ts:71](https://github.com/kiyasov/nestelia/blob/main/packages/core/src/module-utils/configurable-module.builder.ts#L71) |
-| <a id="staticmethodkey-1"></a> `staticMethodKey` | `protected` | `StaticMethodKey` | `undefined` | [packages/core/src/module-utils/configurable-module.builder.ts:60](https://github.com/kiyasov/nestelia/blob/main/packages/core/src/module-utils/configurable-module.builder.ts#L60) |
-| <a id="transformmoduledefinition"></a> `transformModuleDefinition` | `protected` | (`definition`, `extraOptions`) => [`DynamicModule`](../interfaces/DynamicModule.md) | `undefined` | [packages/core/src/module-utils/configurable-module.builder.ts:63](https://github.com/kiyasov/nestelia/blob/main/packages/core/src/module-utils/configurable-module.builder.ts#L63) |
+| <a id="extras"></a> `extras` | `protected` | `ExtraModuleDefinitionOptions` | `undefined` | [packages/core/src/module-utils/configurable-module.builder.ts:60](https://github.com/kiyasov/nestelia/blob/main/packages/core/src/module-utils/configurable-module.builder.ts#L60) |
+| <a id="factoryclassmethodkey-1"></a> `factoryClassMethodKey` | `protected` | `FactoryClassMethodKey` | `undefined` | [packages/core/src/module-utils/configurable-module.builder.ts:59](https://github.com/kiyasov/nestelia/blob/main/packages/core/src/module-utils/configurable-module.builder.ts#L59) |
+| <a id="logger"></a> `logger` | `readonly` | [`Logger`](Logger.md) | `undefined` | [packages/core/src/module-utils/configurable-module.builder.ts:66](https://github.com/kiyasov/nestelia/blob/main/packages/core/src/module-utils/configurable-module.builder.ts#L66) |
+| <a id="options"></a> `options` | `readonly` | [`ConfigurableModuleBuilderOptions`](../interfaces/ConfigurableModuleBuilderOptions.md) | `{}` | [packages/core/src/module-utils/configurable-module.builder.ts:69](https://github.com/kiyasov/nestelia/blob/main/packages/core/src/module-utils/configurable-module.builder.ts#L69) |
+| <a id="staticmethodkey-1"></a> `staticMethodKey` | `protected` | `StaticMethodKey` | `undefined` | [packages/core/src/module-utils/configurable-module.builder.ts:58](https://github.com/kiyasov/nestelia/blob/main/packages/core/src/module-utils/configurable-module.builder.ts#L58) |
+| <a id="transformmoduledefinition"></a> `transformModuleDefinition` | `protected` | (`definition`, `extraOptions`) => [`DynamicModule`](../interfaces/DynamicModule.md) | `undefined` | [packages/core/src/module-utils/configurable-module.builder.ts:61](https://github.com/kiyasov/nestelia/blob/main/packages/core/src/module-utils/configurable-module.builder.ts#L61) |

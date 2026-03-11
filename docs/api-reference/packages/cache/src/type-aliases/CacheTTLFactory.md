@@ -4,7 +4,7 @@
 type CacheTTLFactory = (ctx) => Promise<number> | number;
 ```
 
-Defined in: [packages/cache/src/decorators/cache-ttl.decorator.ts:25](https://github.com/kiyasov/nestelia/blob/main/packages/cache/src/decorators/cache-ttl.decorator.ts#L25)
+Defined in: [packages/cache/src/decorators/cache-ttl.decorator.ts:24](https://github.com/kiyasov/nestelia/blob/main/packages/cache/src/decorators/cache-ttl.decorator.ts#L24)
 
 Factory function type for generating TTL (time-to-live) values dynamically.
 
@@ -32,5 +32,3 @@ const ttlFactory: CacheTTLFactory = (ctx) => {
   return request.user.isPremium ? 3600000 : 60000;
 };
 ```
-
-## Public Api

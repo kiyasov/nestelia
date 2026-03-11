@@ -4,7 +4,7 @@
 function InjectEventEmitter(): ParameterDecorator;
 ```
 
-Defined in: [packages/event-emitter/src/decorators/inject-event-emitter.decorator.ts:20](https://github.com/kiyasov/nestelia/blob/main/packages/event-emitter/src/decorators/inject-event-emitter.decorator.ts#L20)
+Defined in: [packages/event-emitter/src/decorators/inject-event-emitter.decorator.ts:19](https://github.com/kiyasov/nestelia/blob/main/packages/event-emitter/src/decorators/inject-event-emitter.decorator.ts#L19)
 
 Parameter decorator that injects the `EventEmitterService` instance.
 
@@ -22,5 +22,3 @@ export class OrderService {
   constructor(@InjectEventEmitter() private readonly events: EventEmitterService) {}
 }
 ```
-
-## Public Api

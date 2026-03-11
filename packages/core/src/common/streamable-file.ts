@@ -1,7 +1,6 @@
 /**
  * Streamable file class for handling file streams
  *
- * @publicApi
  */
 export class StreamableFile {
   private readonly stream: any;

@@ -4,7 +4,6 @@
  * Use this token with `@Inject(DRIZZLE_INSTANCE)` or the `@InjectDrizzle()`
  * shorthand decorator.
  *
- * @publicApi
  */
 export const DRIZZLE_INSTANCE = "DRIZZLE_INSTANCE";
 

@@ -23,7 +23,6 @@ export const HEADERS_METADATA = "__headers__";
  * }
  * ```
  *
- * @publicApi
  */
 export function Header(name: string, value: string): MethodDecorator {
   return <T>(

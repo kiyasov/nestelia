@@ -19,7 +19,6 @@ import { CACHE_KEY_METADATA } from "../cache.constants";
  * };
  * ```
  *
- * @publicApi
  */
 export type CacheKeyFactory = (ctx: ExecutionContext) => string;
 
@@ -56,7 +55,6 @@ export type CacheKeyFactory = (ctx: ExecutionContext) => string;
  * }
  * ```
  *
- * @publicApi
  */
 export const CacheKey = (key: string | CacheKeyFactory) =>
   SetMetadata(CACHE_KEY_METADATA, key);

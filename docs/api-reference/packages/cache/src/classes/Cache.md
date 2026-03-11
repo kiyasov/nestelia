@@ -1,12 +1,10 @@
 # Class: Cache
 
-Defined in: [packages/cache/src/cache.module.ts:20](https://github.com/kiyasov/nestelia/blob/main/packages/cache/src/cache.module.ts#L20)
+Defined in: [packages/cache/src/cache.module.ts:19](https://github.com/kiyasov/nestelia/blob/main/packages/cache/src/cache.module.ts#L19)
 
 Empty base class that will be merged with the Cache interface. 
 
 This class can be used as a provider token for dependency injection.
-
-## Public Api
 
 ## Extends
 

@@ -1,10 +1,8 @@
 # Class: Reflector
 
-Defined in: [packages/core/src/di/reflector.ts:13](https://github.com/kiyasov/nestelia/blob/main/packages/core/src/di/reflector.ts#L13)
+Defined in: [packages/core/src/di/reflector.ts:12](https://github.com/kiyasov/nestelia/blob/main/packages/core/src/di/reflector.ts#L12)
 
 Helper class for retrieving metadata from classes and methods using reflect-metadata.
-
-## Public Api
 
 ## Constructors
 
@@ -28,7 +26,7 @@ new Reflector(): Reflector;
 get<T>(metadataKey, target): T | undefined;
 ```
 
-Defined in: [packages/core/src/di/reflector.ts:23](https://github.com/kiyasov/nestelia/blob/main/packages/core/src/di/reflector.ts#L23)
+Defined in: [packages/core/src/di/reflector.ts:21](https://github.com/kiyasov/nestelia/blob/main/packages/core/src/di/reflector.ts#L21)
 
 Retrieve metadata for a specified key from a target object.
 
@@ -51,8 +49,6 @@ Retrieve metadata for a specified key from a target object.
 
 the metadata value
 
-##### Public Api
-
 #### Call Signature
 
 ```ts
@@ -62,7 +58,7 @@ get<T>(
    propertyKey): T | undefined;
 ```
 
-Defined in: [packages/core/src/di/reflector.ts:38](https://github.com/kiyasov/nestelia/blob/main/packages/core/src/di/reflector.ts#L38)
+Defined in: [packages/core/src/di/reflector.ts:35](https://github.com/kiyasov/nestelia/blob/main/packages/core/src/di/reflector.ts#L35)
 
 Retrieve metadata for a specified key from a target object's method.
 
@@ -86,8 +82,6 @@ Retrieve metadata for a specified key from a target object's method.
 
 the metadata value
 
-##### Public Api
-
 ***
 
 ### getAllAndMerge()
@@ -96,7 +90,7 @@ the metadata value
 getAllAndMerge<T>(metadataKey, targets): T | undefined;
 ```
 
-Defined in: [packages/core/src/di/reflector.ts:124](https://github.com/kiyasov/nestelia/blob/main/packages/core/src/di/reflector.ts#L124)
+Defined in: [packages/core/src/di/reflector.ts:117](https://github.com/kiyasov/nestelia/blob/main/packages/core/src/di/reflector.ts#L117)
 
 Retrieve metadata for a specified key from multiple targets and merge the results.
 Arrays will be concatenated, objects will be merged, and primitive values will be
@@ -121,8 +115,6 @@ collected into an array.
 
 merged metadata value
 
-#### Public Api
-
 ***
 
 ### getAllAndOverride()
@@ -131,7 +123,7 @@ merged metadata value
 getAllAndOverride<T>(metadataKey, targets): T | undefined;
 ```
 
-Defined in: [packages/core/src/di/reflector.ts:100](https://github.com/kiyasov/nestelia/blob/main/packages/core/src/di/reflector.ts#L100)
+Defined in: [packages/core/src/di/reflector.ts:94](https://github.com/kiyasov/nestelia/blob/main/packages/core/src/di/reflector.ts#L94)
 
 Retrieve metadata for a specified key from multiple targets and return the first defined value.
 This method is useful when you want to get metadata from both class and method, where method
@@ -156,8 +148,6 @@ metadata should override class metadata.
 
 the first defined metadata value
 
-#### Public Api
-
 ***
 
 ### getMetadataKeys()
@@ -168,7 +158,7 @@ the first defined metadata value
 getMetadataKeys(target): (string | symbol)[];
 ```
 
-Defined in: [packages/core/src/di/reflector.ts:63](https://github.com/kiyasov/nestelia/blob/main/packages/core/src/di/reflector.ts#L63)
+Defined in: [packages/core/src/di/reflector.ts:59](https://github.com/kiyasov/nestelia/blob/main/packages/core/src/di/reflector.ts#L59)
 
 Retrieve all metadata keys from a target object.
 
@@ -184,15 +174,13 @@ Retrieve all metadata keys from a target object.
 
 array of metadata keys
 
-##### Public Api
-
 #### Call Signature
 
 ```ts
 getMetadataKeys(target, propertyKey): (string | symbol)[];
 ```
 
-Defined in: [packages/core/src/di/reflector.ts:74](https://github.com/kiyasov/nestelia/blob/main/packages/core/src/di/reflector.ts#L74)
+Defined in: [packages/core/src/di/reflector.ts:69](https://github.com/kiyasov/nestelia/blob/main/packages/core/src/di/reflector.ts#L69)
 
 Retrieve all metadata keys from a target object's method.
 
@@ -208,5 +196,3 @@ Retrieve all metadata keys from a target object's method.
 (`string` \| `symbol`)[]
 
 array of metadata keys
-
-##### Public Api

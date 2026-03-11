@@ -18,7 +18,6 @@ import {
 import { generateOptionsInjectionToken, getInjectionProviders } from "./utils";
 
 /**
- * @publicApi
  */
 export interface ConfigurableModuleBuilderOptions {
   /**
@@ -48,7 +47,6 @@ export interface ConfigurableModuleBuilderOptions {
  * Factory that lets you create configurable modules and
  * provides a way to reduce the majority of dynamic module boilerplate.
  *
- * @publicApi
  */
 export class ConfigurableModuleBuilder<
   ModuleOptions,

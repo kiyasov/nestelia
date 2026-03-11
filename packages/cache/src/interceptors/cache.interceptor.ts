@@ -91,7 +91,6 @@ function sanitizeCacheKey(key: string): string {
  * }
  * ```
  *
- * @publicApi
  */
 @Injectable()
 export class CacheInterceptor implements NestInterceptor {

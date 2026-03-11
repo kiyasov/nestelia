@@ -5,7 +5,6 @@ import { ConfigurableModuleCls } from "./configurable-module-cls.interface";
 /**
  * Configurable module host. See properties for more details
  *
- * @publicApi
  */
 export interface ConfigurableModuleHost<
   ModuleOptions = Record<string, unknown>,

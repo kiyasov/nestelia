@@ -1,7 +1,6 @@
 /**
  * Options for configuring the EventEmitterModule.
  *
- * @publicApi
  */
 export interface EventEmitterModuleOptions {
   /**

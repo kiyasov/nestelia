@@ -12,7 +12,6 @@ type Constructor<T = unknown> = new (...args: unknown[]) => T;
 /**
  * Standard Relay-style PageInfo object. Included in every Connection type.
  *
- * @publicApi
  */
 @ObjectType({ description: "Pagination metadata for cursor-based navigation." })
 export class PageInfo {
@@ -44,7 +43,6 @@ export class PageInfo {
  * books(@Args() args: BooksArgs): BooksPage { ... }
  * ```
  *
- * @publicApi
  */
 export function Paginated<T>(ItemType: Constructor<T>): AnyConstructor {
   @ObjectType({ isAbstract: true })
@@ -71,7 +69,6 @@ export function Paginated<T>(ItemType: Constructor<T>): AnyConstructor {
  * Creates a Relay-style Edge type for a given node class.
  * Fields: `node`, `cursor`.
  *
- * @publicApi
  */
 export function createEdgeType<T>(NodeType: Constructor<T>): AnyConstructor {
   @ObjectType({ isAbstract: true })
@@ -102,7 +99,6 @@ export function createEdgeType<T>(NodeType: Constructor<T>): AnyConstructor {
  * booksConnection(@Args('after', { nullable: true }) after?: string): BookConnection { ... }
  * ```
  *
- * @publicApi
  */
 export function createConnectionType<T>(
   NodeType: Constructor<T>,

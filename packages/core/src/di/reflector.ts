@@ -8,7 +8,6 @@ type Constructor = abstract new (...args: unknown[]) => unknown;
 /**
  * Helper class for retrieving metadata from classes and methods using reflect-metadata.
  *
- * @publicApi
  */
 export class Reflector {
   /**
@@ -18,7 +17,6 @@ export class Reflector {
    * @param target the target object
    * @returns the metadata value
    *
-   * @publicApi
    */
   get<T = unknown>(
     metadataKey: string | symbol,
@@ -33,7 +31,6 @@ export class Reflector {
    * @param propertyKey the property key (method name)
    * @returns the metadata value
    *
-   * @publicApi
    */
   get<T = unknown>(
     metadataKey: string | symbol,
@@ -58,7 +55,6 @@ export class Reflector {
    * @param target the target object
    * @returns array of metadata keys
    *
-   * @publicApi
    */
   getMetadataKeys(target: object | Constructor): (string | symbol)[];
 
@@ -69,7 +65,6 @@ export class Reflector {
    * @param propertyKey the property key (method name)
    * @returns array of metadata keys
    *
-   * @publicApi
    */
   getMetadataKeys(
     target: object | Constructor,
@@ -95,7 +90,6 @@ export class Reflector {
    * @param targets array of target objects to check
    * @returns the first defined metadata value
    *
-   * @publicApi
    */
   getAllAndOverride<T = unknown>(
     metadataKey: string | symbol,
@@ -119,7 +113,6 @@ export class Reflector {
    * @param targets array of target objects to check
    * @returns merged metadata value
    *
-   * @publicApi
    */
   getAllAndMerge<T = unknown>(
     metadataKey: string | symbol,

@@ -11,7 +11,6 @@ import { ConfigurableModuleAsyncOptions } from "./configurable-module-async-opti
  * This class provides static methods for constructing dynamic modules. Their names
  * can be controlled through the "MethodKey" type argument.
  *
- * @publicApi
  */
 export type ConfigurableModuleCls<
   ModuleOptions,

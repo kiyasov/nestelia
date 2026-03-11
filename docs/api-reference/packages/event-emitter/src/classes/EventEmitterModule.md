@@ -1,6 +1,6 @@
 # Class: EventEmitterModule
 
-Defined in: [packages/event-emitter/src/event-emitter.module.ts:57](https://github.com/kiyasov/nestelia/blob/main/packages/event-emitter/src/event-emitter.module.ts#L57)
+Defined in: [packages/event-emitter/src/event-emitter.module.ts:56](https://github.com/kiyasov/nestelia/blob/main/packages/event-emitter/src/event-emitter.module.ts#L56)
 
 Module that integrates a typed, wildcard-capable event emitter into nestelia's
 dependency injection system.
@@ -46,8 +46,6 @@ export class NotificationService {
 }
 ```
 
-## Public Api
-
 ## Constructors
 
 ### Constructor
@@ -68,7 +66,7 @@ new EventEmitterModule(): EventEmitterModule;
 static forRoot(options?): DynamicModule;
 ```
 
-Defined in: [packages/event-emitter/src/event-emitter.module.ts:63](https://github.com/kiyasov/nestelia/blob/main/packages/event-emitter/src/event-emitter.module.ts#L63)
+Defined in: [packages/event-emitter/src/event-emitter.module.ts:62](https://github.com/kiyasov/nestelia/blob/main/packages/event-emitter/src/event-emitter.module.ts#L62)
 
 Configure and register the `EventEmitterModule`.
 

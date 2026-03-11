@@ -15,7 +15,6 @@ import { EVENT_EMITTER_TOKEN } from "../event-emitter.constants";
  * }
  * ```
  *
- * @publicApi
  */
 export const InjectEventEmitter = (): ParameterDecorator =>
   Inject(EVENT_EMITTER_TOKEN);

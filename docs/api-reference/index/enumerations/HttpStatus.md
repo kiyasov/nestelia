@@ -1,6 +1,6 @@
 # Enumeration: HttpStatus
 
-Defined in: [packages/core/src/enums/http-status.enum.ts:29](https://github.com/kiyasov/nestelia/blob/main/packages/core/src/enums/http-status.enum.ts#L29)
+Defined in: [packages/core/src/enums/http-status.enum.ts:28](https://github.com/kiyasov/nestelia/blob/main/packages/core/src/enums/http-status.enum.ts#L28)
 
 Standard HTTP status codes.
 
@@ -30,8 +30,6 @@ create() {
 
 https://developer.mozilla.org/en-US/docs/Web/HTTP/Status
 
-## Public Api
-
 ## Enumeration Members
 
 ### ACCEPTED
@@ -40,7 +38,7 @@ https://developer.mozilla.org/en-US/docs/Web/HTTP/Status
 ACCEPTED: 202;
 ```
 
-Defined in: [packages/core/src/enums/http-status.enum.ts:51](https://github.com/kiyasov/nestelia/blob/main/packages/core/src/enums/http-status.enum.ts#L51)
+Defined in: [packages/core/src/enums/http-status.enum.ts:50](https://github.com/kiyasov/nestelia/blob/main/packages/core/src/enums/http-status.enum.ts#L50)
 
 The request has been accepted for processing but not yet completed
 
@@ -52,7 +50,7 @@ The request has been accepted for processing but not yet completed
 AMBIGUOUS: 300;
 ```
 
-Defined in: [packages/core/src/enums/http-status.enum.ts:67](https://github.com/kiyasov/nestelia/blob/main/packages/core/src/enums/http-status.enum.ts#L67)
+Defined in: [packages/core/src/enums/http-status.enum.ts:66](https://github.com/kiyasov/nestelia/blob/main/packages/core/src/enums/http-status.enum.ts#L66)
 
 Multiple response options available, client must choose
 
@@ -64,7 +62,7 @@ Multiple response options available, client must choose
 BAD_GATEWAY: 502;
 ```
 
-Defined in: [packages/core/src/enums/http-status.enum.ts:168](https://github.com/kiyasov/nestelia/blob/main/packages/core/src/enums/http-status.enum.ts#L168)
+Defined in: [packages/core/src/enums/http-status.enum.ts:167](https://github.com/kiyasov/nestelia/blob/main/packages/core/src/enums/http-status.enum.ts#L167)
 
 Bad response from upstream server
 
@@ -76,7 +74,7 @@ Bad response from upstream server
 BAD_REQUEST: 400;
 ```
 
-Defined in: [packages/core/src/enums/http-status.enum.ts:89](https://github.com/kiyasov/nestelia/blob/main/packages/core/src/enums/http-status.enum.ts#L89)
+Defined in: [packages/core/src/enums/http-status.enum.ts:88](https://github.com/kiyasov/nestelia/blob/main/packages/core/src/enums/http-status.enum.ts#L88)
 
 The server cannot understand the request due to malformed syntax
 
@@ -88,7 +86,7 @@ The server cannot understand the request due to malformed syntax
 CONFLICT: 409;
 ```
 
-Defined in: [packages/core/src/enums/http-status.enum.ts:116](https://github.com/kiyasov/nestelia/blob/main/packages/core/src/enums/http-status.enum.ts#L116)
+Defined in: [packages/core/src/enums/http-status.enum.ts:115](https://github.com/kiyasov/nestelia/blob/main/packages/core/src/enums/http-status.enum.ts#L115)
 
 There is a conflict with the current state of the resource
 
@@ -100,7 +98,7 @@ There is a conflict with the current state of the resource
 CONTINUE: 100;
 ```
 
-Defined in: [packages/core/src/enums/http-status.enum.ts:32](https://github.com/kiyasov/nestelia/blob/main/packages/core/src/enums/http-status.enum.ts#L32)
+Defined in: [packages/core/src/enums/http-status.enum.ts:31](https://github.com/kiyasov/nestelia/blob/main/packages/core/src/enums/http-status.enum.ts#L31)
 
 The server has received the initial part of the request and the client may continue sending
 
@@ -112,7 +110,7 @@ The server has received the initial part of the request and the client may conti
 CREATED: 201;
 ```
 
-Defined in: [packages/core/src/enums/http-status.enum.ts:48](https://github.com/kiyasov/nestelia/blob/main/packages/core/src/enums/http-status.enum.ts#L48)
+Defined in: [packages/core/src/enums/http-status.enum.ts:47](https://github.com/kiyasov/nestelia/blob/main/packages/core/src/enums/http-status.enum.ts#L47)
 
 The resource has been created successfully (typically after POST or PUT)
 
@@ -124,7 +122,7 @@ The resource has been created successfully (typically after POST or PUT)
 EARLYHINTS: 103;
 ```
 
-Defined in: [packages/core/src/enums/http-status.enum.ts:41](https://github.com/kiyasov/nestelia/blob/main/packages/core/src/enums/http-status.enum.ts#L41)
+Defined in: [packages/core/src/enums/http-status.enum.ts:40](https://github.com/kiyasov/nestelia/blob/main/packages/core/src/enums/http-status.enum.ts#L40)
 
 Preliminary response with headers that the client may use
 
@@ -136,7 +134,7 @@ Preliminary response with headers that the client may use
 EXPECTATION_FAILED: 417;
 ```
 
-Defined in: [packages/core/src/enums/http-status.enum.ts:140](https://github.com/kiyasov/nestelia/blob/main/packages/core/src/enums/http-status.enum.ts#L140)
+Defined in: [packages/core/src/enums/http-status.enum.ts:139](https://github.com/kiyasov/nestelia/blob/main/packages/core/src/enums/http-status.enum.ts#L139)
 
 The expectation given in the Expect header cannot be met
 
@@ -148,7 +146,7 @@ The expectation given in the Expect header cannot be met
 FAILED_DEPENDENCY: 424;
 ```
 
-Defined in: [packages/core/src/enums/http-status.enum.ts:152](https://github.com/kiyasov/nestelia/blob/main/packages/core/src/enums/http-status.enum.ts#L152)
+Defined in: [packages/core/src/enums/http-status.enum.ts:151](https://github.com/kiyasov/nestelia/blob/main/packages/core/src/enums/http-status.enum.ts#L151)
 
 Error due to failure of a previous request (WebDAV)
 
@@ -160,7 +158,7 @@ Error due to failure of a previous request (WebDAV)
 FORBIDDEN: 403;
 ```
 
-Defined in: [packages/core/src/enums/http-status.enum.ts:98](https://github.com/kiyasov/nestelia/blob/main/packages/core/src/enums/http-status.enum.ts#L98)
+Defined in: [packages/core/src/enums/http-status.enum.ts:97](https://github.com/kiyasov/nestelia/blob/main/packages/core/src/enums/http-status.enum.ts#L97)
 
 Access is forbidden (no rights to the resource)
 
@@ -172,7 +170,7 @@ Access is forbidden (no rights to the resource)
 FOUND: 302;
 ```
 
-Defined in: [packages/core/src/enums/http-status.enum.ts:73](https://github.com/kiyasov/nestelia/blob/main/packages/core/src/enums/http-status.enum.ts#L73)
+Defined in: [packages/core/src/enums/http-status.enum.ts:72](https://github.com/kiyasov/nestelia/blob/main/packages/core/src/enums/http-status.enum.ts#L72)
 
 The resource is temporarily available at a different URL
 
@@ -184,7 +182,7 @@ The resource is temporarily available at a different URL
 GATEWAY_TIMEOUT: 504;
 ```
 
-Defined in: [packages/core/src/enums/http-status.enum.ts:174](https://github.com/kiyasov/nestelia/blob/main/packages/core/src/enums/http-status.enum.ts#L174)
+Defined in: [packages/core/src/enums/http-status.enum.ts:173](https://github.com/kiyasov/nestelia/blob/main/packages/core/src/enums/http-status.enum.ts#L173)
 
 The upstream server did not respond in time
 
@@ -196,7 +194,7 @@ The upstream server did not respond in time
 GONE: 410;
 ```
 
-Defined in: [packages/core/src/enums/http-status.enum.ts:119](https://github.com/kiyasov/nestelia/blob/main/packages/core/src/enums/http-status.enum.ts#L119)
+Defined in: [packages/core/src/enums/http-status.enum.ts:118](https://github.com/kiyasov/nestelia/blob/main/packages/core/src/enums/http-status.enum.ts#L118)
 
 The resource has been removed and is no longer available
 
@@ -208,7 +206,7 @@ The resource has been removed and is no longer available
 HTTP_VERSION_NOT_SUPPORTED: 505;
 ```
 
-Defined in: [packages/core/src/enums/http-status.enum.ts:177](https://github.com/kiyasov/nestelia/blob/main/packages/core/src/enums/http-status.enum.ts#L177)
+Defined in: [packages/core/src/enums/http-status.enum.ts:176](https://github.com/kiyasov/nestelia/blob/main/packages/core/src/enums/http-status.enum.ts#L176)
 
 The HTTP version is not supported by the server
 
@@ -220,7 +218,7 @@ The HTTP version is not supported by the server
 I_AM_A_TEAPOT: 418;
 ```
 
-Defined in: [packages/core/src/enums/http-status.enum.ts:143](https://github.com/kiyasov/nestelia/blob/main/packages/core/src/enums/http-status.enum.ts#L143)
+Defined in: [packages/core/src/enums/http-status.enum.ts:142](https://github.com/kiyasov/nestelia/blob/main/packages/core/src/enums/http-status.enum.ts#L142)
 
 I'm a teapot (Easter Egg from RFC 2324)
 
@@ -232,7 +230,7 @@ I'm a teapot (Easter Egg from RFC 2324)
 INTERNAL_SERVER_ERROR: 500;
 ```
 
-Defined in: [packages/core/src/enums/http-status.enum.ts:162](https://github.com/kiyasov/nestelia/blob/main/packages/core/src/enums/http-status.enum.ts#L162)
+Defined in: [packages/core/src/enums/http-status.enum.ts:161](https://github.com/kiyasov/nestelia/blob/main/packages/core/src/enums/http-status.enum.ts#L161)
 
 Internal server error
 
@@ -244,7 +242,7 @@ Internal server error
 LENGTH_REQUIRED: 411;
 ```
 
-Defined in: [packages/core/src/enums/http-status.enum.ts:122](https://github.com/kiyasov/nestelia/blob/main/packages/core/src/enums/http-status.enum.ts#L122)
+Defined in: [packages/core/src/enums/http-status.enum.ts:121](https://github.com/kiyasov/nestelia/blob/main/packages/core/src/enums/http-status.enum.ts#L121)
 
 Content-Length header is required
 
@@ -256,7 +254,7 @@ Content-Length header is required
 METHOD_NOT_ALLOWED: 405;
 ```
 
-Defined in: [packages/core/src/enums/http-status.enum.ts:104](https://github.com/kiyasov/nestelia/blob/main/packages/core/src/enums/http-status.enum.ts#L104)
+Defined in: [packages/core/src/enums/http-status.enum.ts:103](https://github.com/kiyasov/nestelia/blob/main/packages/core/src/enums/http-status.enum.ts#L103)
 
 The HTTP method is not allowed for this resource
 
@@ -268,7 +266,7 @@ The HTTP method is not allowed for this resource
 MISDIRECTED: 421;
 ```
 
-Defined in: [packages/core/src/enums/http-status.enum.ts:146](https://github.com/kiyasov/nestelia/blob/main/packages/core/src/enums/http-status.enum.ts#L146)
+Defined in: [packages/core/src/enums/http-status.enum.ts:145](https://github.com/kiyasov/nestelia/blob/main/packages/core/src/enums/http-status.enum.ts#L145)
 
 The request was directed to a server that cannot produce a response
 
@@ -280,7 +278,7 @@ The request was directed to a server that cannot produce a response
 MOVED_PERMANENTLY: 301;
 ```
 
-Defined in: [packages/core/src/enums/http-status.enum.ts:70](https://github.com/kiyasov/nestelia/blob/main/packages/core/src/enums/http-status.enum.ts#L70)
+Defined in: [packages/core/src/enums/http-status.enum.ts:69](https://github.com/kiyasov/nestelia/blob/main/packages/core/src/enums/http-status.enum.ts#L69)
 
 The resource has been moved permanently to a new URL
 
@@ -292,7 +290,7 @@ The resource has been moved permanently to a new URL
 NO_CONTENT: 204;
 ```
 
-Defined in: [packages/core/src/enums/http-status.enum.ts:57](https://github.com/kiyasov/nestelia/blob/main/packages/core/src/enums/http-status.enum.ts#L57)
+Defined in: [packages/core/src/enums/http-status.enum.ts:56](https://github.com/kiyasov/nestelia/blob/main/packages/core/src/enums/http-status.enum.ts#L56)
 
 The request succeeded but the response body is empty
 
@@ -304,7 +302,7 @@ The request succeeded but the response body is empty
 NON_AUTHORITATIVE_INFORMATION: 203;
 ```
 
-Defined in: [packages/core/src/enums/http-status.enum.ts:54](https://github.com/kiyasov/nestelia/blob/main/packages/core/src/enums/http-status.enum.ts#L54)
+Defined in: [packages/core/src/enums/http-status.enum.ts:53](https://github.com/kiyasov/nestelia/blob/main/packages/core/src/enums/http-status.enum.ts#L53)
 
 The information comes from a third-party source
 
@@ -316,7 +314,7 @@ The information comes from a third-party source
 NOT_ACCEPTABLE: 406;
 ```
 
-Defined in: [packages/core/src/enums/http-status.enum.ts:107](https://github.com/kiyasov/nestelia/blob/main/packages/core/src/enums/http-status.enum.ts#L107)
+Defined in: [packages/core/src/enums/http-status.enum.ts:106](https://github.com/kiyasov/nestelia/blob/main/packages/core/src/enums/http-status.enum.ts#L106)
 
 The server cannot produce a response in the requested format
 
@@ -328,7 +326,7 @@ The server cannot produce a response in the requested format
 NOT_FOUND: 404;
 ```
 
-Defined in: [packages/core/src/enums/http-status.enum.ts:101](https://github.com/kiyasov/nestelia/blob/main/packages/core/src/enums/http-status.enum.ts#L101)
+Defined in: [packages/core/src/enums/http-status.enum.ts:100](https://github.com/kiyasov/nestelia/blob/main/packages/core/src/enums/http-status.enum.ts#L100)
 
 The resource could not be found
 
@@ -340,7 +338,7 @@ The resource could not be found
 NOT_IMPLEMENTED: 501;
 ```
 
-Defined in: [packages/core/src/enums/http-status.enum.ts:165](https://github.com/kiyasov/nestelia/blob/main/packages/core/src/enums/http-status.enum.ts#L165)
+Defined in: [packages/core/src/enums/http-status.enum.ts:164](https://github.com/kiyasov/nestelia/blob/main/packages/core/src/enums/http-status.enum.ts#L164)
 
 The server does not support the functionality required to fulfill the request
 
@@ -352,7 +350,7 @@ The server does not support the functionality required to fulfill the request
 NOT_MODIFIED: 304;
 ```
 
-Defined in: [packages/core/src/enums/http-status.enum.ts:79](https://github.com/kiyasov/nestelia/blob/main/packages/core/src/enums/http-status.enum.ts#L79)
+Defined in: [packages/core/src/enums/http-status.enum.ts:78](https://github.com/kiyasov/nestelia/blob/main/packages/core/src/enums/http-status.enum.ts#L78)
 
 The resource has not changed since the last request (caching)
 
@@ -364,7 +362,7 @@ The resource has not changed since the last request (caching)
 OK: 200;
 ```
 
-Defined in: [packages/core/src/enums/http-status.enum.ts:45](https://github.com/kiyasov/nestelia/blob/main/packages/core/src/enums/http-status.enum.ts#L45)
+Defined in: [packages/core/src/enums/http-status.enum.ts:44](https://github.com/kiyasov/nestelia/blob/main/packages/core/src/enums/http-status.enum.ts#L44)
 
 The request has succeeded
 
@@ -376,7 +374,7 @@ The request has succeeded
 PARTIAL_CONTENT: 206;
 ```
 
-Defined in: [packages/core/src/enums/http-status.enum.ts:63](https://github.com/kiyasov/nestelia/blob/main/packages/core/src/enums/http-status.enum.ts#L63)
+Defined in: [packages/core/src/enums/http-status.enum.ts:62](https://github.com/kiyasov/nestelia/blob/main/packages/core/src/enums/http-status.enum.ts#L62)
 
 The server is returning only part of the resource (for range requests)
 
@@ -388,7 +386,7 @@ The server is returning only part of the resource (for range requests)
 PAYLOAD_TOO_LARGE: 413;
 ```
 
-Defined in: [packages/core/src/enums/http-status.enum.ts:128](https://github.com/kiyasov/nestelia/blob/main/packages/core/src/enums/http-status.enum.ts#L128)
+Defined in: [packages/core/src/enums/http-status.enum.ts:127](https://github.com/kiyasov/nestelia/blob/main/packages/core/src/enums/http-status.enum.ts#L127)
 
 The request payload is too large
 
@@ -400,7 +398,7 @@ The request payload is too large
 PAYMENT_REQUIRED: 402;
 ```
 
-Defined in: [packages/core/src/enums/http-status.enum.ts:95](https://github.com/kiyasov/nestelia/blob/main/packages/core/src/enums/http-status.enum.ts#L95)
+Defined in: [packages/core/src/enums/http-status.enum.ts:94](https://github.com/kiyasov/nestelia/blob/main/packages/core/src/enums/http-status.enum.ts#L94)
 
 Payment required (reserved for future use)
 
@@ -412,7 +410,7 @@ Payment required (reserved for future use)
 PERMANENT_REDIRECT: 308;
 ```
 
-Defined in: [packages/core/src/enums/http-status.enum.ts:85](https://github.com/kiyasov/nestelia/blob/main/packages/core/src/enums/http-status.enum.ts#L85)
+Defined in: [packages/core/src/enums/http-status.enum.ts:84](https://github.com/kiyasov/nestelia/blob/main/packages/core/src/enums/http-status.enum.ts#L84)
 
 The resource has been moved permanently to a new URL (do not change request method)
 
@@ -424,7 +422,7 @@ The resource has been moved permanently to a new URL (do not change request meth
 PRECONDITION_FAILED: 412;
 ```
 
-Defined in: [packages/core/src/enums/http-status.enum.ts:125](https://github.com/kiyasov/nestelia/blob/main/packages/core/src/enums/http-status.enum.ts#L125)
+Defined in: [packages/core/src/enums/http-status.enum.ts:124](https://github.com/kiyasov/nestelia/blob/main/packages/core/src/enums/http-status.enum.ts#L124)
 
 A precondition given in the headers is not met
 
@@ -436,7 +434,7 @@ A precondition given in the headers is not met
 PRECONDITION_REQUIRED: 428;
 ```
 
-Defined in: [packages/core/src/enums/http-status.enum.ts:155](https://github.com/kiyasov/nestelia/blob/main/packages/core/src/enums/http-status.enum.ts#L155)
+Defined in: [packages/core/src/enums/http-status.enum.ts:154](https://github.com/kiyasov/nestelia/blob/main/packages/core/src/enums/http-status.enum.ts#L154)
 
 The server requires conditional headers
 
@@ -448,7 +446,7 @@ The server requires conditional headers
 PROCESSING: 102;
 ```
 
-Defined in: [packages/core/src/enums/http-status.enum.ts:38](https://github.com/kiyasov/nestelia/blob/main/packages/core/src/enums/http-status.enum.ts#L38)
+Defined in: [packages/core/src/enums/http-status.enum.ts:37](https://github.com/kiyasov/nestelia/blob/main/packages/core/src/enums/http-status.enum.ts#L37)
 
 The server is processing the request but no response is available yet (WebDAV)
 
@@ -460,7 +458,7 @@ The server is processing the request but no response is available yet (WebDAV)
 PROXY_AUTHENTICATION_REQUIRED: 407;
 ```
 
-Defined in: [packages/core/src/enums/http-status.enum.ts:110](https://github.com/kiyasov/nestelia/blob/main/packages/core/src/enums/http-status.enum.ts#L110)
+Defined in: [packages/core/src/enums/http-status.enum.ts:109](https://github.com/kiyasov/nestelia/blob/main/packages/core/src/enums/http-status.enum.ts#L109)
 
 Authentication through proxy is required
 
@@ -472,7 +470,7 @@ Authentication through proxy is required
 REQUEST_TIMEOUT: 408;
 ```
 
-Defined in: [packages/core/src/enums/http-status.enum.ts:113](https://github.com/kiyasov/nestelia/blob/main/packages/core/src/enums/http-status.enum.ts#L113)
+Defined in: [packages/core/src/enums/http-status.enum.ts:112](https://github.com/kiyasov/nestelia/blob/main/packages/core/src/enums/http-status.enum.ts#L112)
 
 The server timed out waiting for the request
 
@@ -484,7 +482,7 @@ The server timed out waiting for the request
 REQUESTED_RANGE_NOT_SATISFIABLE: 416;
 ```
 
-Defined in: [packages/core/src/enums/http-status.enum.ts:137](https://github.com/kiyasov/nestelia/blob/main/packages/core/src/enums/http-status.enum.ts#L137)
+Defined in: [packages/core/src/enums/http-status.enum.ts:136](https://github.com/kiyasov/nestelia/blob/main/packages/core/src/enums/http-status.enum.ts#L136)
 
 The requested range cannot be returned
 
@@ -496,7 +494,7 @@ The requested range cannot be returned
 RESET_CONTENT: 205;
 ```
 
-Defined in: [packages/core/src/enums/http-status.enum.ts:60](https://github.com/kiyasov/nestelia/blob/main/packages/core/src/enums/http-status.enum.ts#L60)
+Defined in: [packages/core/src/enums/http-status.enum.ts:59](https://github.com/kiyasov/nestelia/blob/main/packages/core/src/enums/http-status.enum.ts#L59)
 
 The client should reset the document (e.g., clear form)
 
@@ -508,7 +506,7 @@ The client should reset the document (e.g., clear form)
 SEE_OTHER: 303;
 ```
 
-Defined in: [packages/core/src/enums/http-status.enum.ts:76](https://github.com/kiyasov/nestelia/blob/main/packages/core/src/enums/http-status.enum.ts#L76)
+Defined in: [packages/core/src/enums/http-status.enum.ts:75](https://github.com/kiyasov/nestelia/blob/main/packages/core/src/enums/http-status.enum.ts#L75)
 
 The client should retrieve the resource via GET from another URL
 
@@ -520,7 +518,7 @@ The client should retrieve the resource via GET from another URL
 SERVICE_UNAVAILABLE: 503;
 ```
 
-Defined in: [packages/core/src/enums/http-status.enum.ts:171](https://github.com/kiyasov/nestelia/blob/main/packages/core/src/enums/http-status.enum.ts#L171)
+Defined in: [packages/core/src/enums/http-status.enum.ts:170](https://github.com/kiyasov/nestelia/blob/main/packages/core/src/enums/http-status.enum.ts#L170)
 
 The server is temporarily unavailable (overload or maintenance)
 
@@ -532,7 +530,7 @@ The server is temporarily unavailable (overload or maintenance)
 SWITCHING_PROTOCOLS: 101;
 ```
 
-Defined in: [packages/core/src/enums/http-status.enum.ts:35](https://github.com/kiyasov/nestelia/blob/main/packages/core/src/enums/http-status.enum.ts#L35)
+Defined in: [packages/core/src/enums/http-status.enum.ts:34](https://github.com/kiyasov/nestelia/blob/main/packages/core/src/enums/http-status.enum.ts#L34)
 
 The server agrees to switch protocols (e.g., to WebSocket)
 
@@ -544,7 +542,7 @@ The server agrees to switch protocols (e.g., to WebSocket)
 TEMPORARY_REDIRECT: 307;
 ```
 
-Defined in: [packages/core/src/enums/http-status.enum.ts:82](https://github.com/kiyasov/nestelia/blob/main/packages/core/src/enums/http-status.enum.ts#L82)
+Defined in: [packages/core/src/enums/http-status.enum.ts:81](https://github.com/kiyasov/nestelia/blob/main/packages/core/src/enums/http-status.enum.ts#L81)
 
 The resource is temporarily available at a different URL (do not change request method)
 
@@ -556,7 +554,7 @@ The resource is temporarily available at a different URL (do not change request 
 TOO_MANY_REQUESTS: 429;
 ```
 
-Defined in: [packages/core/src/enums/http-status.enum.ts:158](https://github.com/kiyasov/nestelia/blob/main/packages/core/src/enums/http-status.enum.ts#L158)
+Defined in: [packages/core/src/enums/http-status.enum.ts:157](https://github.com/kiyasov/nestelia/blob/main/packages/core/src/enums/http-status.enum.ts#L157)
 
 Too many requests (rate limiting)
 
@@ -568,7 +566,7 @@ Too many requests (rate limiting)
 UNAUTHORIZED: 401;
 ```
 
-Defined in: [packages/core/src/enums/http-status.enum.ts:92](https://github.com/kiyasov/nestelia/blob/main/packages/core/src/enums/http-status.enum.ts#L92)
+Defined in: [packages/core/src/enums/http-status.enum.ts:91](https://github.com/kiyasov/nestelia/blob/main/packages/core/src/enums/http-status.enum.ts#L91)
 
 Authentication is required (not authorized)
 
@@ -580,7 +578,7 @@ Authentication is required (not authorized)
 UNPROCESSABLE_ENTITY: 422;
 ```
 
-Defined in: [packages/core/src/enums/http-status.enum.ts:149](https://github.com/kiyasov/nestelia/blob/main/packages/core/src/enums/http-status.enum.ts#L149)
+Defined in: [packages/core/src/enums/http-status.enum.ts:148](https://github.com/kiyasov/nestelia/blob/main/packages/core/src/enums/http-status.enum.ts#L148)
 
 Semantic error in the request (cannot be processed)
 
@@ -592,7 +590,7 @@ Semantic error in the request (cannot be processed)
 UNSUPPORTED_MEDIA_TYPE: 415;
 ```
 
-Defined in: [packages/core/src/enums/http-status.enum.ts:134](https://github.com/kiyasov/nestelia/blob/main/packages/core/src/enums/http-status.enum.ts#L134)
+Defined in: [packages/core/src/enums/http-status.enum.ts:133](https://github.com/kiyasov/nestelia/blob/main/packages/core/src/enums/http-status.enum.ts#L133)
 
 The request media format is not supported by the server
 
@@ -604,6 +602,6 @@ The request media format is not supported by the server
 URI_TOO_LONG: 414;
 ```
 
-Defined in: [packages/core/src/enums/http-status.enum.ts:131](https://github.com/kiyasov/nestelia/blob/main/packages/core/src/enums/http-status.enum.ts#L131)
+Defined in: [packages/core/src/enums/http-status.enum.ts:130](https://github.com/kiyasov/nestelia/blob/main/packages/core/src/enums/http-status.enum.ts#L130)
 
 The request URL is too long

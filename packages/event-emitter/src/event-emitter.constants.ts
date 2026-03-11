@@ -1,7 +1,6 @@
 /**
  * Injection token for the EventEmitterService instance.
  *
- * @publicApi
  */
 export const EVENT_EMITTER_TOKEN = "EVENT_EMITTER_TOKEN";
 

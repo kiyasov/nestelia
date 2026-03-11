@@ -4,7 +4,6 @@
  *
  * @param decorators Array of decorators to apply.
  *
- * @publicApi
  */
 export function applyDecorators(
   ...decorators: (

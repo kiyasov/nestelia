@@ -4,7 +4,7 @@
 function SetMetadata<K, V>(metadataKey, metadataValue): MethodDecorator & ClassDecorator;
 ```
 
-Defined in: [packages/core/src/decorators/set-metadata.decorator.ts:13](https://github.com/kiyasov/nestelia/blob/main/packages/core/src/decorators/set-metadata.decorator.ts#L13)
+Defined in: [packages/core/src/decorators/set-metadata.decorator.ts:12](https://github.com/kiyasov/nestelia/blob/main/packages/core/src/decorators/set-metadata.decorator.ts#L12)
 
 Decorator that assigns metadata to the class using the specified key.
 
@@ -27,5 +27,3 @@ This metadata can be reflected using the `Reflect` API.
 ## Returns
 
 `MethodDecorator` & `ClassDecorator`
-
-## Public Api

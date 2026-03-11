@@ -4,7 +4,7 @@
 function createEdgeType<T>(NodeType): AnyConstructor;
 ```
 
-Defined in: [packages/apollo/src/pagination.ts:76](https://github.com/kiyasov/nestelia/blob/main/packages/apollo/src/pagination.ts#L76)
+Defined in: [packages/apollo/src/pagination.ts:73](https://github.com/kiyasov/nestelia/blob/main/packages/apollo/src/pagination.ts#L73)
 
 Creates a Relay-style Edge type for a given node class.
 Fields: `node`, `cursor`.
@@ -24,5 +24,3 @@ Fields: `node`, `cursor`.
 ## Returns
 
 `AnyConstructor`
-
-## Public Api

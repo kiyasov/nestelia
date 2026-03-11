@@ -27,7 +27,6 @@ import { Keyv, KeyvStoreAdapter } from "keyv";
  * };
  * ```
  *
- * @publicApi
  */
 export interface CacheManagerOptions extends Omit<
   CreateCacheOptions,

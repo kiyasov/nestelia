@@ -9,7 +9,6 @@ import { INTERCEPTORS_METADATA } from "../decorators/constants";
  * @param interceptors A single interceptor instance or class, or an array of
  * interceptor instances or classes.
  *
- * @publicApi
  */
 export function UseInterceptors(
   ...interceptors: ((new (...args: any[]) => any) | object)[]

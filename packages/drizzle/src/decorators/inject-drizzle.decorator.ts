@@ -31,7 +31,6 @@ import { DRIZZLE_INSTANCE } from "../drizzle.constants";
  * }
  * ```
  *
- * @publicApi
  */
 export const InjectDrizzle = (tag?: string | symbol): ParameterDecorator =>
   Inject(tag ?? DRIZZLE_INSTANCE);

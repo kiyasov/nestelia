@@ -68,7 +68,6 @@ import type {
  * export class AppModule {}
  * ```
  *
- * @publicApi
  */
 @Module({})
 export class DrizzleModule {

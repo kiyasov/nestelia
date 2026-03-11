@@ -3,7 +3,6 @@ import type { FactoryProvider, Provider, Type } from "nestelia";
 /**
  * Options for synchronously configuring the Drizzle module.
  *
- * @publicApi
  */
 export interface DrizzleModuleOptions {
   /**
@@ -42,7 +41,6 @@ export interface DrizzleModuleOptions {
  * Implement this interface in a class and pass it via `useClass` or
  * `useExisting` in `DrizzleModule.forRootAsync()`.
  *
- * @publicApi
  */
 export interface DrizzleOptionsFactory {
   /**
@@ -54,7 +52,6 @@ export interface DrizzleOptionsFactory {
 /**
  * Options for asynchronously configuring the Drizzle module.
  *
- * @publicApi
  */
 export interface DrizzleModuleAsyncOptions {
   /**

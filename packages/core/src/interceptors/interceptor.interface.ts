@@ -27,7 +27,6 @@ export interface ResponseInterceptor {
 /**
  * Call handler interface for interceptors
  *
- * @publicApi
  */
 export interface CallHandler<T = any> {
   /**
@@ -39,7 +38,6 @@ export interface CallHandler<T = any> {
 /**
  * Elysia-Nest interceptor interface
  *
- * @publicApi
  */
 export interface NestInterceptor<T = any, R = any> {
   /**

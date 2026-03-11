@@ -20,7 +20,6 @@ import { CACHE_TTL_METADATA } from "../cache.constants";
  * };
  * ```
  *
- * @publicApi
  */
 export type CacheTTLFactory = (
   ctx: ExecutionContext,
@@ -60,7 +59,6 @@ export type CacheTTLFactory = (
  * }
  * ```
  *
- * @publicApi
  */
 export const CacheTTL = (ttl: number | CacheTTLFactory) =>
   SetMetadata(CACHE_TTL_METADATA, ttl);

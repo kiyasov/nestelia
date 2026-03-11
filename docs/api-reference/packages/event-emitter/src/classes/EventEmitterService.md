@@ -1,6 +1,6 @@
 # Class: EventEmitterService
 
-Defined in: [packages/event-emitter/src/event-emitter.service.ts:61](https://github.com/kiyasov/nestelia/blob/main/packages/event-emitter/src/event-emitter.service.ts#L61)
+Defined in: [packages/event-emitter/src/event-emitter.service.ts:60](https://github.com/kiyasov/nestelia/blob/main/packages/event-emitter/src/event-emitter.service.ts#L60)
 
 Injectable event emitter service.
 
@@ -21,8 +21,6 @@ export class OrderService {
 }
 ```
 
-## Public Api
-
 ## Constructors
 
 ### Constructor
@@ -31,7 +29,7 @@ export class OrderService {
 new EventEmitterService(options?): EventEmitterService;
 ```
 
-Defined in: [packages/event-emitter/src/event-emitter.service.ts:67](https://github.com/kiyasov/nestelia/blob/main/packages/event-emitter/src/event-emitter.service.ts#L67)
+Defined in: [packages/event-emitter/src/event-emitter.service.ts:66](https://github.com/kiyasov/nestelia/blob/main/packages/event-emitter/src/event-emitter.service.ts#L66)
 
 #### Parameters
 
@@ -51,7 +49,7 @@ Defined in: [packages/event-emitter/src/event-emitter.service.ts:67](https://git
 emit(event, payload?): boolean;
 ```
 
-Defined in: [packages/event-emitter/src/event-emitter.service.ts:78](https://github.com/kiyasov/nestelia/blob/main/packages/event-emitter/src/event-emitter.service.ts#L78)
+Defined in: [packages/event-emitter/src/event-emitter.service.ts:77](https://github.com/kiyasov/nestelia/blob/main/packages/event-emitter/src/event-emitter.service.ts#L77)
 
 Emit an event synchronously. Returns `true` if at least one handler was
 invoked (async handlers are fired but not awaited — use `emitAsync` if
@@ -76,7 +74,7 @@ you need to wait for them).
 emitAsync(event, payload?): Promise<unknown[]>;
 ```
 
-Defined in: [packages/event-emitter/src/event-emitter.service.ts:101](https://github.com/kiyasov/nestelia/blob/main/packages/event-emitter/src/event-emitter.service.ts#L101)
+Defined in: [packages/event-emitter/src/event-emitter.service.ts:100](https://github.com/kiyasov/nestelia/blob/main/packages/event-emitter/src/event-emitter.service.ts#L100)
 
 Emit an event and await all async handlers.
 Returns an array of values resolved by each handler.
@@ -100,7 +98,7 @@ Returns an array of values resolved by each handler.
 listenerCount(event): number;
 ```
 
-Defined in: [packages/event-emitter/src/event-emitter.service.ts:186](https://github.com/kiyasov/nestelia/blob/main/packages/event-emitter/src/event-emitter.service.ts#L186)
+Defined in: [packages/event-emitter/src/event-emitter.service.ts:185](https://github.com/kiyasov/nestelia/blob/main/packages/event-emitter/src/event-emitter.service.ts#L185)
 
 Returns the number of handlers registered for `event`.
 
@@ -122,7 +120,7 @@ Returns the number of handlers registered for `event`.
 off<T>(event, handler?): this;
 ```
 
-Defined in: [packages/event-emitter/src/event-emitter.service.ts:151](https://github.com/kiyasov/nestelia/blob/main/packages/event-emitter/src/event-emitter.service.ts#L151)
+Defined in: [packages/event-emitter/src/event-emitter.service.ts:150](https://github.com/kiyasov/nestelia/blob/main/packages/event-emitter/src/event-emitter.service.ts#L150)
 
 Remove a specific handler (or all handlers for an event when omitted).
 
@@ -151,7 +149,7 @@ Remove a specific handler (or all handlers for an event when omitted).
 on<T>(event, handler): this;
 ```
 
-Defined in: [packages/event-emitter/src/event-emitter.service.ts:129](https://github.com/kiyasov/nestelia/blob/main/packages/event-emitter/src/event-emitter.service.ts#L129)
+Defined in: [packages/event-emitter/src/event-emitter.service.ts:128](https://github.com/kiyasov/nestelia/blob/main/packages/event-emitter/src/event-emitter.service.ts#L128)
 
 Register a persistent event handler.
 
@@ -180,7 +178,7 @@ Register a persistent event handler.
 once<T>(event, handler): this;
 ```
 
-Defined in: [packages/event-emitter/src/event-emitter.service.ts:140](https://github.com/kiyasov/nestelia/blob/main/packages/event-emitter/src/event-emitter.service.ts#L140)
+Defined in: [packages/event-emitter/src/event-emitter.service.ts:139](https://github.com/kiyasov/nestelia/blob/main/packages/event-emitter/src/event-emitter.service.ts#L139)
 
 Register a one-time event handler.
 
@@ -209,7 +207,7 @@ Register a one-time event handler.
 removeAllListeners(event?): this;
 ```
 
-Defined in: [packages/event-emitter/src/event-emitter.service.ts:170](https://github.com/kiyasov/nestelia/blob/main/packages/event-emitter/src/event-emitter.service.ts#L170)
+Defined in: [packages/event-emitter/src/event-emitter.service.ts:169](https://github.com/kiyasov/nestelia/blob/main/packages/event-emitter/src/event-emitter.service.ts#L169)
 
 Remove all listeners, optionally scoped to a specific event.
 

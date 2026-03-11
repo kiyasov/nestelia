@@ -4,7 +4,7 @@
 const CACHE_TTL_METADATA: "cache_module:cache_ttl" = "cache_module:cache_ttl";
 ```
 
-Defined in: [packages/cache/src/cache.constants.ts:31](https://github.com/kiyasov/nestelia/blob/main/packages/cache/src/cache.constants.ts#L31)
+Defined in: [packages/cache/src/cache.constants.ts:30](https://github.com/kiyasov/nestelia/blob/main/packages/cache/src/cache.constants.ts#L30)
 
 **`Internal`**
 

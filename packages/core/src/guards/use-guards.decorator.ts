@@ -9,7 +9,6 @@ import { GUARDS_METADATA } from "../decorators/constants";
  * @param guards A single guard instance or class, or an array of guard
  * instances or classes.
  *
- * @publicApi
  */
 export function UseGuards(
   ...guards: ((new (...args: any[]) => any) | object)[]

@@ -8,7 +8,6 @@ import "reflect-metadata";
  * @param metadataKey The key used to store the metadata.
  * @param metadataValue The value to store.
  *
- * @publicApi
  */
 export function SetMetadata<K = string, V = any>(
   metadataKey: K,

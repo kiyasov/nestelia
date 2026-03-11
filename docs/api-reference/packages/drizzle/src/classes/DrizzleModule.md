@@ -1,6 +1,6 @@
 # Class: DrizzleModule
 
-Defined in: [packages/drizzle/src/drizzle.module.ts:74](https://github.com/kiyasov/nestelia/blob/main/packages/drizzle/src/drizzle.module.ts#L74)
+Defined in: [packages/drizzle/src/drizzle.module.ts:73](https://github.com/kiyasov/nestelia/blob/main/packages/drizzle/src/drizzle.module.ts#L73)
 
 DrizzleModule — integrates drizzle-orm with nestelia's dependency injection.
 
@@ -58,8 +58,6 @@ Multiple databases using `tag`:
 export class AppModule {}
 ```
 
-## Public Api
-
 ## Constructors
 
 ### Constructor
@@ -80,7 +78,7 @@ new DrizzleModule(): DrizzleModule;
 static forRoot(options): DynamicModule;
 ```
 
-Defined in: [packages/drizzle/src/drizzle.module.ts:80](https://github.com/kiyasov/nestelia/blob/main/packages/drizzle/src/drizzle.module.ts#L80)
+Defined in: [packages/drizzle/src/drizzle.module.ts:79](https://github.com/kiyasov/nestelia/blob/main/packages/drizzle/src/drizzle.module.ts#L79)
 
 Synchronously configure the Drizzle module.
 
@@ -102,7 +100,7 @@ Synchronously configure the Drizzle module.
 static forRootAsync(options): DynamicModule;
 ```
 
-Defined in: [packages/drizzle/src/drizzle.module.ts:98](https://github.com/kiyasov/nestelia/blob/main/packages/drizzle/src/drizzle.module.ts#L98)
+Defined in: [packages/drizzle/src/drizzle.module.ts:97](https://github.com/kiyasov/nestelia/blob/main/packages/drizzle/src/drizzle.module.ts#L97)
 
 Asynchronously configure the Drizzle module.
 
@@ -124,7 +122,7 @@ Asynchronously configure the Drizzle module.
 static register(options): DynamicModule;
 ```
 
-Defined in: [packages/drizzle/src/drizzle.module.ts:115](https://github.com/kiyasov/nestelia/blob/main/packages/drizzle/src/drizzle.module.ts#L115)
+Defined in: [packages/drizzle/src/drizzle.module.ts:114](https://github.com/kiyasov/nestelia/blob/main/packages/drizzle/src/drizzle.module.ts#L114)
 
 Alias for `forRoot`.
 
@@ -146,7 +144,7 @@ Alias for `forRoot`.
 static registerAsync(options): DynamicModule;
 ```
 
-Defined in: [packages/drizzle/src/drizzle.module.ts:120](https://github.com/kiyasov/nestelia/blob/main/packages/drizzle/src/drizzle.module.ts#L120)
+Defined in: [packages/drizzle/src/drizzle.module.ts:119](https://github.com/kiyasov/nestelia/blob/main/packages/drizzle/src/drizzle.module.ts#L119)
 
 Alias for `forRootAsync`.
 

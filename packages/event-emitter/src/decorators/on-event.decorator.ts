@@ -6,7 +6,6 @@ import type { OnEventMetadata } from "../interfaces";
 /**
  * Options for `@OnEvent`.
  *
- * @publicApi
  */
 export interface OnEventOptions {
   /**
@@ -43,7 +42,6 @@ export interface OnEventOptions {
  * }
  * ```
  *
- * @publicApi
  */
 export function OnEvent(
   event: string | symbol,
