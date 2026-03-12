@@ -96,6 +96,7 @@
 | [SubscriptionOptions](interfaces/SubscriptionOptions.md) | Options for the |
 | [UnionMetadata](interfaces/UnionMetadata.md) | - |
 | [UploadedFile](interfaces/UploadedFile.md) | Represents an uploaded file in a GraphQL multipart request. Provides access to file metadata and streaming capabilities. |
+| [UploadOptions](interfaces/UploadOptions.md) | Options for controlling file upload limits in a GraphQL multipart request. |
 
 ## Type Aliases
 

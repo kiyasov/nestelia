@@ -80,4 +80,39 @@ describe("UploadResolver", () => {
     expect(result.totalSize).toBe(0);
     expect(result.files).toHaveLength(0);
   });
+
+  // ─── stream ──────────────────────────────────────────────────────────────
+
+  it("UploadedFile stream can be read as text", async () => {
+    const content = "stream content";
+    const file = new File([content], "stream.txt", { type: "text/plain" });
+    const upload = await makeUpload(file);
+
+    const reader = upload.stream.getReader();
+    const chunks: Uint8Array[] = [];
+    while (true) {
+      const { done, value } = await reader.read();
+      if (done) break;
+      chunks.push(value);
+    }
+
+    const totalLength = chunks.reduce((n, c) => n + c.length, 0);
+    const merged = new Uint8Array(totalLength);
+    let offset = 0;
+    for (const chunk of chunks) {
+      merged.set(chunk, offset);
+      offset += chunk.length;
+    }
+
+    expect(new TextDecoder().decode(merged)).toBe(content);
+  });
+
+  it("UploadedFile stream contains correct binary data", async () => {
+    const bytes = new Uint8Array([0x89, 0x50, 0x4e, 0x47]); // PNG magic bytes
+    const file = new File([bytes], "image.png", { type: "image/png" });
+    const upload = await makeUpload(file);
+
+    const buffer = await upload.arrayBuffer();
+    expect(new Uint8Array(buffer)).toEqual(bytes);
+  });
 });

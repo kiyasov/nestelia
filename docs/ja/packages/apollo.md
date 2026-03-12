@@ -323,6 +323,98 @@ async me(@Context("user") user: User, @Info() info: GraphQLResolveInfo) {
 }
 ```
 
+## ファイルアップロード
+
+Nestelia は [GraphQL multipart request 仕様](https://github.com/jaydenseric/graphql-multipart-request-spec) を実装しています。
+追加パッケージは不要 — `GraphQLUpload` と `UploadedFile` は組み込み済みです。
+
+### 単一ファイル
+
+```typescript
+import { GraphQLUpload, type UploadedFile } from "nestelia/apollo";
+
+@Mutation(() => UploadResult)
+async uploadFile(
+  @Args("file", { type: () => GraphQLUpload }) file: Promise<UploadedFile>,
+): Promise<UploadResult> {
+  const upload = await file;
+  // upload.filename, upload.mimetype, upload.size, upload.stream
+  return { filename: upload.filename, mimetype: upload.mimetype, size: upload.size };
+}
+```
+
+### 複数ファイル
+
+```typescript
+@Mutation(() => MultiUploadResult)
+async uploadFiles(
+  @Args("files", { type: () => [GraphQLUpload] }) files: Promise<UploadedFile>[],
+): Promise<MultiUploadResult> {
+  const uploads = await Promise.all(files);
+  return {
+    count: uploads.length,
+    totalSize: uploads.reduce((sum, f) => sum + f.size, 0),
+  };
+}
+```
+
+### ディスクへのストリーミング
+
+```typescript
+import { createWriteStream } from "node:fs";
+import { Writable } from "node:stream";
+
+@Mutation(() => UploadResult)
+async uploadFile(
+  @Args("file", { type: () => GraphQLUpload }) file: Promise<UploadedFile>,
+): Promise<UploadResult> {
+  const upload = await file;
+  const dest = createWriteStream(`./uploads/${upload.filename}`);
+  await upload.stream.pipeTo(Writable.toWeb(dest));
+  return { filename: upload.filename, mimetype: upload.mimetype, size: upload.size };
+}
+```
+
+### multipart リクエストの例
+
+```
+operations: {"query":"mutation($file:Upload!){uploadFile(file:$file){filename size}}","variables":{"file":null}}
+map:        {"0":["variables.file"]}
+0:          <binary file data>
+```
+
+### `UploadedFile` インターフェース
+
+| プロパティ | 型 | 説明 |
+|------------|-----|------|
+| `filename` | `string` | 元のファイル名 |
+| `mimetype` | `string` | MIME タイプ |
+| `size` | `number` | バイト単位のサイズ |
+| `stream` | `ReadableStream` | Web Streams 読み取りストリーム |
+| `blob()` | `Promise<Blob>` | Blob として読み取る |
+| `arrayBuffer()` | `Promise<ArrayBuffer>` | ArrayBuffer として読み取る |
+| `text()` | `Promise<string>` | 文字列として読み取る |
+
+### アップロード制限
+
+`UploadOptions` オブジェクトを `processMultipartRequest` の第二引数として渡します：
+
+```typescript
+import { processMultipartRequest, type UploadOptions } from "nestelia/apollo";
+
+const options: UploadOptions = {
+  maxFiles: 5,              // リクエストあたりの最大ファイル数（デフォルト: 10）
+  maxFileSize: 10_485_760,  // ファイルあたり 10 MB
+};
+
+const operations = await processMultipartRequest(body, options);
+```
+
+| オプション | 型 | デフォルト | 説明 |
+|------------|-----|------------|------|
+| `maxFiles` | `number` | `10` | リクエストあたりの最大ファイル数 |
+| `maxFileSize` | `number` | — | ファイルあたりの最大バイト数。省略した場合は制限なし |
+
 ## リゾルバーでガードを使う
 
 ```typescript

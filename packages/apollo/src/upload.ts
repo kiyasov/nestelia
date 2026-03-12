@@ -12,7 +12,7 @@ const POLLUTION_KEYS = new Set<string>([
 /** Maximum allowed path depth to prevent ReDoS. */
 const MAX_PATH_DEPTH = 20;
 
-/** Maximum number of files per request to prevent DoS. */
+/** Default maximum number of files per request to prevent DoS. */
 const MAX_FILES_PER_REQUEST = 10;
 
 /** Maximum allowed path length. */
@@ -222,16 +222,36 @@ function setPath(
 }
 
 /**
+ * Options for controlling file upload limits in a GraphQL multipart request.
+ */
+export interface UploadOptions {
+  /**
+   * Maximum number of files allowed per request.
+   * @default 10
+   */
+  maxFiles?: number;
+  /**
+   * Maximum allowed size per file in bytes.
+   * Requests containing a file that exceeds this limit will throw an error.
+   */
+  maxFileSize?: number;
+}
+
+/**
  * Processes a GraphQL multipart request per the
  * [GraphQL multipart request spec](https://github.com/jaydenseric/graphql-multipart-request-spec).
  *
  * @param body - The multipart request body.
+ * @param options - Optional upload limits.
  * @returns Operations object with uploaded files injected.
- * @throws Error if 'operations' field is missing.
+ * @throws Error if 'operations' field is missing or limits are exceeded.
  */
 export async function processMultipartRequest(
   body: MultipartBody,
+  options?: UploadOptions,
 ): Promise<Record<string, unknown>> {
+  const maxFiles = options?.maxFiles ?? MAX_FILES_PER_REQUEST;
+
   const operations = parseJson(getField(body, "operations"));
   if (!operations) {
     throw new Error("Missing 'operations' field in multipart request");
@@ -243,9 +263,9 @@ export async function processMultipartRequest(
   }
 
   const keys = Object.keys(fileMap);
-  if (keys.length > MAX_FILES_PER_REQUEST) {
+  if (keys.length > maxFiles) {
     throw new Error(
-      `Too many files: ${keys.length}. Maximum allowed: ${MAX_FILES_PER_REQUEST}`,
+      `Too many files: ${keys.length}. Maximum allowed: ${maxFiles}`,
     );
   }
 
@@ -256,6 +276,12 @@ export async function processMultipartRequest(
 
     if (!(file instanceof File) || !Array.isArray(paths)) {
       continue;
+    }
+
+    if (options?.maxFileSize !== undefined && file.size > options.maxFileSize) {
+      throw new Error(
+        `File "${file.name}" exceeds the size limit of ${options.maxFileSize} bytes (got ${file.size})`,
+      );
     }
 
     const uploadedFile = new UploadedFileImpl(fieldName, file);

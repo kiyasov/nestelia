@@ -322,6 +322,98 @@ async me(@Context("user") user: User, @Info() info: GraphQLResolveInfo) {
 }
 ```
 
+## 文件上传
+
+Nestelia 实现了 [GraphQL multipart request 规范](https://github.com/jaydenseric/graphql-multipart-request-spec)。
+无需额外安装包 — `GraphQLUpload` 和 `UploadedFile` 已内置。
+
+### 单文件上传
+
+```typescript
+import { GraphQLUpload, type UploadedFile } from "nestelia/apollo";
+
+@Mutation(() => UploadResult)
+async uploadFile(
+  @Args("file", { type: () => GraphQLUpload }) file: Promise<UploadedFile>,
+): Promise<UploadResult> {
+  const upload = await file;
+  // upload.filename, upload.mimetype, upload.size, upload.stream
+  return { filename: upload.filename, mimetype: upload.mimetype, size: upload.size };
+}
+```
+
+### 多文件上传
+
+```typescript
+@Mutation(() => MultiUploadResult)
+async uploadFiles(
+  @Args("files", { type: () => [GraphQLUpload] }) files: Promise<UploadedFile>[],
+): Promise<MultiUploadResult> {
+  const uploads = await Promise.all(files);
+  return {
+    count: uploads.length,
+    totalSize: uploads.reduce((sum, f) => sum + f.size, 0),
+  };
+}
+```
+
+### 流式写入磁盘
+
+```typescript
+import { createWriteStream } from "node:fs";
+import { Writable } from "node:stream";
+
+@Mutation(() => UploadResult)
+async uploadFile(
+  @Args("file", { type: () => GraphQLUpload }) file: Promise<UploadedFile>,
+): Promise<UploadResult> {
+  const upload = await file;
+  const dest = createWriteStream(`./uploads/${upload.filename}`);
+  await upload.stream.pipeTo(Writable.toWeb(dest));
+  return { filename: upload.filename, mimetype: upload.mimetype, size: upload.size };
+}
+```
+
+### multipart 请求示例
+
+```
+operations: {"query":"mutation($file:Upload!){uploadFile(file:$file){filename size}}","variables":{"file":null}}
+map:        {"0":["variables.file"]}
+0:          <binary file data>
+```
+
+### `UploadedFile` 接口
+
+| 属性 | 类型 | 描述 |
+|------|------|------|
+| `filename` | `string` | 原始文件名 |
+| `mimetype` | `string` | MIME 类型 |
+| `size` | `number` | 文件大小（字节） |
+| `stream` | `ReadableStream` | Web Streams 可读流 |
+| `blob()` | `Promise<Blob>` | 读取为 Blob |
+| `arrayBuffer()` | `Promise<ArrayBuffer>` | 读取为 ArrayBuffer |
+| `text()` | `Promise<string>` | 读取为字符串 |
+
+### 上传限制
+
+将 `UploadOptions` 对象作为第二个参数传入 `processMultipartRequest`：
+
+```typescript
+import { processMultipartRequest, type UploadOptions } from "nestelia/apollo";
+
+const options: UploadOptions = {
+  maxFiles: 5,              // 每次请求最大文件数（默认：10）
+  maxFileSize: 10_485_760,  // 每个文件 10 MB
+};
+
+const operations = await processMultipartRequest(body, options);
+```
+
+| 选项 | 类型 | 默认值 | 描述 |
+|------|------|--------|------|
+| `maxFiles` | `number` | `10` | 每次请求的最大文件数 |
+| `maxFileSize` | `number` | — | 每个文件的最大字节数，不设置则无限制 |
+
 ## 解析器上的守卫
 
 ```typescript

@@ -1,10 +1,10 @@
 # Function: processMultipartRequest()
 
 ```ts
-function processMultipartRequest(body): Promise<Record<string, unknown>>;
+function processMultipartRequest(body, options?): Promise<Record<string, unknown>>;
 ```
 
-Defined in: [packages/apollo/src/upload.ts:232](https://github.com/nestelia/nestelia/blob/main/packages/apollo/src/upload.ts#L232)
+Defined in: [packages/apollo/src/upload.ts:249](https://github.com/nestelia/nestelia/blob/main/packages/apollo/src/upload.ts#L249)
 
 Processes a GraphQL multipart request per the
 [GraphQL multipart request spec](https://github.com/jaydenseric/graphql-multipart-request-spec).
@@ -14,6 +14,7 @@ Processes a GraphQL multipart request per the
 | Parameter | Type | Description |
 | ------ | ------ | ------ |
 | `body` | `MultipartBody` | The multipart request body. |
+| `options?` | [`UploadOptions`](../interfaces/UploadOptions.md) | Optional upload limits. |
 
 ## Returns
 
@@ -23,4 +24,4 @@ Operations object with uploaded files injected.
 
 ## Throws
 
-Error if 'operations' field is missing.
+Error if 'operations' field is missing or limits are exceeded.
