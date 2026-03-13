@@ -1,6 +1,6 @@
 # Class: TestingModuleBuilder
 
-Defined in: [packages/testing/src/testing.module-builder.ts:81](https://github.com/nestelia/nestelia/blob/main/packages/testing/src/testing.module-builder.ts#L81)
+Defined in: [packages/testing/src/testing.module-builder.ts:80](https://github.com/nestelia/nestelia/blob/main/packages/testing/src/testing.module-builder.ts#L80)
 
 Builder for creating and configuring testing modules.
 
@@ -26,7 +26,7 @@ const service = moduleRef.get(MyService);
 new TestingModuleBuilder(metadata): TestingModuleBuilder;
 ```
 
-Defined in: [packages/testing/src/testing.module-builder.ts:85](https://github.com/nestelia/nestelia/blob/main/packages/testing/src/testing.module-builder.ts#L85)
+Defined in: [packages/testing/src/testing.module-builder.ts:84](https://github.com/nestelia/nestelia/blob/main/packages/testing/src/testing.module-builder.ts#L84)
 
 #### Parameters
 
@@ -46,7 +46,7 @@ Defined in: [packages/testing/src/testing.module-builder.ts:85](https://github.c
 addOverride(override): void;
 ```
 
-Defined in: [packages/testing/src/testing.module-builder.ts:100](https://github.com/nestelia/nestelia/blob/main/packages/testing/src/testing.module-builder.ts#L100)
+Defined in: [packages/testing/src/testing.module-builder.ts:99](https://github.com/nestelia/nestelia/blob/main/packages/testing/src/testing.module-builder.ts#L99)
 
 **`Internal`**
 
@@ -70,9 +70,13 @@ Add provider override
 compile(): Promise<TestingModule>;
 ```
 
-Defined in: [packages/testing/src/testing.module-builder.ts:121](https://github.com/nestelia/nestelia/blob/main/packages/testing/src/testing.module-builder.ts#L121)
+Defined in: [packages/testing/src/testing.module-builder.ts:124](https://github.com/nestelia/nestelia/blob/main/packages/testing/src/testing.module-builder.ts#L124)
 
-Compile the testing module and initialize all providers
+Compile the testing module and initialize all providers.
+
+Each call creates a fully isolated DI container so that unit tests
+never interfere with each other or with integration tests that share
+the global Container.instance.
 
 #### Returns
 
@@ -86,7 +90,7 @@ Compile the testing module and initialize all providers
 overrideClass<T>(token): OverrideByBuilder<T>;
 ```
 
-Defined in: [packages/testing/src/testing.module-builder.ts:114](https://github.com/nestelia/nestelia/blob/main/packages/testing/src/testing.module-builder.ts#L114)
+Defined in: [packages/testing/src/testing.module-builder.ts:113](https://github.com/nestelia/nestelia/blob/main/packages/testing/src/testing.module-builder.ts#L113)
 
 Override a class provider
 
@@ -114,7 +118,7 @@ Override a class provider
 overrideProvider<T>(token): OverrideByBuilder<T>;
 ```
 
-Defined in: [packages/testing/src/testing.module-builder.ts:107](https://github.com/nestelia/nestelia/blob/main/packages/testing/src/testing.module-builder.ts#L107)
+Defined in: [packages/testing/src/testing.module-builder.ts:106](https://github.com/nestelia/nestelia/blob/main/packages/testing/src/testing.module-builder.ts#L106)
 
 Override a provider with mock/stub
 

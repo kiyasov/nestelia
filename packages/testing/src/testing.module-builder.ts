@@ -2,7 +2,6 @@ import { Module } from "nestelia";
 import type { ModuleOptions } from "nestelia";
 import {
   Container,
-  DIContainer,
   type Provider,
   type ProviderToken,
   STATIC_CONTEXT,
@@ -116,18 +115,22 @@ export class TestingModuleBuilder {
   }
 
   /**
-   * Compile the testing module and initialize all providers
+   * Compile the testing module and initialize all providers.
+   *
+   * Each call creates a fully isolated DI container so that unit tests
+   * never interfere with each other or with integration tests that share
+   * the global Container.instance.
    */
   async compile(): Promise<TestingModule> {
-    // Clear container for isolated testing
-    Container.instance.clear();
+    // Each compile() gets its own isolated container — no global state is touched.
+    const testContainer = Container.create();
 
     // Create a dynamic testing module
     @Module(this._metadata)
     class TestingModuleClass {}
 
-    // Register the module in container
-    const moduleRef = Container.instance.addModule(
+    // Register the module in the isolated container
+    const moduleRef = testContainer.addModule(
       TestingModuleClass,
       TestingModuleClass.name,
     );
@@ -135,7 +138,7 @@ export class TestingModuleBuilder {
     // Process imports first
     if (this._metadata.imports) {
       for (const importedModule of this._metadata.imports) {
-        await this.processImport(importedModule, moduleRef);
+        await this.processImport(importedModule, moduleRef, testContainer);
       }
     }
 
@@ -145,26 +148,17 @@ export class TestingModuleBuilder {
       moduleRef.addProvider(provider);
     }
 
-    // Register in DI container
-    if (providers.length > 0) {
-      DIContainer.register(providers, TestingModuleClass);
-    }
-
     // Register controllers
     if (this._metadata.controllers) {
       for (const controller of this._metadata.controllers) {
         moduleRef.addController(controller);
       }
-      DIContainer.registerControllers(
-        this._metadata.controllers,
-        TestingModuleClass,
-      );
     }
 
     // Initialize singleton providers
-    await this.initializeSingletons(moduleRef);
+    await this.initializeSingletons(moduleRef, testContainer);
 
-    return new TestingModule(moduleRef, Container.instance);
+    return new TestingModule(moduleRef, testContainer);
   }
 
   /**
@@ -242,13 +236,14 @@ export class TestingModuleBuilder {
   private async processImport(
     importedModule: Type | { module: Type },
     targetModule: ModuleType,
+    testContainer: Container,
   ): Promise<void> {
     const moduleClass =
       typeof importedModule === "function"
         ? importedModule
         : importedModule.module;
 
-    const importedRef = Container.instance.addModule(
+    const importedRef = testContainer.addModule(
       moduleClass,
       moduleClass.name || "imported-module",
     );
@@ -259,8 +254,8 @@ export class TestingModuleBuilder {
   /**
    * Initialize all singleton providers
    */
-  private async initializeSingletons(moduleRef: ModuleType): Promise<void> {
-    const injector = new Injector(Container.instance);
+  private async initializeSingletons(moduleRef: ModuleType, testContainer: Container): Promise<void> {
+    const injector = new Injector(testContainer);
 
     for (const [token, wrapper] of moduleRef.getProviders()) {
       if (!wrapper.metatype) {

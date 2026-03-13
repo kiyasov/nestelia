@@ -26,7 +26,7 @@ Defined in: [packages/core/src/di/container.ts:32](https://github.com/nestelia/n
 addGlobalModule(module): void;
 ```
 
-Defined in: [packages/core/src/di/container.ts:70](https://github.com/nestelia/nestelia/blob/main/packages/core/src/di/container.ts#L70)
+Defined in: [packages/core/src/di/container.ts:75](https://github.com/nestelia/nestelia/blob/main/packages/core/src/di/container.ts#L75)
 
 #### Parameters
 
@@ -46,7 +46,7 @@ Defined in: [packages/core/src/di/container.ts:70](https://github.com/nestelia/n
 addModule(metatype, token): Module;
 ```
 
-Defined in: [packages/core/src/di/container.ts:39](https://github.com/nestelia/nestelia/blob/main/packages/core/src/di/container.ts#L39)
+Defined in: [packages/core/src/di/container.ts:44](https://github.com/nestelia/nestelia/blob/main/packages/core/src/di/container.ts#L44)
 
 #### Parameters
 
@@ -67,7 +67,7 @@ Defined in: [packages/core/src/di/container.ts:39](https://github.com/nestelia/n
 beginInitSession(): void;
 ```
 
-Defined in: [packages/core/src/di/container.ts:209](https://github.com/nestelia/nestelia/blob/main/packages/core/src/di/container.ts#L209)
+Defined in: [packages/core/src/di/container.ts:214](https://github.com/nestelia/nestelia/blob/main/packages/core/src/di/container.ts#L214)
 
 #### Returns
 
@@ -81,7 +81,7 @@ Defined in: [packages/core/src/di/container.ts:209](https://github.com/nestelia/
 bindGlobalModuleToModule(target, globalModule): void;
 ```
 
-Defined in: [packages/core/src/di/container.ts:90](https://github.com/nestelia/nestelia/blob/main/packages/core/src/di/container.ts#L90)
+Defined in: [packages/core/src/di/container.ts:95](https://github.com/nestelia/nestelia/blob/main/packages/core/src/di/container.ts#L95)
 
 #### Parameters
 
@@ -102,7 +102,7 @@ Defined in: [packages/core/src/di/container.ts:90](https://github.com/nestelia/n
 bindGlobalScope(): void;
 ```
 
-Defined in: [packages/core/src/di/container.ts:78](https://github.com/nestelia/nestelia/blob/main/packages/core/src/di/container.ts#L78)
+Defined in: [packages/core/src/di/container.ts:83](https://github.com/nestelia/nestelia/blob/main/packages/core/src/di/container.ts#L83)
 
 #### Returns
 
@@ -116,7 +116,7 @@ Defined in: [packages/core/src/di/container.ts:78](https://github.com/nestelia/n
 bindGlobalsToImports(moduleRef): void;
 ```
 
-Defined in: [packages/core/src/di/container.ts:84](https://github.com/nestelia/nestelia/blob/main/packages/core/src/di/container.ts#L84)
+Defined in: [packages/core/src/di/container.ts:89](https://github.com/nestelia/nestelia/blob/main/packages/core/src/di/container.ts#L89)
 
 #### Parameters
 
@@ -136,7 +136,7 @@ Defined in: [packages/core/src/di/container.ts:84](https://github.com/nestelia/n
 clear(): void;
 ```
 
-Defined in: [packages/core/src/di/container.ts:202](https://github.com/nestelia/nestelia/blob/main/packages/core/src/di/container.ts#L202)
+Defined in: [packages/core/src/di/container.ts:207](https://github.com/nestelia/nestelia/blob/main/packages/core/src/di/container.ts#L207)
 
 #### Returns
 
@@ -155,7 +155,7 @@ get<T>(
 contextId?): Promise<T | undefined>;
 ```
 
-Defined in: [packages/core/src/di/container.ts:97](https://github.com/nestelia/nestelia/blob/main/packages/core/src/di/container.ts#L97)
+Defined in: [packages/core/src/di/container.ts:102](https://github.com/nestelia/nestelia/blob/main/packages/core/src/di/container.ts#L102)
 
 ##### Type Parameters
 
@@ -184,7 +184,7 @@ get<T>(
 contextId?): Promise<T | undefined>;
 ```
 
-Defined in: [packages/core/src/di/container.ts:98](https://github.com/nestelia/nestelia/blob/main/packages/core/src/di/container.ts#L98)
+Defined in: [packages/core/src/di/container.ts:103](https://github.com/nestelia/nestelia/blob/main/packages/core/src/di/container.ts#L103)
 
 ##### Type Parameters
 
@@ -215,7 +215,7 @@ getFromModule<T>(
 contextId?): Promise<T | undefined>;
 ```
 
-Defined in: [packages/core/src/di/container.ts:172](https://github.com/nestelia/nestelia/blob/main/packages/core/src/di/container.ts#L172)
+Defined in: [packages/core/src/di/container.ts:177](https://github.com/nestelia/nestelia/blob/main/packages/core/src/di/container.ts#L177)
 
 #### Type Parameters
 
@@ -243,7 +243,7 @@ Defined in: [packages/core/src/di/container.ts:172](https://github.com/nestelia/
 getGlobalModules(): Set<Module>;
 ```
 
-Defined in: [packages/core/src/di/container.ts:74](https://github.com/nestelia/nestelia/blob/main/packages/core/src/di/container.ts#L74)
+Defined in: [packages/core/src/di/container.ts:79](https://github.com/nestelia/nestelia/blob/main/packages/core/src/di/container.ts#L79)
 
 #### Returns
 
@@ -257,7 +257,7 @@ Defined in: [packages/core/src/di/container.ts:74](https://github.com/nestelia/n
 getModuleByKey(key): Module | undefined;
 ```
 
-Defined in: [packages/core/src/di/container.ts:66](https://github.com/nestelia/nestelia/blob/main/packages/core/src/di/container.ts#L66)
+Defined in: [packages/core/src/di/container.ts:71](https://github.com/nestelia/nestelia/blob/main/packages/core/src/di/container.ts#L71)
 
 #### Parameters
 
@@ -277,7 +277,7 @@ Defined in: [packages/core/src/di/container.ts:66](https://github.com/nestelia/n
 getModules(): Map<string, Module>;
 ```
 
-Defined in: [packages/core/src/di/container.ts:62](https://github.com/nestelia/nestelia/blob/main/packages/core/src/di/container.ts#L62)
+Defined in: [packages/core/src/di/container.ts:67](https://github.com/nestelia/nestelia/blob/main/packages/core/src/di/container.ts#L67)
 
 #### Returns
 
@@ -291,7 +291,7 @@ Defined in: [packages/core/src/di/container.ts:62](https://github.com/nestelia/n
 isInitializedInSession(metatype): boolean;
 ```
 
-Defined in: [packages/core/src/di/container.ts:213](https://github.com/nestelia/nestelia/blob/main/packages/core/src/di/container.ts#L213)
+Defined in: [packages/core/src/di/container.ts:218](https://github.com/nestelia/nestelia/blob/main/packages/core/src/di/container.ts#L218)
 
 #### Parameters
 
@@ -311,7 +311,7 @@ Defined in: [packages/core/src/di/container.ts:213](https://github.com/nestelia/
 markInitializedInSession(metatype): void;
 ```
 
-Defined in: [packages/core/src/di/container.ts:217](https://github.com/nestelia/nestelia/blob/main/packages/core/src/di/container.ts#L217)
+Defined in: [packages/core/src/di/container.ts:222](https://github.com/nestelia/nestelia/blob/main/packages/core/src/di/container.ts#L222)
 
 #### Parameters
 
@@ -331,7 +331,7 @@ Defined in: [packages/core/src/di/container.ts:217](https://github.com/nestelia/
 register(providers, moduleKey?): void;
 ```
 
-Defined in: [packages/core/src/di/container.ts:251](https://github.com/nestelia/nestelia/blob/main/packages/core/src/di/container.ts#L251)
+Defined in: [packages/core/src/di/container.ts:256](https://github.com/nestelia/nestelia/blob/main/packages/core/src/di/container.ts#L256)
 
 #### Parameters
 
@@ -352,7 +352,7 @@ Defined in: [packages/core/src/di/container.ts:251](https://github.com/nestelia/
 registerControllers(controllers, moduleKey?): void;
 ```
 
-Defined in: [packages/core/src/di/container.ts:222](https://github.com/nestelia/nestelia/blob/main/packages/core/src/di/container.ts#L222)
+Defined in: [packages/core/src/di/container.ts:227](https://github.com/nestelia/nestelia/blob/main/packages/core/src/di/container.ts#L227)
 
 #### Parameters
 
@@ -367,13 +367,29 @@ Defined in: [packages/core/src/di/container.ts:222](https://github.com/nestelia/
 
 ***
 
+### create()
+
+```ts
+static create(): Container;
+```
+
+Defined in: [packages/core/src/di/container.ts:40](https://github.com/nestelia/nestelia/blob/main/packages/core/src/di/container.ts#L40)
+
+Creates a new, isolated container instance (for testing).
+
+#### Returns
+
+`Container`
+
+***
+
 ### getRequestContext()
 
 ```ts
 static getRequestContext(): RequestContext | undefined;
 ```
 
-Defined in: [packages/core/src/di/container.ts:280](https://github.com/nestelia/nestelia/blob/main/packages/core/src/di/container.ts#L280)
+Defined in: [packages/core/src/di/container.ts:285](https://github.com/nestelia/nestelia/blob/main/packages/core/src/di/container.ts#L285)
 
 #### Returns
 
@@ -387,7 +403,7 @@ Defined in: [packages/core/src/di/container.ts:280](https://github.com/nestelia/
 static runInRequestContext<R>(context, fn): R;
 ```
 
-Defined in: [packages/core/src/di/container.ts:284](https://github.com/nestelia/nestelia/blob/main/packages/core/src/di/container.ts#L284)
+Defined in: [packages/core/src/di/container.ts:289](https://github.com/nestelia/nestelia/blob/main/packages/core/src/di/container.ts#L289)
 
 #### Type Parameters
 

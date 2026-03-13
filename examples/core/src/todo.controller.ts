@@ -1,8 +1,11 @@
-import { t } from "elysia";
+import { t, type Static } from "elysia";
 
 import { Body, Controller, Delete, Get, Param, Post, Put } from "nestelia";
 
 import { TodoService } from "./todo.service";
+
+const IdParams = t.Object({ id: t.String() });
+const TodoBody = t.Object({ title: t.String() });
 
 @Controller("/todos")
 export class TodoController {
@@ -14,21 +17,21 @@ export class TodoController {
   }
 
   @Get("/:id")
-  getOne(@Param(t.Object({ id: t.String() })) params: { id: string }) {
+  getOne(@Param(IdParams) params: Static<typeof IdParams>) {
     const todo = this.todos.findOne(Number(params.id));
     if (!todo) return new Response("Not found", { status: 404 });
     return todo;
   }
 
   @Post("/")
-  create(@Body(t.Object({ title: t.String() })) body: { title: string }) {
+  create(@Body(TodoBody) body: Static<typeof TodoBody>) {
     return this.todos.create(body.title);
   }
 
   @Put("/:id")
   update(
-    @Param(t.Object({ id: t.String() })) params: { id: string },
-    @Body(t.Object({ title: t.String() })) body: { title: string },
+    @Param(IdParams) params: Static<typeof IdParams>,
+    @Body(TodoBody) body: Static<typeof TodoBody>,
   ) {
     const todo = this.todos.update(Number(params.id), body.title);
     if (!todo) return new Response("Not found", { status: 404 });
@@ -36,7 +39,7 @@ export class TodoController {
   }
 
   @Delete("/:id")
-  remove(@Param(t.Object({ id: t.String() })) params: { id: string }) {
+  remove(@Param(IdParams) params: Static<typeof IdParams>) {
     const ok = this.todos.remove(Number(params.id));
     if (!ok) return new Response("Not found", { status: 404 });
     return { success: true };

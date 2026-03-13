@@ -1,6 +1,11 @@
+import { t, type Static } from "elysia";
+
 import { Body, Controller, Get, Param, Post } from "nestelia";
 
 import { OrdersService } from "./orders.service";
+
+const CreateOrderBody = t.Object({ product: t.String(), amount: t.Number(), email: t.String() });
+const IdParams = t.Object({ id: t.String() });
 
 @Controller("/orders")
 export class OrdersController {
@@ -12,13 +17,13 @@ export class OrdersController {
   }
 
   @Post("/")
-  async create(@Body() body: { product: string; amount: number; email: string }) {
+  async create(@Body(CreateOrderBody) body: Static<typeof CreateOrderBody>) {
     return this.ordersService.create(body.product, body.amount, body.email);
   }
 
   @Post("/:id/ship")
-  async ship(@Param("id") id: string) {
-    const order = await this.ordersService.ship(id);
+  async ship(@Param(IdParams) params: Static<typeof IdParams>) {
+    const order = await this.ordersService.ship(params.id);
     if (!order) return { error: "Order not found" };
     return order;
   }

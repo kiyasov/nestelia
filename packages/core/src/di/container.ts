@@ -36,6 +36,11 @@ export class Container {
     return Container._instance;
   }
 
+  /** Creates a new, isolated container instance (for testing). */
+  public static create(): Container {
+    return new Container();
+  }
+
   public addModule(metatype: Type, token: string): Module {
     // Check if module already exists by token
     if (this._modules.has(token)) {

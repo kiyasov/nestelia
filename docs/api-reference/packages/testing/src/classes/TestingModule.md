@@ -1,6 +1,6 @@
 # Class: TestingModule
 
-Defined in: [packages/testing/src/testing.module-builder.ts:289](https://github.com/nestelia/nestelia/blob/main/packages/testing/src/testing.module-builder.ts#L289)
+Defined in: [packages/testing/src/testing.module-builder.ts:284](https://github.com/nestelia/nestelia/blob/main/packages/testing/src/testing.module-builder.ts#L284)
 
 Compiled testing module with methods to access providers
 
@@ -14,7 +14,7 @@ Compiled testing module with methods to access providers
 get container(): Container;
 ```
 
-Defined in: [packages/testing/src/testing.module-builder.ts:367](https://github.com/nestelia/nestelia/blob/main/packages/testing/src/testing.module-builder.ts#L367)
+Defined in: [packages/testing/src/testing.module-builder.ts:362](https://github.com/nestelia/nestelia/blob/main/packages/testing/src/testing.module-builder.ts#L362)
 
 Get the container instance
 
@@ -32,7 +32,7 @@ Get the container instance
 get module(): Module;
 ```
 
-Defined in: [packages/testing/src/testing.module-builder.ts:360](https://github.com/nestelia/nestelia/blob/main/packages/testing/src/testing.module-builder.ts#L360)
+Defined in: [packages/testing/src/testing.module-builder.ts:355](https://github.com/nestelia/nestelia/blob/main/packages/testing/src/testing.module-builder.ts#L355)
 
 Get the module reference
 
@@ -48,7 +48,7 @@ Get the module reference
 new TestingModule(_module, _container): TestingModule;
 ```
 
-Defined in: [packages/testing/src/testing.module-builder.ts:290](https://github.com/nestelia/nestelia/blob/main/packages/testing/src/testing.module-builder.ts#L290)
+Defined in: [packages/testing/src/testing.module-builder.ts:285](https://github.com/nestelia/nestelia/blob/main/packages/testing/src/testing.module-builder.ts#L285)
 
 #### Parameters
 
@@ -69,7 +69,7 @@ Defined in: [packages/testing/src/testing.module-builder.ts:290](https://github.
 get<T>(token): T;
 ```
 
-Defined in: [packages/testing/src/testing.module-builder.ts:299](https://github.com/nestelia/nestelia/blob/main/packages/testing/src/testing.module-builder.ts#L299)
+Defined in: [packages/testing/src/testing.module-builder.ts:294](https://github.com/nestelia/nestelia/blob/main/packages/testing/src/testing.module-builder.ts#L294)
 
 Get a provider instance from the module.
 Synchronous - returns already resolved instance.
@@ -98,7 +98,7 @@ Synchronous - returns already resolved instance.
 has(token): boolean;
 ```
 
-Defined in: [packages/testing/src/testing.module-builder.ts:348](https://github.com/nestelia/nestelia/blob/main/packages/testing/src/testing.module-builder.ts#L348)
+Defined in: [packages/testing/src/testing.module-builder.ts:343](https://github.com/nestelia/nestelia/blob/main/packages/testing/src/testing.module-builder.ts#L343)
 
 Check if provider exists in module
 
@@ -120,7 +120,7 @@ Check if provider exists in module
 resolve<T>(token): Promise<T>;
 ```
 
-Defined in: [packages/testing/src/testing.module-builder.ts:333](https://github.com/nestelia/nestelia/blob/main/packages/testing/src/testing.module-builder.ts#L333)
+Defined in: [packages/testing/src/testing.module-builder.ts:328](https://github.com/nestelia/nestelia/blob/main/packages/testing/src/testing.module-builder.ts#L328)
 
 Resolve a provider instance (async, for request-scoped providers)
 
