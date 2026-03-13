@@ -122,7 +122,7 @@ export class Container {
       // For transient providers, always create a fresh instance
       if (wrapper.isTransient) {
         const transientCtx: ContextId = { id: Symbol("transient") };
-        await this._injector.loadInstance(wrapper, moduleRef, transientCtx);
+        await this._injector.loadInstance(wrapper, wrapper.host ?? moduleRef, transientCtx);
         const resolved = wrapper.getInstanceByContextId(transientCtx);
         return resolved.instance as T;
       }
@@ -131,7 +131,7 @@ export class Container {
       if (instancePerContext.isResolved) {
         return instancePerContext.instance as T;
       }
-      await this._injector.loadInstance(wrapper, moduleRef, contextId);
+      await this._injector.loadInstance(wrapper, wrapper.host ?? moduleRef, contextId);
       const resolved = wrapper.getInstanceByContextId(contextId);
       return resolved.instance as T;
     };
