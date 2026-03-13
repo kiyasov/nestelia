@@ -8,7 +8,7 @@ import {
   MODULE_METADATA,
 } from "../decorators/constants";
 import type { ModuleOptions } from "../decorators/types";
-import { Container, DIContainer, isCustomProvider, Scope, type Type } from "../di";
+import { Container, DIContainer, isCustomProvider, type Type } from "../di";
 import { APP_FILTER } from "../di/constants";
 import type { Provider } from "../di/provider.interface";
 import { type ElysiaNestMiddleware, isClassMiddleware } from "../interfaces/middleware.interface";
@@ -18,7 +18,6 @@ import { setupController } from "./controller-setup";
 import { addGlobalExceptionFilter, applyExceptionFilters } from "./exception-filter.registry";
 import {
   type DynamicModule,
-  extractProviderInfo,
   getModuleClass,
   initializeSingletonProviders,
   isDecoratedModule,
@@ -255,31 +254,6 @@ export function createElysiaPlugin(
         metadata.controllers.map((controllerClass) =>
           setupController(app, controllerClass, moduleinstance, prefix, classMiddlewares),
         ),
-      );
-    }
-
-    if (metadata?.providers?.length) {
-      const singletonProviders = metadata.providers
-        .map((provider) => ({ provider, ...extractProviderInfo(provider) }))
-        .filter(({ token, scope }) => token && scope === Scope.SINGLETON);
-
-      await Promise.all(
-        singletonProviders.map(async ({ token }) => {
-          try {
-            const instance = await DIContainer.get(token!, moduleinstance as Type<unknown>);
-            if (
-              instance &&
-              typeof (instance as { onModuleInit?: () => Promise<void> | void }).onModuleInit ===
-                "function" &&
-              !(instance as { __onModuleInitCalled?: boolean }).__onModuleInitCalled
-            ) {
-              await (instance as { onModuleInit: () => Promise<void> | void }).onModuleInit();
-              (instance as { __onModuleInitCalled?: boolean }).__onModuleInitCalled = true;
-            }
-          } catch (e) {
-            Logger.error(`Error in local provider:`, e);
-          }
-        }),
       );
     }
 
