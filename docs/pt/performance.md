@@ -15,8 +15,19 @@ Nestelia adiciona uma camada fina de decoradores e injeção de dependência sob
 <PerformanceChart
   :results="benchmarkResults"
   compare-to="Nestelia"
-  methodology="Medido em requisições/segundo. GET / → texto puro 'Hello World'. 500 conexões, 10 segundos de duração."
+  methodology="Média de reqs/s em 5 cenários. 500 conexões, 10s por cenário. macOS arm64, Bun 1.3, Node 24."
 />
+
+## Resultados por cenário
+
+| Cenário | Nestelia | Elysia | Fastify | Express | NestJS |
+|---|---:|---:|---:|---:|---:|
+| **Plain Text** GET / | 75,868 | 77,912 | 47,946 | 40,605 | 39,098 |
+| **JSON** GET /json | 75,232 | 78,548 | 45,279 | 38,472 | 36,752 |
+| **Path Params** GET /user/:id | 58,854 | 76,953 | 45,867 | 38,658 | 28,003 |
+| **POST JSON** POST /user | 51,266 | 64,383 | 30,567 | 34,119 | 24,707 |
+| **DI + Service** GET /users | 73,983 | 77,585 | 44,757 | 38,126 | 25,550 |
+| **Média** | **67,041** | **75,076** | **42,883** | **37,996** | **30,822** |
 
 ## Como reproduzir
 
@@ -27,11 +38,11 @@ cd benchmark && bun install && cd ..
 # Instalar ferramenta de teste de carga
 brew install bombardier
 
-# Executar todos os benchmarks
-bun benchmark/run.ts
+# Executar todos os benchmarks (5 cenários × 5 frameworks)
+bun run bench
 
 # Ou executar frameworks específicos
-bun benchmark/run.ts nestelia elysia fastify
+bun run bench nestelia elysia fastify
 ```
 
 ## Por que o Nestelia é rápido?
@@ -43,5 +54,7 @@ Nestelia resolve toda a injeção de dependência, conexão de módulos e regist
 | Runtime | Bun | Node.js |
 | Camada HTTP | Elysia | Express (padrão) |
 | Resolução DI | Na inicialização | Na inicialização |
+| Reflexão de metadados | Cache na inicialização | Por requisição |
+| Contexto da requisição | Caminho rápido ignora | Sempre criado |
 | Cadeia de middleware | Nenhuma (handlers Elysia) | Stack de middleware Express |
 | Validação | Elysia TypeBox (compilação) | class-validator (reflexão em runtime) |

@@ -1109,7 +1109,7 @@ Implement these interfaces on your `@Injectable()` services or controllers:
 
 ### OnModuleInit
 
-Called once the module's providers have been instantiated:
+Called once **all** providers across all modules have been instantiated. This guarantees that any provider can be safely retrieved via `ModuleRef` at this point:
 
 ```typescript
 import { Injectable, OnModuleInit } from "nestelia";
@@ -1119,6 +1119,22 @@ class DatabaseService implements OnModuleInit {
   async onModuleInit() {
     await this.connect();
     console.log("Database connected");
+  }
+}
+```
+
+You can use `ModuleRef` to dynamically retrieve another provider inside `onModuleInit`:
+
+```typescript
+import { Injectable, ModuleRef, OnModuleInit } from "nestelia";
+
+@Injectable()
+class CacheService implements OnModuleInit {
+  constructor(private moduleRef: ModuleRef) {}
+
+  onModuleInit() {
+    const db = this.moduleRef.get(DatabaseService);
+    console.log(`Cache connected to ${db.getUrl()}`);
   }
 }
 ```
@@ -2501,6 +2517,98 @@ async me(@Context("user") user: User, @Info() info: GraphQLResolveInfo) {
   return user;
 }
 ```
+
+## File Uploads
+
+Nestelia implements the [GraphQL multipart request spec](https://github.com/jaydenseric/graphql-multipart-request-spec).
+No extra packages needed — `GraphQLUpload` and `UploadedFile` are built in.
+
+### Single file
+
+```typescript
+import { GraphQLUpload, type UploadedFile } from "nestelia/apollo";
+
+@Mutation(() => UploadResult)
+async uploadFile(
+  @Args("file", { type: () => GraphQLUpload }) file: Promise<UploadedFile>,
+): Promise<UploadResult> {
+  const upload = await file;
+  // upload.filename, upload.mimetype, upload.size, upload.stream
+  return { filename: upload.filename, mimetype: upload.mimetype, size: upload.size };
+}
+```
+
+### Multiple files
+
+```typescript
+@Mutation(() => MultiUploadResult)
+async uploadFiles(
+  @Args("files", { type: () => [GraphQLUpload] }) files: Promise<UploadedFile>[],
+): Promise<MultiUploadResult> {
+  const uploads = await Promise.all(files);
+  return {
+    count: uploads.length,
+    totalSize: uploads.reduce((sum, f) => sum + f.size, 0),
+  };
+}
+```
+
+### Streaming to disk
+
+```typescript
+import { createWriteStream } from "node:fs";
+import { Writable } from "node:stream";
+
+@Mutation(() => UploadResult)
+async uploadFile(
+  @Args("file", { type: () => GraphQLUpload }) file: Promise<UploadedFile>,
+): Promise<UploadResult> {
+  const upload = await file;
+  const dest = createWriteStream(`./uploads/${upload.filename}`);
+  await upload.stream.pipeTo(Writable.toWeb(dest));
+  return { filename: upload.filename, mimetype: upload.mimetype, size: upload.size };
+}
+```
+
+### Example multipart request
+
+```
+operations: {"query":"mutation($file:Upload!){uploadFile(file:$file){filename size}}","variables":{"file":null}}
+map:        {"0":["variables.file"]}
+0:          <binary file data>
+```
+
+### `UploadedFile` interface
+
+| Property | Type | Description |
+|----------|------|-------------|
+| `filename` | `string` | Original file name |
+| `mimetype` | `string` | MIME type |
+| `size` | `number` | Size in bytes |
+| `stream` | `ReadableStream` | Web Streams readable stream |
+| `blob()` | `Promise<Blob>` | Read as Blob |
+| `arrayBuffer()` | `Promise<ArrayBuffer>` | Read as ArrayBuffer |
+| `text()` | `Promise<string>` | Read as string |
+
+### Upload limits
+
+Pass an `UploadOptions` object as the second argument to `processMultipartRequest` to enforce per-request limits:
+
+```typescript
+import { processMultipartRequest, type UploadOptions } from "nestelia/apollo";
+
+const options: UploadOptions = {
+  maxFiles: 5,              // max files per request (default: 10)
+  maxFileSize: 10_485_760,  // 10 MB per file
+};
+
+const operations = await processMultipartRequest(body, options);
+```
+
+| Option | Type | Default | Description |
+|--------|------|---------|-------------|
+| `maxFiles` | `number` | `10` | Maximum number of files per request |
+| `maxFileSize` | `number` | — | Maximum file size in bytes. No limit if omitted |
 
 ## Guards on Resolvers
 
