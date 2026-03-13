@@ -4,7 +4,7 @@ import { beforeEach, describe, expect, it } from "bun:test";
 
 import { Global } from "~/src/decorators/index";
 import { Container } from "~/src/di/container";
-import { Injectable } from "~/src/di/injectable.decorator";
+import { Inject, Injectable } from "~/src/di/injectable.decorator";
 import { ModuleRef } from "~/src/di/module-ref";
 import { initializeSingletonProviders } from "~/src/core/module.utils";
 
@@ -178,6 +178,165 @@ describe("@Global() module", () => {
 
     const service = await container.get<LateService>(LateService, LateModule);
     expect(service!.shared.name).toBe("shared");
+  });
+});
+
+describe("same module imported by multiple parents", () => {
+  let container: Container;
+
+  beforeEach(() => {
+    Container.instance.clear();
+    container = Container.instance;
+  });
+
+  it("shared module providers are singletons across all importers", async () => {
+    @Injectable()
+    class SharedService {
+      count = 0;
+      inc() {
+        return ++this.count;
+      }
+    }
+
+    @Injectable()
+    class ModuleAService {
+      constructor(public shared: SharedService) {}
+    }
+
+    @Injectable()
+    class ModuleBService {
+      constructor(public shared: SharedService) {}
+    }
+
+    class SharedModule {}
+    class ModuleA {}
+    class ModuleB {}
+    class AppModule {}
+
+    const sharedMod = container.addModule(SharedModule, "SharedModule");
+    sharedMod.addProvider(SharedService);
+
+    const modA = container.addModule(ModuleA, "ModuleA");
+    modA.addProvider(ModuleAService);
+    modA.addImport(sharedMod);
+
+    const modB = container.addModule(ModuleB, "ModuleB");
+    modB.addProvider(ModuleBService);
+    modB.addImport(sharedMod);
+
+    const appMod = container.addModule(AppModule, "AppModule");
+    appMod.addImport(modA);
+    appMod.addImport(modB);
+
+    const svcA = await container.get<ModuleAService>(ModuleAService, ModuleA);
+    const svcB = await container.get<ModuleBService>(ModuleBService, ModuleB);
+
+    // Both reference the same SharedService singleton
+    expect(svcA!.shared).toBe(svcB!.shared);
+    svcA!.shared.inc();
+    expect(svcB!.shared.count).toBe(1);
+  });
+});
+
+describe("cross-module onModuleInit", () => {
+  let container: Container;
+
+  beforeEach(() => {
+    Container.instance.clear();
+    container = Container.instance;
+  });
+
+  it("onModuleInit in sub-module can access its own cross-module dependencies", async () => {
+    const events: string[] = [];
+
+    @Injectable()
+    class RepoService {
+      find() {
+        return ["item-1"];
+      }
+    }
+
+    @Injectable()
+    class BusinessService {
+      constructor(public repo: RepoService) {}
+
+      onModuleInit() {
+        const items = this.repo.find();
+        events.push(`init:${items[0]}`);
+      }
+    }
+
+    class RepoModule {}
+    class BusinessModule {}
+    class AppModule {}
+
+    const repoMod = container.addModule(RepoModule, "RepoModule");
+    repoMod.addProvider(RepoService);
+
+    const bizMod = container.addModule(BusinessModule, "BusinessModule");
+    bizMod.addProvider(BusinessService);
+    bizMod.addImport(repoMod);
+
+    const appMod = container.addModule(AppModule, "AppModule");
+    appMod.addImport(bizMod);
+
+    await initializeSingletonProviders();
+
+    expect(events).toEqual(["init:item-1"]);
+  });
+
+  it("onModuleInit is not called twice when initializeSingletonProviders runs multiple times", async () => {
+    const calls: string[] = [];
+
+    class RootModule {}
+
+    @Injectable()
+    class SingletonService {
+      onModuleInit() {
+        calls.push("init");
+      }
+    }
+
+    const rootMod = container.addModule(RootModule, "RootModule");
+    rootMod.addProvider(SingletonService);
+
+    await initializeSingletonProviders();
+    await initializeSingletonProviders(); // second call (simulates module factory re-entrant call)
+
+    expect(calls).toHaveLength(1);
+  });
+});
+
+describe("custom provider tokens in cross-module DI", () => {
+  let container: Container;
+
+  beforeEach(() => {
+    Container.instance.clear();
+    container = Container.instance;
+  });
+
+  it("useValue provider from imported module is accessible to dependent service", async () => {
+    const CONFIG_TOKEN = "CONFIG";
+
+    @Injectable()
+    class AppService {
+      constructor(@Inject(CONFIG_TOKEN) public config: { env: string }) {}
+    }
+
+    class ConfigModule {}
+    class AppModule {}
+
+    const configMod = container.addModule(ConfigModule, "ConfigModule");
+    configMod.addProvider({ provide: CONFIG_TOKEN, useValue: { env: "test" } });
+
+    const appMod = container.addModule(AppModule, "AppModule");
+    appMod.addProvider(AppService);
+    appMod.addImport(configMod);
+
+    const service = await container.get<AppService>(AppService, AppModule);
+
+    expect(service).toBeDefined();
+    expect(service!.config.env).toBe("test");
   });
 });
 

@@ -19,7 +19,6 @@ import { addGlobalExceptionFilter, applyExceptionFilters } from "./exception-fil
 import {
   type DynamicModule,
   getModuleClass,
-  initializeSingletonProviders,
   isDecoratedModule,
   isDynamicModule,
 } from "./module.utils";
@@ -246,8 +245,6 @@ export function createElysiaPlugin(
         moduleinstance as Type<any>,
       );
     }
-
-    await initializeSingletonProviders();
 
     if (metadata?.controllers?.length) {
       await Promise.all(

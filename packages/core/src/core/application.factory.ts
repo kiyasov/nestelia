@@ -4,6 +4,7 @@ import type { ModuleOptions } from "../decorators/types";
 import { Container, type Type } from "../di";
 import type { ExceptionFilter } from "../exceptions";
 import { validateTsConfig } from "./helpers";
+import { initializeSingletonProviders } from "./module.utils";
 
 // Module factory type - accepts any function (module created by @Module decorator)
 // eslint-disable-next-line @typescript-eslint/no-unsafe-function-type
@@ -42,6 +43,11 @@ export async function createElysiaApplication(
   Container.instance.beginInitSession();
 
   const elysiaApp = await rootModule();
+
+  // All modules are now registered and import relationships are fully wired.
+  // Call initializeSingletonProviders once here so that cross-module dependency
+  // lookups succeed for every provider regardless of initialization order.
+  await initializeSingletonProviders();
 
   // Get module metadata to extract controllers
   const moduleMetadata: ModuleOptions = Reflect.getMetadata(MODULE_METADATA, rootModule) || {};

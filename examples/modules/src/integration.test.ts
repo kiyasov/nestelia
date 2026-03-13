@@ -44,6 +44,16 @@ describe("cross-module DI integration (createElysiaApplication)", () => {
     expect(await res.json()).toEqual([]);
   });
 
+  it("OrdersService can call appName() from global ConfigModule", async () => {
+    // Verifies that a service in OrdersModule can access ConfigService from ConfigModule
+    // (which is @Global), testing the global provider binding path.
+    const res = await server.handle(
+      new Request("http://localhost/orders/app-name", { method: "GET" }),
+    );
+    expect(res.status).toBe(200);
+    expect(await res.text()).toContain("nestelia-modules-example");
+  });
+
   it("full cross-module flow: create user then create order", async () => {
     // Create user
     const userRes = await server.handle(

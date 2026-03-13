@@ -13,6 +13,11 @@ export class OrdersController {
     return this.orders.findAll();
   }
 
+  @Get("/app-name")
+  appName() {
+    return this.orders.appName();
+  }
+
   @Post("/")
   create(
     @Body(t.Object({ userId: t.Number(), item: t.String() }))

@@ -57,7 +57,7 @@ function createElysiaPlugin(
 }>>;
 ```
 
-Defined in: [packages/core/src/core/elysia-plugin.factory.ts:32](https://github.com/nestelia/nestelia/blob/main/packages/core/src/core/elysia-plugin.factory.ts#L32)
+Defined in: [packages/core/src/core/elysia-plugin.factory.ts:31](https://github.com/nestelia/nestelia/blob/main/packages/core/src/core/elysia-plugin.factory.ts#L31)
 
 Helper function to create the Elysia plugin from module metadata.
 
