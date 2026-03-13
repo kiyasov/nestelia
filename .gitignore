@@ -36,6 +36,6 @@ docs/node_modules
 
 # Benchmark
 benchmark/node_modules
-benchmark/results.json
+benchmark/results*.json
 !benchmark/src/express.js
 !benchmark/src/fastify.js

@@ -9,7 +9,7 @@ import { resolve } from "node:path";
 const DURATION = process.env.DURATION || "10s";
 const CONNECTIONS = Number(process.env.CONNECTIONS) || 500;
 const PORT = 3000;
-const WARMUP_DURATION = "3s";
+const WARMUP_DURATION = "2s";
 const WARMUP_CONNECTIONS = 50;
 const ROOT = resolve(import.meta.dir, "..");
 const BENCH_DIR = import.meta.dir;
@@ -21,16 +21,61 @@ interface Framework {
   runtime: string;
   cmd: string[];
   cwd: string;
-  env?: Record<string, string>;
 }
 
-interface BenchResult {
+interface Scenario {
   name: string;
+  description: string;
+  method: "GET" | "POST";
+  path: string;
+  body?: string;
+  contentType?: string;
+}
+
+interface Result {
+  scenario: string;
+  framework: string;
   runtime: string;
   reqsPerSec: number;
-  latencyAvg: number; // microseconds
-  latencyP99: number; // microseconds
+  latencyAvgUs: number;
 }
+
+// ── Scenarios ────────────────────────────────────────────────────────────────
+
+const scenarios: Scenario[] = [
+  {
+    name: "Plain Text",
+    description: 'GET / → "Hello World"',
+    method: "GET",
+    path: "/",
+  },
+  {
+    name: "JSON",
+    description: "GET /json → JSON object",
+    method: "GET",
+    path: "/json",
+  },
+  {
+    name: "Path Params",
+    description: "GET /user/:id → lookup by ID",
+    method: "GET",
+    path: "/user/2",
+  },
+  {
+    name: "POST JSON",
+    description: "POST /user → parse body, create",
+    method: "POST",
+    path: "/user",
+    body: '{"name":"test","email":"test@test.com"}',
+    contentType: "application/json",
+  },
+  {
+    name: "DI + Service",
+    description: "GET /users → service → array",
+    method: "GET",
+    path: "/users",
+  },
+];
 
 // ── Frameworks ───────────────────────────────────────────────────────────────
 
@@ -69,17 +114,29 @@ const frameworks: Framework[] = [
 
 // ── Helpers ──────────────────────────────────────────────────────────────────
 
-function detectBenchTool(): "bombardier" | "oha" | null {
+const RESET = "\x1b[0m";
+const BOLD = "\x1b[1m";
+const DIM = "\x1b[2m";
+const MAGENTA = "\x1b[35m";
+const CYAN = "\x1b[36m";
+const YELLOW = "\x1b[33m";
+const GREEN = "\x1b[32m";
+const RED = "\x1b[31m";
+
+const COLORS: Record<string, string> = {
+  Nestelia: MAGENTA,
+  Elysia: CYAN,
+  Fastify: YELLOW,
+  Express: GREEN,
+  NestJS: RED,
+};
+
+function detectBenchTool(): "bombardier" | null {
   try {
     execSync("which bombardier", { stdio: "ignore" });
     return "bombardier";
   } catch {
-    try {
-      execSync("which oha", { stdio: "ignore" });
-      return "oha";
-    } catch {
-      return null;
-    }
+    return null;
   }
 }
 
@@ -89,21 +146,34 @@ async function waitForServer(port: number, timeout = 15000): Promise<boolean> {
     try {
       const res = await fetch(`http://localhost:${port}/`);
       if (res.ok) return true;
-    } catch {
-      // not ready yet
-    }
+    } catch {}
     await Bun.sleep(100);
   }
   return false;
 }
 
+async function waitForPortFree(port: number, timeout = 5000): Promise<void> {
+  const start = Date.now();
+  while (Date.now() - start < timeout) {
+    try {
+      await fetch(`http://localhost:${port}/`);
+      await Bun.sleep(200);
+    } catch {
+      return;
+    }
+  }
+  try {
+    execSync(`lsof -ti :${port} | xargs kill -9`, { stdio: "ignore" });
+    await Bun.sleep(500);
+  } catch {}
+}
+
 function startServer(fw: Framework): ReturnType<typeof spawn> {
-  const proc = spawn(fw.cmd[0], fw.cmd.slice(1), {
+  return spawn(fw.cmd[0], fw.cmd.slice(1), {
     cwd: fw.cwd,
-    env: { ...process.env, PORT: String(PORT), ...fw.env },
+    env: { ...process.env, PORT: String(PORT) },
     stdio: ["ignore", "pipe", "pipe"],
   });
-  return proc;
 }
 
 async function killServer(proc: ReturnType<typeof spawn>) {
@@ -115,320 +185,193 @@ async function killServer(proc: ReturnType<typeof spawn>) {
       resolve();
     }, 3000);
   });
-  // Ensure port is fully released
   await waitForPortFree(PORT);
 }
 
-async function waitForPortFree(port: number, timeout = 5000): Promise<void> {
-  const start = Date.now();
-  while (Date.now() - start < timeout) {
-    try {
-      await fetch(`http://localhost:${port}/`);
-      // Still responding — wait
-      await Bun.sleep(200);
-    } catch {
-      return; // Port is free
-    }
+function runBombardier(scenario: Scenario, duration: string, connections: number): string {
+  const url = `http://localhost:${PORT}${scenario.path}`;
+  let cmd = `bombardier -c ${connections} -d ${duration} --print r --format json`;
+
+  if (scenario.method === "POST") {
+    cmd += ` -m POST`;
+    if (scenario.body) cmd += ` -b '${scenario.body}'`;
+    if (scenario.contentType) cmd += ` -H "Content-Type: ${scenario.contentType}"`;
   }
-  // Force kill anything on this port
-  try {
-    execSync(`lsof -ti :${port} | xargs kill -9`, { stdio: "ignore" });
-    await Bun.sleep(500);
-  } catch {
-    // nothing to kill
-  }
+
+  return execSync(`${cmd} ${url}`, { encoding: "utf-8", timeout: 120000 });
 }
 
-function runBombardier(
-  port: number,
-  duration: string,
-  connections: number,
-): string {
-  return execSync(
-    `bombardier -c ${connections} -d ${duration} --print r --format json http://localhost:${port}/`,
-    { encoding: "utf-8", timeout: 120000 },
-  );
-}
-
-function runOha(
-  port: number,
-  duration: string,
-  connections: number,
-): string {
-  return execSync(
-    `oha -c ${connections} -z ${duration} --json http://localhost:${port}/`,
-    { encoding: "utf-8", timeout: 120000 },
-  );
-}
-
-function parseBombardierResult(json: string): {
-  reqsPerSec: number;
-  latencyAvg: number;
-  latencyP99: number;
-} {
+function parseResult(json: string): { reqsPerSec: number; latencyAvgUs: number } {
   const data = JSON.parse(json);
   return {
     reqsPerSec: Math.round(data.result.rps.mean),
-    latencyAvg: data.result.latency.mean, // microseconds
-    latencyP99: data.result.latency.max,  // bombardier doesn't expose p99 latency in JSON
+    latencyAvgUs: Math.round(data.result.latency.mean),
   };
 }
 
-function parseOhaResult(json: string): {
-  reqsPerSec: number;
-  latencyAvg: number;
-  latencyP99: number;
-} {
-  const data = JSON.parse(json);
-  return {
-    reqsPerSec: Math.round(data.summary.requestsPerSec),
-    latencyAvg: data.summary.average * 1_000_000, // seconds to microseconds
-    latencyP99: (data.latencyPercentiles?.p99 ?? 0) * 1_000_000,
-  };
-}
-
-function formatNumber(n: number): string {
+function fmt(n: number): string {
   return n.toLocaleString("en-US");
 }
 
-function formatLatency(us: number): string {
-  if (us < 1000) return `${us.toFixed(0)} us`;
-  return `${(us / 1000).toFixed(2)} ms`;
-}
+// ── Display ──────────────────────────────────────────────────────────────────
 
-// ── Bar chart display ────────────────────────────────────────────────────────
+function printResults(results: Result[], toRun: Framework[]) {
+  const scenarioNames = scenarios.map((s) => s.name);
+  const frameworkNames = toRun.map((f) => f.name);
+  const BAR_WIDTH = 40;
 
-const RESET = "\x1b[0m";
-const BOLD = "\x1b[1m";
-const DIM = "\x1b[2m";
-const MAGENTA = "\x1b[35m";
-const CYAN = "\x1b[36m";
-const YELLOW = "\x1b[33m";
-const GREEN = "\x1b[32m";
-const RED = "\x1b[31m";
-const GRAY = "\x1b[90m";
+  // Per-scenario bar charts
+  for (const sName of scenarioNames) {
+    const rows = results
+      .filter((r) => r.scenario === sName)
+      .sort((a, b) => b.reqsPerSec - a.reqsPerSec);
+    if (rows.length === 0) continue;
 
-const COLORS: Record<string, string> = {
-  Nestelia: MAGENTA,
-  Elysia: CYAN,
-  Fastify: YELLOW,
-  Express: GREEN,
-  NestJS: RED,
-};
+    const scenario = scenarios.find((s) => s.name === sName)!;
+    const maxRps = rows[0].reqsPerSec;
 
-function printResults(results: BenchResult[]) {
-  const sorted = [...results].sort((a, b) => b.reqsPerSec - a.reqsPerSec);
-  const maxRps = sorted[0].reqsPerSec;
-  const BAR_WIDTH = 45;
+    console.log();
+    console.log(`  ${BOLD}${sName}${RESET} ${DIM}${scenario.description}${RESET}`);
+    console.log(`  ${DIM}${"─".repeat(64)}${RESET}`);
 
+    for (const r of rows) {
+      const c = COLORS[r.framework] || "";
+      const barLen = Math.round((r.reqsPerSec / maxRps) * BAR_WIDTH);
+      console.log(
+        `  ${c}${BOLD}${r.framework.padEnd(10)}${RESET} ${DIM}${r.runtime.padEnd(5)}${RESET} ${c}${"█".repeat(barLen)}${RESET}${" ".repeat(BAR_WIDTH - barLen)} ${BOLD}${fmt(r.reqsPerSec).padStart(7)}${RESET} reqs/s`,
+      );
+    }
+  }
+
+  // Summary table
   console.log();
-  console.log(
-    `${BOLD}  ╔══════════════════════════════════════════════════════════════════════╗${RESET}`,
-  );
-  console.log(
-    `${BOLD}  ║                       Benchmark Results                             ║${RESET}`,
-  );
-  console.log(
-    `${BOLD}  ║            GET / → "Hello World" (plain text)                       ║${RESET}`,
-  );
-  console.log(
-    `${BOLD}  ╚══════════════════════════════════════════════════════════════════════╝${RESET}`,
-  );
+  console.log(`  ${BOLD}Summary (reqs/s)${RESET}`);
   console.log();
 
-  for (const r of sorted) {
-    const color = COLORS[r.name] || GRAY;
-    const barLen = Math.round((r.reqsPerSec / maxRps) * BAR_WIDTH);
-    const bar = "█".repeat(barLen);
-    const empty = " ".repeat(BAR_WIDTH - barLen);
-    const name = r.name.padEnd(10);
-    const runtime = r.runtime.padEnd(5);
+  const header = `  ${BOLD}${"".padEnd(12)}${scenarioNames.map((s) => s.padStart(12)).join("")}${"Avg".padStart(12)}${RESET}`;
+  console.log(header);
+  console.log(`  ${DIM}${"─".repeat(12 + scenarioNames.length * 12 + 12)}${RESET}`);
 
-    console.log(
-      `  ${color}${BOLD}${name}${RESET} ${DIM}${runtime}${RESET} ${color}${bar}${RESET}${empty} ${BOLD}${formatNumber(r.reqsPerSec)}${RESET} reqs/s`,
-    );
+  const avgs = new Map<string, number>();
+  for (const fName of frameworkNames) {
+    const c = COLORS[fName] || "";
+    let row = `  ${c}${fName.padEnd(12)}${RESET}`;
+    let total = 0;
+    let count = 0;
+
+    for (const sName of scenarioNames) {
+      const r = results.find((r) => r.scenario === sName && r.framework === fName);
+      if (r) {
+        row += fmt(r.reqsPerSec).padStart(12);
+        total += r.reqsPerSec;
+        count++;
+      } else {
+        row += "—".padStart(12);
+      }
+    }
+
+    const avg = count > 0 ? Math.round(total / count) : 0;
+    avgs.set(fName, avg);
+    row += `${BOLD}${fmt(avg).padStart(12)}${RESET}`;
+    console.log(row);
+  }
+
+  // Comparisons
+  console.log();
+  const nesteliaAvg = avgs.get("Nestelia") ?? 0;
+  const elysiaAvg = avgs.get("Elysia") ?? 0;
+
+  if (elysiaAvg > 0 && nesteliaAvg > 0) {
+    const overhead = (((elysiaAvg - nesteliaAvg) / elysiaAvg) * 100).toFixed(1);
+    console.log(`  ${MAGENTA}${BOLD}~${overhead}%${RESET} avg overhead vs plain Elysia ${DIM}(DI + decorators + params)${RESET}`);
+  }
+
+  for (const [name, avg] of avgs) {
+    if (name === "Nestelia" || name === "Elysia" || avg === 0 || nesteliaAvg === 0) continue;
+    console.log(`  ${MAGENTA}${BOLD}${(nesteliaAvg / avg).toFixed(1)}x${RESET} faster than ${name} ${DIM}(avg)${RESET}`);
   }
 
   console.log();
-  console.log(`  ${DIM}${"─".repeat(68)}${RESET}`);
-  console.log();
-
-  // Comparisons: always use Nestelia as the base
-  const nestelia = sorted.find((r) => r.name === "Nestelia") ?? sorted[0];
-  const color = COLORS[nestelia.name] || MAGENTA;
-
-  // Show Elysia comparison if present (as "near-zero overhead")
-  const elysia = sorted.find((r) => r.name === "Elysia");
-  if (elysia && nestelia.name === "Nestelia") {
-    const overhead = (((elysia.reqsPerSec - nestelia.reqsPerSec) / elysia.reqsPerSec) * 100).toFixed(1);
-    console.log(
-      `  ${color}${BOLD}~${overhead}%${RESET} overhead vs plain Elysia ${DIM}(DI + decorators)${RESET}`,
-    );
-  }
-
-  for (const r of sorted) {
-    if (r.name === "Nestelia" || r.name === "Elysia") continue;
-    const multiplier = (nestelia.reqsPerSec / r.reqsPerSec).toFixed(1);
-    console.log(
-      `  ${color}${BOLD}${multiplier}x${RESET} faster than ${r.name} ${DIM}(${r.runtime})${RESET}`,
-    );
-  }
-
-  console.log();
-
-  // Detailed table
-  console.log(
-    `  ${BOLD}${"Framework".padEnd(12)} ${"Runtime".padEnd(8)} ${"Reqs/s".padStart(12)} ${"Avg Latency".padStart(14)} ${"P99 Latency".padStart(14)}${RESET}`,
-  );
-  console.log(`  ${DIM}${"─".repeat(62)}${RESET}`);
-
-  for (const r of sorted) {
-    const color = COLORS[r.name] || "";
-    console.log(
-      `  ${color}${r.name.padEnd(12)}${RESET} ${DIM}${r.runtime.padEnd(8)}${RESET} ${formatNumber(r.reqsPerSec).padStart(12)} ${formatLatency(r.latencyAvg).padStart(14)} ${formatLatency(r.latencyP99).padStart(14)}`,
-    );
-  }
-
-  console.log();
-  console.log(
-    `  ${DIM}Measured with ${CONNECTIONS} connections over ${DURATION}. Higher is better.${RESET}`,
-  );
+  console.log(`  ${DIM}${CONNECTIONS} connections, ${DURATION} per scenario. Higher is better.${RESET}`);
   console.log();
 }
 
 // ── Main ─────────────────────────────────────────────────────────────────────
 
 async function main() {
-  const tool = detectBenchTool();
-
-  if (!tool) {
-    console.error(`
-  No HTTP benchmark tool found. Install one of:
-
-    brew install bombardier    ${DIM}(recommended)${RESET}
-    brew install oha
-
-  Then re-run: bun benchmark/run.ts
-`);
+  if (!detectBenchTool()) {
+    console.error(`\n  bombardier not found. Install: brew install bombardier\n`);
     process.exit(1);
   }
 
   console.log();
-  console.log(
-    `  ${BOLD}Nestelia Benchmark${RESET} ${DIM}(using ${tool}, ${CONNECTIONS} connections, ${DURATION})${RESET}`,
-  );
-  console.log();
+  console.log(`  ${BOLD}Nestelia Benchmark${RESET} ${DIM}(${CONNECTIONS} connections, ${DURATION}, ${scenarios.length} scenarios)${RESET}`);
 
-  // Check benchmark deps
   if (!existsSync(resolve(BENCH_DIR, "node_modules"))) {
     console.log(`  ${DIM}Installing benchmark dependencies...${RESET}`);
     execSync("bun install", { cwd: BENCH_DIR, stdio: "inherit" });
-    console.log();
   }
 
-  const results: BenchResult[] = [];
-
-  // Filter frameworks if specified via CLI args
   const only = process.argv
     .slice(2)
     .filter((a) => !a.startsWith("-"))
     .map((s) => s.toLowerCase());
 
-  const toRun =
-    only.length > 0
-      ? frameworks.filter((fw) => only.includes(fw.name.toLowerCase()))
-      : frameworks;
+  const toRun = only.length > 0
+    ? frameworks.filter((fw) => only.includes(fw.name.toLowerCase()))
+    : frameworks;
+
+  const allResults: Result[] = [];
 
   for (const fw of toRun) {
-    const color = COLORS[fw.name] || "";
-    process.stdout.write(
-      `  ${color}${BOLD}${fw.name}${RESET} ${DIM}(${fw.runtime})${RESET} ... `,
-    );
+    const c = COLORS[fw.name] || "";
+    console.log();
+    console.log(`  ${c}${BOLD}${fw.name}${RESET} ${DIM}(${fw.runtime})${RESET}`);
 
     const proc = startServer(fw);
     const ready = await waitForServer(PORT);
 
     if (!ready) {
-      console.log(`${RED}FAILED (server did not start)${RESET}`);
+      console.log(`    ${RED}server did not start${RESET}`);
       await killServer(proc);
       continue;
     }
 
-    // Warmup
-    try {
-      if (tool === "bombardier") {
-        runBombardier(PORT, WARMUP_DURATION, WARMUP_CONNECTIONS);
-      } else {
-        runOha(PORT, WARMUP_DURATION, WARMUP_CONNECTIONS);
+    for (const scenario of scenarios) {
+      process.stdout.write(`    ${DIM}${scenario.name.padEnd(14)}${RESET} `);
+
+      try { runBombardier(scenario, WARMUP_DURATION, WARMUP_CONNECTIONS); } catch {}
+
+      try {
+        const parsed = parseResult(runBombardier(scenario, DURATION, CONNECTIONS));
+        allResults.push({
+          scenario: scenario.name,
+          framework: fw.name,
+          runtime: fw.runtime,
+          ...parsed,
+        });
+        console.log(`${BOLD}${fmt(parsed.reqsPerSec).padStart(8)}${RESET} reqs/s`);
+      } catch {
+        console.log(`${RED}FAILED${RESET}`);
       }
-    } catch {
-      // warmup failure is non-fatal
-    }
-
-    // Benchmark
-    try {
-      let raw: string;
-      let parsed: { reqsPerSec: number; latencyAvg: number; latencyP99: number };
-
-      if (tool === "bombardier") {
-        raw = runBombardier(PORT, DURATION, CONNECTIONS);
-        parsed = parseBombardierResult(raw);
-      } else {
-        raw = runOha(PORT, DURATION, CONNECTIONS);
-        parsed = parseOhaResult(raw);
-      }
-
-      results.push({
-        name: fw.name,
-        runtime: fw.runtime,
-        ...parsed,
-      });
-
-      console.log(
-        `${BOLD}${formatNumber(parsed.reqsPerSec)}${RESET} reqs/s`,
-      );
-    } catch (e) {
-      console.log(`${RED}FAILED${RESET}`);
-      console.error(`  ${DIM}${e}${RESET}`);
     }
 
     await killServer(proc);
-    // Small gap between benchmarks
     await Bun.sleep(1000);
   }
 
-  if (results.length > 0) {
-    printResults(results);
+  if (allResults.length > 0) {
+    printResults(allResults, toRun);
 
-    // Save results to JSON
-    const outPath = resolve(BENCH_DIR, "results.json");
     await Bun.write(
-      outPath,
-      JSON.stringify(
-        {
-          date: new Date().toISOString(),
-          tool,
-          connections: CONNECTIONS,
-          duration: DURATION,
-          system: {
-            platform: process.platform,
-            arch: process.arch,
-            bun: Bun.version,
-            node: execSync("node --version", { encoding: "utf-8" }).trim(),
-          },
-          results: results
-            .sort((a, b) => b.reqsPerSec - a.reqsPerSec)
-            .map((r) => ({
-              name: r.name,
-              runtime: r.runtime,
-              reqsPerSec: r.reqsPerSec,
-              latencyAvgUs: Math.round(r.latencyAvg),
-              latencyP99Us: Math.round(r.latencyP99),
-            })),
-        },
-        null,
-        2,
-      ),
+      resolve(BENCH_DIR, "results.json"),
+      JSON.stringify({
+        date: new Date().toISOString(),
+        connections: CONNECTIONS,
+        duration: DURATION,
+        system: { platform: process.platform, arch: process.arch, bun: Bun.version, node: execSync("node --version", { encoding: "utf-8" }).trim() },
+        results: allResults,
+      }, null, 2),
     );
     console.log(`  ${DIM}Results saved to benchmark/results.json${RESET}`);
     console.log();
