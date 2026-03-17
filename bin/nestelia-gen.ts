@@ -5,6 +5,10 @@
  * Reads @Controller / @Get / @Post / ... decorators and generates a fully-typed
  * Elysia schema file — including return types from TypeScript annotations.
  *
+ * The generated file is fully self-contained: return types are expanded
+ * structurally via the TypeScript type checker so no project-local imports
+ * are needed (only `import { Elysia, t } from "elysia"`).
+ *
  * Usage:
  *   bunx nestelia-gen [--tsconfig <path>] [output-file]
  *
@@ -18,6 +22,7 @@ import {
   Project,
   Node,
   SyntaxKind,
+  ts,
   type Decorator,
   type SourceFile,
 } from "ts-morph";
@@ -48,6 +53,8 @@ const project = new Project({
   tsConfigFilePath: resolve(cwd, tsConfigPath),
 });
 
+const compilerChecker = project.getTypeChecker().compilerObject;
+
 // ─── Constants ───────────────────────────────────────────────────────────────
 
 const HTTP_METHODS: Record<string, string> = {
@@ -63,14 +70,12 @@ const HTTP_METHODS: Record<string, string> = {
 interface Route {
   method: string;
   path: string;
-  returnType: string; // TypeScript type text, e.g. "Todo | null"
+  returnType: string; // Fully-expanded TypeScript type text
   body?: string; // TypeBox expression text, e.g. "t.Object({ title: t.String() })"
   params?: string;
   query?: string;
 }
 
-// importMap: typeName → { isType, fromPath (relative to output) }
-const importMap = new Map<string, { isType: boolean; from: string }>();
 const routes: Route[] = [];
 
 // ─── Source file walker ──────────────────────────────────────────────────────
@@ -100,13 +105,8 @@ for (const sf of project.getSourceFiles()) {
 
       if (!httpMethod) continue;
 
-      // ── Return type ────────────────────────────────────────────────────────
-      const returnTypeNode = method.getReturnTypeNode();
-      let returnType = "unknown";
-      if (returnTypeNode) {
-        returnType = returnTypeNode.getText();
-        collectReturnTypeImports(returnType, sf);
-      }
+      // ── Return type (expanded via type checker) ─────────────────────────────
+      const returnType = expandReturnType(method);
 
       // ── Parameter decorators: @Body, @Param, @Query ────────────────────────
       let body: string | undefined;
@@ -169,7 +169,7 @@ function resolveExpression(node: Node, sf: SourceFile): string {
 
 /**
  * Recursively resolve an identifier to its TypeBox initializer text.
- * Follows: local variables → named imports → re-exports (barrel files).
+ * Follows: local variables → named imports → re-exports → star re-exports.
  * `seen` prevents infinite loops on circular re-exports.
  */
 function resolveIdentifier(
@@ -199,7 +199,7 @@ function resolveIdentifier(
     }
   }
 
-  // 3. Re-exports: `export { schema } from "./schemas"`
+  // 3. Named re-exports: `export { schema } from "./schemas"`
   for (const exp of sf.getExportDeclarations()) {
     for (const named of exp.getNamedExports()) {
       if (named.getName() !== name) continue;
@@ -211,44 +211,193 @@ function resolveIdentifier(
     }
   }
 
+  // 4. Star re-exports: `export * from "./dto"`
+  for (const exp of sf.getExportDeclarations()) {
+    if (exp.getNamedExports().length > 0) continue; // skip named re-exports (handled above)
+    if (!exp.getModuleSpecifierValue()) continue;
+    const reExportSf = exp.getModuleSpecifierSourceFile();
+    if (reExportSf) {
+      const result = resolveIdentifier(name, reExportSf, seen);
+      if (result) return result;
+    }
+  }
+
   return undefined;
 }
 
+// ─── Return type expansion ──────────────────────────────────────────────────
+
 /**
- * Scan `typeText` for identifiers that are imported in `sf`, then record
- * those imports (with paths adjusted to be relative to the output file).
+ * Expand the method's return type into a fully self-contained type string
+ * using the TypeScript type checker, so no project-local imports are needed.
  */
-function collectReturnTypeImports(typeText: string, sf: SourceFile): void {
-  for (const imp of sf.getImportDeclarations()) {
-    const impSf = imp.getModuleSpecifierSourceFile();
-    // Keep track of both resolved source files and raw specifiers (e.g. "elysia")
-    const absPath = impSf?.getFilePath();
+function expandReturnType(method: Node): string {
+  const sig = compilerChecker.getSignatureFromDeclaration(
+    method.compilerNode as ts.SignatureDeclaration,
+  );
+  if (!sig) return "unknown";
+  const type = compilerChecker.getReturnTypeOfSignature(sig);
+  return printType(type, method.compilerNode, 0, new Set());
+}
 
-    for (const named of imp.getNamedImports()) {
-      const typeName = named.getName();
-      if (!new RegExp(`\\b${typeName}\\b`).test(typeText)) continue;
-      if (importMap.has(typeName)) continue;
+/**
+ * Recursively print a TypeScript type as a self-contained string.
+ * - Primitives, literals, unions, intersections → printed directly
+ * - Well-known globals (Promise, Date, Map, Set, etc.) → kept by name, type args expanded
+ * - Project-local types (interfaces, type aliases) → expanded structurally
+ */
+function printType(
+  type: ts.Type,
+  anchor: ts.Node,
+  depth: number,
+  seen: Set<number>,
+): string {
+  if (depth > 10) return "unknown";
+  const f = type.getFlags();
 
-      // Compute the import specifier for the generated file
-      let fromSpec: string;
-      if (absPath) {
-        // Local file — compute a relative path from the output file's directory
-        fromSpec =
-          "./" +
-          relative(outputDir, absPath)
-            .replace(/\\/g, "/")
-            .replace(/\.tsx?$/, "");
-      } else {
-        // External package — keep the original specifier
-        fromSpec = imp.getModuleSpecifierValue();
-      }
+  // ── Primitives ──────────────────────────────────────────────────────────────
+  if (f & ts.TypeFlags.String) return "string";
+  if (f & ts.TypeFlags.Number) return "number";
+  if (f & ts.TypeFlags.Null) return "null";
+  if (f & ts.TypeFlags.Undefined) return "undefined";
+  if (f & ts.TypeFlags.Void) return "void";
+  if (f & ts.TypeFlags.Never) return "never";
+  if (f & ts.TypeFlags.Any) return "any";
+  if (f & ts.TypeFlags.Unknown) return "unknown";
+  if (f & ts.TypeFlags.BigInt) return "bigint";
 
-      importMap.set(typeName, {
-        isType: named.isTypeOnly() || imp.isTypeOnly(),
-        from: fromSpec,
-      });
+  // ── Literals ────────────────────────────────────────────────────────────────
+  if (f & ts.TypeFlags.StringLiteral)
+    return JSON.stringify((type as ts.StringLiteralType).value);
+  if (f & ts.TypeFlags.NumberLiteral)
+    return String((type as ts.NumberLiteralType).value);
+  if (f & ts.TypeFlags.BigIntLiteral) {
+    const v = (type as ts.BigIntLiteralType).value;
+    return `${v.negative ? "-" : ""}${v.base10Value}n`;
+  }
+  if (f & ts.TypeFlags.BooleanLiteral)
+    return (type as any).intrinsicName === "true" ? "true" : "false";
+
+  // ── Union ───────────────────────────────────────────────────────────────────
+  if (type.isUnion()) {
+    const members = (type as ts.UnionType).types;
+    // Detect `boolean` (union of `true | false`)
+    if (
+      members.length === 2 &&
+      members.every((t) => t.getFlags() & ts.TypeFlags.BooleanLiteral)
+    )
+      return "boolean";
+    return members
+      .map((t) => printType(t, anchor, depth + 1, seen))
+      .join(" | ");
+  }
+
+  // ── Intersection ────────────────────────────────────────────────────────────
+  if (type.isIntersection()) {
+    return (type as ts.IntersectionType).types
+      .map((t) => printType(t, anchor, depth + 1, seen))
+      .join(" & ");
+  }
+
+  // ── Array / Tuple ───────────────────────────────────────────────────────────
+  if (compilerChecker.isArrayType(type)) {
+    const typeArgs = compilerChecker.getTypeArguments(
+      type as ts.TypeReference,
+    );
+    if (typeArgs.length === 1) {
+      const inner = printType(typeArgs[0], anchor, depth + 1, seen);
+      return inner.includes(" | ") || inner.includes(" & ")
+        ? `Array<${inner}>`
+        : `${inner}[]`;
     }
   }
+
+  if (compilerChecker.isTupleType(type)) {
+    const typeArgs = compilerChecker.getTypeArguments(
+      type as ts.TypeReference,
+    );
+    return `[${typeArgs.map((t) => printType(t, anchor, depth + 1, seen)).join(", ")}]`;
+  }
+
+  // ── Well-known external types (Promise, Date, Map, Set, etc.) ─────────────
+  const symbol = type.getSymbol() ?? type.aliasSymbol;
+  if (symbol) {
+    const decls = symbol.getDeclarations();
+    const isExternal = decls?.some((d) => {
+      const fn = d.getSourceFile().fileName;
+      return fn.includes("/node_modules/") || fn.includes("/typescript/lib/");
+    });
+
+    if (isExternal) {
+      const name = symbol.getName();
+      const typeArgs = (type as ts.TypeReference).typeArguments;
+      if (typeArgs && typeArgs.length > 0) {
+        const args = typeArgs.map((t) =>
+          printType(t, anchor, depth + 1, seen),
+        );
+        return `${name}<${args.join(", ")}>`;
+      }
+      return name;
+    }
+  }
+
+  // ── Object type → expand structurally ─────────────────────────────────────
+  if (f & ts.TypeFlags.Object) {
+    const id = (type as any).id as number | undefined;
+    if (id !== undefined && seen.has(id)) return "unknown";
+    const newSeen = new Set(seen);
+    if (id !== undefined) newSeen.add(id);
+
+    // Check for call signatures (function types)
+    const callSigs = type.getCallSignatures();
+    if (callSigs.length > 0) {
+      const props = compilerChecker.getPropertiesOfType(type);
+      if (props.length === 0) {
+        const sig = callSigs[0];
+        const params = sig.getParameters().map((p) => {
+          const pType = compilerChecker.getTypeOfSymbolAtLocation(p, anchor);
+          return `${p.getName()}: ${printType(pType, anchor, depth + 1, newSeen)}`;
+        });
+        const ret = printType(
+          compilerChecker.getReturnTypeOfSignature(sig),
+          anchor,
+          depth + 1,
+          newSeen,
+        );
+        return `(${params.join(", ")}) => ${ret}`;
+      }
+    }
+
+    // Regular object — expand properties
+    const props = compilerChecker.getPropertiesOfType(type);
+    const indexInfos = compilerChecker.getIndexInfosOfType(type);
+
+    if (props.length === 0 && indexInfos.length === 0) return "{}";
+
+    const parts: string[] = [];
+
+    for (const info of indexInfos) {
+      const keyType = printType(info.keyType, anchor, depth + 1, newSeen);
+      const valType = printType(info.type, anchor, depth + 1, newSeen);
+      parts.push(`[key: ${keyType}]: ${valType}`);
+    }
+
+    for (const prop of props) {
+      const propType = compilerChecker.getTypeOfSymbolAtLocation(prop, anchor);
+      const opt = prop.flags & ts.SymbolFlags.Optional ? "?" : "";
+      const expanded = printType(propType, anchor, depth + 1, newSeen);
+      parts.push(`${prop.getName()}${opt}: ${expanded}`);
+    }
+
+    return `{ ${parts.join("; ")} }`;
+  }
+
+  // ── Fallback ────────────────────────────────────────────────────────────────
+  return compilerChecker.typeToString(
+    type,
+    anchor,
+    ts.TypeFormatFlags.NoTruncation,
+  );
 }
 
 // ─── Code generation ─────────────────────────────────────────────────────────
@@ -259,26 +408,7 @@ if (routes.length === 0) {
   );
 }
 
-// Build import statements grouped by module
-const importsByModule = new Map<string, { types: string[]; values: string[] }>();
-for (const [name, { isType, from }] of importMap) {
-  const entry = importsByModule.get(from) ?? { types: [], values: [] };
-  if (isType) entry.types.push(name);
-  else entry.values.push(name);
-  importsByModule.set(from, entry);
-}
-
-const importLines = [
-  `import { Elysia, t } from "elysia";`,
-  ...[...importsByModule.entries()].flatMap(([from, { types, values }]) => {
-    const lines: string[] = [];
-    if (types.length)
-      lines.push(`import type { ${types.join(", ")} } from "${from}";`);
-    if (values.length)
-      lines.push(`import { ${values.join(", ")} } from "${from}";`);
-    return lines;
-  }),
-].join("\n");
+const importLine = `import { Elysia, t } from "elysia";`;
 
 function buildOptions(route: Route): string {
   const opts: string[] = [];
@@ -310,7 +440,7 @@ const banner = [
 ].join("\n");
 
 const output = `${banner}
-${importLines}
+${importLine}
 
 export const appSchema = new Elysia()
 ${chain};

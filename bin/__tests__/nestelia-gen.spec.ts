@@ -8,6 +8,10 @@ const genScript = join(cwd, "bin/nestelia-gen.ts");
 const tmpOut = join(tmpdir(), `nestelia-gen-test-${Date.now()}.ts`);
 const fixtureDir = join(import.meta.dir, "fixtures/imported-schema");
 const fixtureTmpOut = join(tmpdir(), `nestelia-gen-fixture-${Date.now()}.ts`);
+const starFixtureDir = join(import.meta.dir, "fixtures/star-reexport");
+const starFixtureTmpOut = join(tmpdir(), `nestelia-gen-star-${Date.now()}.ts`);
+const rtFixtureDir = join(import.meta.dir, "fixtures/return-types");
+const rtFixtureTmpOut = join(tmpdir(), `nestelia-gen-rt-${Date.now()}.ts`);
 
 function runGen(outputPath = tmpOut, { fixtureCwd }: { fixtureCwd?: string } = {}) {
   const extraArgs = fixtureCwd ? ["--tsconfig", join(fixtureCwd, "tsconfig.json")] : [];
@@ -21,6 +25,8 @@ function runGen(outputPath = tmpOut, { fixtureCwd }: { fixtureCwd?: string } = {
 afterAll(() => {
   try { rmSync(tmpOut); } catch {}
   try { rmSync(fixtureTmpOut); } catch {}
+  try { rmSync(starFixtureTmpOut); } catch {}
+  try { rmSync(rtFixtureTmpOut); } catch {}
 });
 
 describe("nestelia-gen", () => {
@@ -87,5 +93,49 @@ describe("nestelia-gen: imported schema inlining", () => {
     // Only import should be elysia — no imports from ./dto or ./index
     expect(content).not.toContain('from "./');
     expect(content).not.toContain("dto");
+  });
+});
+
+describe("nestelia-gen: star re-export inlining", () => {
+  it("inlines a schema imported through `export * from`", () => {
+    const result = runGen(starFixtureTmpOut, { fixtureCwd: starFixtureDir });
+    expect(result.exitCode).toBe(0);
+    const content = readFileSync(starFixtureTmpOut, "utf8");
+    // Should contain the inlined t.Object expression, NOT the variable name
+    expect(content).toContain("t.Object(");
+    expect(content).toContain("t.String()");
+    expect(content).toContain("t.Number()");
+    expect(content).not.toContain("createItemSchema");
+    // No project-local imports
+    expect(content).not.toContain('from "./');
+  });
+});
+
+describe("nestelia-gen: return type expansion", () => {
+  it("expands project-local types structurally", () => {
+    const result = runGen(rtFixtureTmpOut, { fixtureCwd: rtFixtureDir });
+    expect(result.exitCode).toBe(0);
+    const content = readFileSync(rtFixtureTmpOut, "utf8");
+    // User[] → expanded structural array type
+    expect(content).toContain("id: string");
+    expect(content).toContain("name: string");
+    expect(content).toContain("email:");
+    // Should NOT contain any project-local type names or imports
+    expect(content).not.toContain("User");
+    expect(content).not.toContain("UserWithPosts");
+    expect(content).not.toContain('from "./');
+  });
+
+  it("preserves well-known global types like Date and Promise", () => {
+    const content = readFileSync(rtFixtureTmpOut, "utf8");
+    expect(content).toContain("Date");
+    expect(content).toContain("Promise<");
+  });
+
+  it("has only the elysia import", () => {
+    const content = readFileSync(rtFixtureTmpOut, "utf8");
+    const imports = content.match(/^import .*/gm) ?? [];
+    expect(imports).toHaveLength(1);
+    expect(imports[0]).toContain("elysia");
   });
 });
