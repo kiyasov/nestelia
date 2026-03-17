@@ -6,10 +6,13 @@ import { join } from "node:path";
 const cwd = join(import.meta.dir, "../..");
 const genScript = join(cwd, "bin/nestelia-gen.ts");
 const tmpOut = join(tmpdir(), `nestelia-gen-test-${Date.now()}.ts`);
+const fixtureDir = join(import.meta.dir, "fixtures/imported-schema");
+const fixtureTmpOut = join(tmpdir(), `nestelia-gen-fixture-${Date.now()}.ts`);
 
-function runGen(outputPath = tmpOut) {
-  return Bun.spawnSync(["bun", genScript, outputPath], {
-    cwd,
+function runGen(outputPath = tmpOut, { fixtureCwd }: { fixtureCwd?: string } = {}) {
+  const extraArgs = fixtureCwd ? ["--tsconfig", join(fixtureCwd, "tsconfig.json")] : [];
+  return Bun.spawnSync(["bun", genScript, ...extraArgs, outputPath], {
+    cwd: fixtureCwd ?? cwd,
     stdout: "pipe",
     stderr: "pipe",
   });
@@ -17,6 +20,7 @@ function runGen(outputPath = tmpOut) {
 
 afterAll(() => {
   try { rmSync(tmpOut); } catch {}
+  try { rmSync(fixtureTmpOut); } catch {}
 });
 
 describe("nestelia-gen", () => {
@@ -54,5 +58,34 @@ describe("nestelia-gen", () => {
     const content = readFileSync(tmpOut, "utf8");
     expect(content).toContain("export const appSchema");
     expect(content).toContain("export type App =");
+  });
+});
+
+describe("nestelia-gen: imported schema inlining", () => {
+  it("inlines a schema imported from a sibling file", () => {
+    const result = runGen(fixtureTmpOut, { fixtureCwd: fixtureDir });
+    expect(result.exitCode).toBe(0);
+    const content = readFileSync(fixtureTmpOut, "utf8");
+    // Should contain the inlined t.Object expression, NOT the variable name
+    expect(content).toContain("t.Object(");
+    expect(content).toContain("t.String()");
+    expect(content).toContain("t.Number()");
+    expect(content).not.toContain("createListingSchema");
+  });
+
+  it("inlines a schema imported through a barrel re-export", () => {
+    const result = runGen(fixtureTmpOut, { fixtureCwd: fixtureDir });
+    expect(result.exitCode).toBe(0);
+    const content = readFileSync(fixtureTmpOut, "utf8");
+    // listingQuerySchema is imported via index.ts (barrel) → dto.ts
+    expect(content).not.toContain("listingQuerySchema");
+    expect(content).toContain("t.Optional(");
+  });
+
+  it("does not generate any import for inlined schemas", () => {
+    const content = readFileSync(fixtureTmpOut, "utf8");
+    // Only import should be elysia — no imports from ./dto or ./index
+    expect(content).not.toContain('from "./');
+    expect(content).not.toContain("dto");
   });
 });

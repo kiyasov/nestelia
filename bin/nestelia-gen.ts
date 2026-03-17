@@ -160,31 +160,58 @@ function resolveExpression(node: Node, sf: SourceFile): string {
   if (!Node.isIdentifier(node)) return node.getText();
 
   const name = node.getText();
+  const resolved = resolveIdentifier(name, sf, new Set());
+  if (!resolved) {
+    console.warn(`Warning: could not inline schema variable "${name}" — using identifier as-is.`);
+  }
+  return resolved ?? name;
+}
 
-  // Try local variable declarations first
+/**
+ * Recursively resolve an identifier to its TypeBox initializer text.
+ * Follows: local variables → named imports → re-exports (barrel files).
+ * `seen` prevents infinite loops on circular re-exports.
+ */
+function resolveIdentifier(
+  name: string,
+  sf: SourceFile,
+  seen: Set<string>,
+): string | undefined {
+  const key = `${sf.getFilePath()}::${name}`;
+  if (seen.has(key)) return undefined;
+  seen.add(key);
+
+  // 1. Local variable declaration: `const schema = t.Object({...})`
   const local = sf.getVariableDeclaration(name);
   if (local) {
     const init = local.getInitializer();
     if (init) return init.getText();
   }
 
-  // Try named imports
+  // 2. Named imports: `import { schema } from "./dto"`
   for (const imp of sf.getImportDeclarations()) {
     for (const named of imp.getNamedImports()) {
       if (named.getName() !== name) continue;
       const importedSf = imp.getModuleSpecifierSourceFile();
-      if (!importedSf) continue;
-      const varDecl = importedSf.getVariableDeclaration(
-        named.getAliasNode()?.getText() ?? name,
-      );
-      if (varDecl) {
-        const init = varDecl.getInitializer();
-        if (init) return init.getText();
+      if (!importedSf) return undefined;
+      const originalName = named.getAliasNode()?.getText() ?? name;
+      return resolveIdentifier(originalName, importedSf, seen);
+    }
+  }
+
+  // 3. Re-exports: `export { schema } from "./schemas"`
+  for (const exp of sf.getExportDeclarations()) {
+    for (const named of exp.getNamedExports()) {
+      if (named.getName() !== name) continue;
+      const reExportSf = exp.getModuleSpecifierSourceFile();
+      if (reExportSf) {
+        const originalName = named.getAliasNode()?.getText() ?? name;
+        return resolveIdentifier(originalName, reExportSf, seen);
       }
     }
   }
 
-  return name; // fallback — use identifier as-is
+  return undefined;
 }
 
 /**
