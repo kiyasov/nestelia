@@ -10,8 +10,10 @@
     "skipLibCheck": true,
     "noEmit": true,
     "types": ["bun", "reflect-metadata"],
+    "baseUrl": ".",
     "paths": {
-      "elysia-nest": ["../../../../index.ts"]
+      "elysia-nest": ["../../../../index.ts"],
+      "fake-orm": ["./_modules/fake-orm/index.d.ts"]
     }
   },
   "include": ["src/**/*"]
