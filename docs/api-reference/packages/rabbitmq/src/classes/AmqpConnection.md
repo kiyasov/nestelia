@@ -111,7 +111,7 @@ Disconnect from RabbitMQ
 getChannel(): Channel | null;
 ```
 
-Defined in: [packages/rabbitmq/src/connection/amqp-connection.ts:546](https://github.com/nestelia/nestelia/blob/main/packages/rabbitmq/src/connection/amqp-connection.ts#L546)
+Defined in: [packages/rabbitmq/src/connection/amqp-connection.ts:553](https://github.com/nestelia/nestelia/blob/main/packages/rabbitmq/src/connection/amqp-connection.ts#L553)
 
 Get the consumer channel (for consuming messages)
 
@@ -127,7 +127,7 @@ Get the consumer channel (for consuming messages)
 getConnection(): ChannelModel | null;
 ```
 
-Defined in: [packages/rabbitmq/src/connection/amqp-connection.ts:560](https://github.com/nestelia/nestelia/blob/main/packages/rabbitmq/src/connection/amqp-connection.ts#L560)
+Defined in: [packages/rabbitmq/src/connection/amqp-connection.ts:567](https://github.com/nestelia/nestelia/blob/main/packages/rabbitmq/src/connection/amqp-connection.ts#L567)
 
 Get the underlying connection (for advanced usage)
 
@@ -137,13 +137,29 @@ Get the underlying connection (for advanced usage)
 
 ***
 
+### getLogger()
+
+```ts
+getLogger(): Logger;
+```
+
+Defined in: [packages/rabbitmq/src/connection/amqp-connection.ts:546](https://github.com/nestelia/nestelia/blob/main/packages/rabbitmq/src/connection/amqp-connection.ts#L546)
+
+Get the logger instance
+
+#### Returns
+
+[`Logger`](../../../../index/classes/Logger.md)
+
+***
+
 ### getPublisherChannel()
 
 ```ts
 getPublisherChannel(): Channel | null;
 ```
 
-Defined in: [packages/rabbitmq/src/connection/amqp-connection.ts:553](https://github.com/nestelia/nestelia/blob/main/packages/rabbitmq/src/connection/amqp-connection.ts#L553)
+Defined in: [packages/rabbitmq/src/connection/amqp-connection.ts:560](https://github.com/nestelia/nestelia/blob/main/packages/rabbitmq/src/connection/amqp-connection.ts#L560)
 
 Get the publisher channel (for publishing messages)
 
@@ -210,7 +226,7 @@ Publish a message to an exchange
 registerHandlers(instance): Promise<void>;
 ```
 
-Defined in: [packages/rabbitmq/src/connection/amqp-connection.ts:720](https://github.com/nestelia/nestelia/blob/main/packages/rabbitmq/src/connection/amqp-connection.ts#L720)
+Defined in: [packages/rabbitmq/src/connection/amqp-connection.ts:727](https://github.com/nestelia/nestelia/blob/main/packages/rabbitmq/src/connection/amqp-connection.ts#L727)
 
 Register RabbitMQ handlers from a service instance
 Scans the instance's class for
@@ -248,7 +264,7 @@ await amqpConnection.registerHandlers(ordersHandlerInstance);
 request<T, R>(options): Promise<R>;
 ```
 
-Defined in: [packages/rabbitmq/src/connection/amqp-connection.ts:582](https://github.com/nestelia/nestelia/blob/main/packages/rabbitmq/src/connection/amqp-connection.ts#L582)
+Defined in: [packages/rabbitmq/src/connection/amqp-connection.ts:589](https://github.com/nestelia/nestelia/blob/main/packages/rabbitmq/src/connection/amqp-connection.ts#L589)
 
 Make an RPC request and wait for a response
 This method creates a temporary reply queue, sends the request, and waits for a response

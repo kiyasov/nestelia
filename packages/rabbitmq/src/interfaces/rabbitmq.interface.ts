@@ -169,6 +169,14 @@ export interface RabbitMQQueueConfig {
 export interface RabbitSubscribeOptions {
   /** Exchange name (must be pre-configured in RabbitMQModule.forRoot({ exchanges })) */
   exchange: string;
+  /**
+   * Exchange type — required when the exchange is NOT pre-configured via forRoot({ exchanges }).
+   * Must be specified for non-default types such as "x-delayed-message" to avoid
+   * a 406 PRECONDITION_FAILED error that would silently kill the consumer channel.
+   */
+  exchangeType?: RabbitMQExchangeType;
+  /** Exchange assert options (e.g. { arguments: { "x-delayed-type": "direct" } }) */
+  exchangeOptions?: RabbitMQExchangeConfig["options"];
   /** Routing key pattern */
   routingKey: string | string[];
   /** Queue name (auto-generated if not provided) */

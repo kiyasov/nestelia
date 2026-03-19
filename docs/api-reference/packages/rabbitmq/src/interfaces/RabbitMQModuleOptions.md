@@ -1,6 +1,6 @@
 # Interface: RabbitMQModuleOptions
 
-Defined in: [packages/rabbitmq/src/rabbitmq.module.ts:48](https://github.com/nestelia/nestelia/blob/main/packages/rabbitmq/src/rabbitmq.module.ts#L48)
+Defined in: [packages/rabbitmq/src/rabbitmq.module.ts:53](https://github.com/nestelia/nestelia/blob/main/packages/rabbitmq/src/rabbitmq.module.ts#L53)
 
 RabbitMQ connection configuration
 
@@ -21,7 +21,7 @@ RabbitMQ connection configuration
 | <a id="enablecontrollerdiscovery"></a> `enableControllerDiscovery?` | `boolean` | Enable controller discovery | [`RabbitMQConfig`](RabbitMQConfig.md).[`enableControllerDiscovery`](RabbitMQConfig.md#enablecontrollerdiscovery) | [packages/rabbitmq/src/interfaces/rabbitmq.interface.ts:83](https://github.com/nestelia/nestelia/blob/main/packages/rabbitmq/src/interfaces/rabbitmq.interface.ts#L83) |
 | <a id="exchangeprefix"></a> `exchangePrefix?` | `string` | Exchange prefix for all exchanges | [`RabbitMQConfig`](RabbitMQConfig.md).[`exchangePrefix`](RabbitMQConfig.md#exchangeprefix) | [packages/rabbitmq/src/interfaces/rabbitmq.interface.ts:55](https://github.com/nestelia/nestelia/blob/main/packages/rabbitmq/src/interfaces/rabbitmq.interface.ts#L55) |
 | <a id="exchanges"></a> `exchanges?` | [`RabbitMQExchangeConfig`](RabbitMQExchangeConfig.md)[] | Exchanges to assert on connection | [`RabbitMQConfig`](RabbitMQConfig.md).[`exchanges`](RabbitMQConfig.md#exchanges) | [packages/rabbitmq/src/interfaces/rabbitmq.interface.ts:67](https://github.com/nestelia/nestelia/blob/main/packages/rabbitmq/src/interfaces/rabbitmq.interface.ts#L67) |
-| <a id="isglobal"></a> `isGlobal?` | `boolean` | If true, register module as global | - | [packages/rabbitmq/src/rabbitmq.module.ts:52](https://github.com/nestelia/nestelia/blob/main/packages/rabbitmq/src/rabbitmq.module.ts#L52) |
+| <a id="isglobal"></a> `isGlobal?` | `boolean` | If true, register module as global | - | [packages/rabbitmq/src/rabbitmq.module.ts:57](https://github.com/nestelia/nestelia/blob/main/packages/rabbitmq/src/rabbitmq.module.ts#L57) |
 | <a id="maxmessagesize"></a> `maxMessageSize?` | `number` | Maximum message size in bytes (default: 10MB) | [`RabbitMQConfig`](RabbitMQConfig.md).[`maxMessageSize`](RabbitMQConfig.md#maxmessagesize) | [packages/rabbitmq/src/interfaces/rabbitmq.interface.ts:87](https://github.com/nestelia/nestelia/blob/main/packages/rabbitmq/src/interfaces/rabbitmq.interface.ts#L87) |
 | <a id="prefetchcount"></a> `prefetchCount?` | `number` | Prefetch count (number of messages processed concurrently) | [`RabbitMQConfig`](RabbitMQConfig.md).[`prefetchCount`](RabbitMQConfig.md#prefetchcount) | [packages/rabbitmq/src/interfaces/rabbitmq.interface.ts:59](https://github.com/nestelia/nestelia/blob/main/packages/rabbitmq/src/interfaces/rabbitmq.interface.ts#L59) |
 | <a id="queueprefix"></a> `queuePrefix?` | `string` | Queue prefix for all queues | [`RabbitMQConfig`](RabbitMQConfig.md).[`queuePrefix`](RabbitMQConfig.md#queueprefix) | [packages/rabbitmq/src/interfaces/rabbitmq.interface.ts:53](https://github.com/nestelia/nestelia/blob/main/packages/rabbitmq/src/interfaces/rabbitmq.interface.ts#L53) |

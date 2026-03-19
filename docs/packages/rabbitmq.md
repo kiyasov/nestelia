@@ -185,6 +185,21 @@ await this.rabbitMQ.publish(
 );
 ```
 
+To consume delayed messages, specify `exchangeType` in `@RabbitSubscribe` so the framework declares the exchange with the correct type. Without it the consumer channel closes with a 406 error and messages are silently lost.
+
+```typescript
+@RabbitSubscribe({
+  exchange: "delayed",
+  exchangeType: "x-delayed-message",
+  exchangeOptions: { arguments: { "x-delayed-type": "direct" } },
+  routingKey: "order.reminder",
+  queue: "order-reminder-queue",
+})
+async handleReminder(event: { orderId: number }) {
+  console.log("Reminder for order", event.orderId);
+}
+```
+
 ### Multiple Connections
 
 ```typescript

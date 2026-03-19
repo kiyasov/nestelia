@@ -37,8 +37,13 @@ class RabbitMQExplorer {
           if (instance) {
             await this.connection.registerHandlers(instance as object);
           }
-        } catch {
-          // Provider may not be resolvable — skip
+        } catch (err) {
+          // Log the error so handler registration failures are visible
+          const name = (wrapper.metatype as { name?: string }).name ?? String(token);
+          this.connection.getLogger().error(
+            `Failed to register RabbitMQ handlers for ${name}: ${(err as Error).message}. ` +
+            `Make sure all exchanges used in @RabbitSubscribe/@RabbitRPC are configured in RabbitMQModule.forRoot({ exchanges: [...] }).`,
+          );
         }
       }
     }

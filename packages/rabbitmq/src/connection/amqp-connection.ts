@@ -541,6 +541,13 @@ export class AmqpConnection {
   }
 
   /**
+   * Get the logger instance
+   */
+  getLogger(): Logger {
+    return this.logger;
+  }
+
+  /**
    * Get the consumer channel (for consuming messages)
    */
   getChannel(): Channel | null {
@@ -777,7 +784,11 @@ export class AmqpConnection {
 
     // Ensure the exchange exists before binding queues to it
     if (exchange) {
-      await this.assertExchange({ name: exchange });
+      await this.assertExchange({
+        name: exchange,
+        type: options.exchangeType,
+        options: options.exchangeOptions,
+      });
     }
 
     // Assert and bind queue
@@ -828,7 +839,11 @@ export class AmqpConnection {
 
     // Ensure the exchange exists before binding queues to it
     if (exchange) {
-      await this.assertExchange({ name: exchange });
+      await this.assertExchange({
+        name: exchange,
+        type: options.exchangeType,
+        options: options.exchangeOptions,
+      });
     }
 
     // Assert and bind queue
