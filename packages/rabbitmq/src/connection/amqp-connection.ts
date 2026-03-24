@@ -2,6 +2,7 @@ import type { Channel, ChannelModel, ConsumeMessage, Replies } from "amqplib";
 import { randomUUID } from "crypto";
 
 import type { Logger } from "nestelia";
+import { Nack } from "../nack";
 import type {
   RabbitMQConfig,
   RabbitMQExchangeConfig,
@@ -11,35 +12,75 @@ import type {
   RabbitRPCOptions,
   RabbitSubscribeOptions,
   RequestOptions,
+  MessageErrorHandler,
+  MessageHandlerErrorBehavior,
+  BatchOptions,
 } from "../interfaces/rabbitmq.interface";
-import { RABBIT_RPC_METADATA, RABBIT_SUBSCRIBE_METADATA } from "../decorators/rabbitmq.decorators";
+import {
+  RABBIT_RPC_METADATA,
+  RABBIT_SUBSCRIBE_METADATA,
+  RABBIT_PAYLOAD_METADATA,
+  RABBIT_HEADER_METADATA,
+  RABBIT_REQUEST_METADATA,
+} from "../decorators/rabbitmq.decorators";
 import { MessageSerializer } from "./message-serializer";
 
 export const RABBITMQ_CONFIG = "RABBITMQ_CONFIG";
 export const RABBITMQ_CONNECTION = "RABBITMQ_CONNECTION";
 
-interface ActiveConsumer {
+const DIRECT_REPLY_QUEUE = "amq.rabbitmq.reply-to";
+
+interface ConsumerHandler {
+  type: "subscribe" | "rpc" | "batch";
   consumerTag: string;
-  queue: string;
+  handler: Function;
+  msgOptions: RabbitSubscribeOptions | RabbitRPCOptions;
+  instance: object;
+  methodName: string | symbol;
+  handlerName: string;
 }
 
-interface PendingRpc {
-  replyQueue: string;
-  timeoutId: ReturnType<typeof setTimeout>;
-  consumerTag: string;
+interface RpcHandlerEntry {
+  routingKey: string | string[];
+  handler: Function;
+  rpcOptions: RabbitRPCOptions;
+  instance: object;
+  methodName: string | symbol;
+  handlerName: string;
+}
+
+interface BatchState<T = unknown> {
+  messages: ConsumeMessage[];
+  timer: ReturnType<typeof setTimeout> | null;
+  options: BatchOptions;
+  handler: Function;
+  instance: object;
+  methodName: string | symbol;
+  handlerName: string;
+  subscribeOptions: RabbitSubscribeOptions;
 }
 
 const DEFAULT_PREFETCH_COUNT = 10;
 const DEFAULT_RECONNECT_ATTEMPTS = 5;
 const DEFAULT_RECONNECT_INTERVAL = 5000;
-const DEFAULT_RPC_TIMEOUT = 30000;
+const DEFAULT_RPC_TIMEOUT = 10000;
+const DEFAULT_BATCH_SIZE = 10;
+const DEFAULT_BATCH_TIMEOUT = 200;
 
 // Valid AMQP URL pattern
 const AMQP_URL_PATTERN = /^amqps?:\/\/([^:@]+(:[^@]+)?@)?[^:/]+(:\d+)?(\/.*)?$/;
 
 /**
- * RabbitMQ connection class for publishing and consuming messages
- * This is the main class for RabbitMQ operations
+ * RabbitMQ connection class for publishing and consuming messages.
+ * Aligned with golevelup/nestjs architecture:
+ * - Exchanges asserted only during connect() from forRoot() config
+ * - Subscribers only assert queues and bind them to existing exchanges
+ * - Graceful shutdown with outstanding message tracking
+ * - Configurable error behaviors per handler
+ * - Direct Reply-To for RPC
+ * - Multiple RPC handlers per queue with routing key matching
+ * - Batch subscribe support
+ * - Consumer cancel/resume
  */
 export class AmqpConnection {
   private connection: ChannelModel | null = null;
@@ -58,12 +99,32 @@ export class AmqpConnection {
   private isInitializing = false;
   private reconnectAttempts = 0;
   private reconnectTimeoutId: ReturnType<typeof setTimeout> | null = null;
-  private activeConsumers: Map<string, ActiveConsumer> = new Map();
-  private pendingRpcs: Map<string, PendingRpc> = new Map();
   private serializer: MessageSerializer;
+
   // Track already asserted exchanges and queues to avoid duplicate assertions
   private assertedExchanges = new Set<string>();
   private assertedQueues = new Set<string>();
+
+  // Consumer registry for cancel/resume
+  private _consumers = new Map<string, ConsumerHandler>();
+
+  // RPC handler multiplexing: multiple handlers per queue
+  private _rpcHandlersByQueue = new Map<string, RpcHandlerEntry[]>();
+  private _rpcConsumerTagByQueue = new Map<string, string>();
+
+  // Batch state per queue
+  private _batchStates = new Map<string, BatchState>();
+
+  // Graceful shutdown: track outstanding message processing
+  private outstandingMessageProcessing = new Set<Promise<void>>();
+
+  // Direct Reply-To: RPC response subject
+  private _rpcResponseHandlers = new Map<string, {
+    resolve: (value: unknown) => void;
+    reject: (reason: unknown) => void;
+    timeoutId: ReturnType<typeof setTimeout>;
+  }>();
+  private _directReplyConsumerTag: string | null = null;
 
   constructor(config: RabbitMQConfig, logger: Logger) {
     this.config = {
@@ -71,36 +132,15 @@ export class AmqpConnection {
       reconnect: true,
       reconnectAttempts: DEFAULT_RECONNECT_ATTEMPTS,
       reconnectInterval: DEFAULT_RECONNECT_INTERVAL,
+      defaultRpcTimeout: DEFAULT_RPC_TIMEOUT,
+      enableDirectReplyTo: true,
       ...config,
     };
     this.serializer = new MessageSerializer(config.maxMessageSize);
     this.logger = logger;
   }
 
-  /**
-   * Validate RabbitMQ connection URL
-   */
-  private validateUrl(url: string): void {
-    if (!AMQP_URL_PATTERN.test(url)) {
-      throw new Error(
-        `Invalid RabbitMQ URL format. Expected: amqp(s)://[user:pass@]host[:port][/vhost]`,
-      );
-    }
-  }
-
-  /**
-   * Sanitize and validate exchange name
-   */
-  private sanitizeExchangeName(name: string): string {
-    return MessageSerializer.sanitizeExchangeName(name);
-  }
-
-  /**
-   * Sanitize and validate queue name
-   */
-  private sanitizeQueueName(name: string): string {
-    return MessageSerializer.sanitizeQueueName(name);
-  }
+  // ── Connection lifecycle ──────────────────────────────────────────
 
   /**
    * Connect to RabbitMQ
@@ -196,8 +236,7 @@ export class AmqpConnection {
       this.reconnectAttempts = 0;
       this.isInitializing = false;
 
-      // Assert configured exchanges — errors are non-fatal so that a type/durable
-      // mismatch on an existing exchange does not abort the whole connection.
+      // Assert configured exchanges
       if (this.config.exchanges?.length) {
         for (const exchange of this.config.exchanges) {
           try {
@@ -206,6 +245,25 @@ export class AmqpConnection {
             this.logger.error(
               `Failed to assert exchange '${exchange.name}': ${(err as Error).message}. ` +
               `Check that the exchange type and options match what is already declared on the broker.`,
+            );
+          }
+        }
+      }
+
+      // Assert exchange bindings (exchange-to-exchange)
+      if (this.config.exchangeBindings?.length) {
+        const ch = await this.getOrCreateAssertionChannel();
+        for (const binding of this.config.exchangeBindings) {
+          try {
+            await ch.bindExchange(
+              this.getExchangeName(binding.destination),
+              this.getExchangeName(binding.source),
+              binding.pattern,
+              binding.args,
+            );
+          } catch (err) {
+            this.logger.error(
+              `Failed to bind exchange '${binding.source}' -> '${binding.destination}': ${(err as Error).message}`,
             );
           }
         }
@@ -224,6 +282,11 @@ export class AmqpConnection {
         }
       }
 
+      // Set up Direct Reply-To queue for RPC
+      if (this.config.enableDirectReplyTo !== false) {
+        await this.initDirectReplyQueue();
+      }
+
       this.logger.log(`Successfully connected to RabbitMQ broker (default)`);
       this.logger.log(`Successfully connected a RabbitMQ channel "AmqpConnection"`);
     } catch (error) {
@@ -237,41 +300,8 @@ export class AmqpConnection {
   }
 
   /**
-   * Handle reconnection logic
-   */
-  private async handleReconnect(): Promise<void> {
-    if (!this.config.reconnect) {
-      return;
-    }
-
-    // Clear any existing reconnection timeout to prevent duplicates
-    if (this.reconnectTimeoutId) {
-      clearTimeout(this.reconnectTimeoutId);
-      this.reconnectTimeoutId = null;
-    }
-
-    if (this.reconnectAttempts >= (this.config.reconnectAttempts || DEFAULT_RECONNECT_ATTEMPTS)) {
-      this.logger.error("Max reconnection attempts reached");
-      return;
-    }
-
-    this.reconnectAttempts++;
-    this.logger.log(
-      `Reconnecting to RabbitMQ (attempt ${this.reconnectAttempts}/${
-        this.config.reconnectAttempts ?? DEFAULT_RECONNECT_ATTEMPTS
-      })...`,
-    );
-
-    this.reconnectTimeoutId = setTimeout(() => {
-      this.reconnectTimeoutId = null;
-      this.connect().catch((err: Error) => {
-        this.logger.error("Reconnection failed:", err);
-      });
-    }, this.config.reconnectInterval ?? DEFAULT_RECONNECT_INTERVAL);
-  }
-
-  /**
-   * Disconnect from RabbitMQ
+   * Disconnect from RabbitMQ with graceful shutdown.
+   * Waits for all outstanding message processing to complete.
    */
   async disconnect(): Promise<void> {
     // Clear reconnection timeout to prevent reconnection after disconnect
@@ -285,24 +315,44 @@ export class AmqpConnection {
     this.assertedQueues.clear();
 
     // Cancel all active consumers
-    for (const [id, consumer] of this.activeConsumers) {
+    for (const [tag] of this._consumers) {
       try {
-        await this.channel?.cancel(consumer.consumerTag);
+        await this.channel?.cancel(tag);
       } catch {
         // Ignore errors during cleanup
       }
-      this.activeConsumers.delete(id);
+    }
+    this._consumers.clear();
+
+    // Cancel Direct Reply-To consumer
+    if (this._directReplyConsumerTag) {
+      try {
+        await this.channel?.cancel(this._directReplyConsumerTag);
+      } catch {
+        // Ignore errors during cleanup
+      }
+      this._directReplyConsumerTag = null;
     }
 
-    // Cleanup pending RPCs
-    for (const [correlationId, rpc] of this.pendingRpcs) {
-      clearTimeout(rpc.timeoutId);
-      try {
-        await this.channel?.deleteQueue(rpc.replyQueue);
-      } catch {
-        // Ignore errors during cleanup
-      }
-      this.pendingRpcs.delete(correlationId);
+    // Clean up pending RPCs
+    for (const [, pending] of this._rpcResponseHandlers) {
+      clearTimeout(pending.timeoutId);
+      pending.reject(new Error("Connection closing"));
+    }
+    this._rpcResponseHandlers.clear();
+
+    // Clear batch timers
+    for (const [, state] of this._batchStates) {
+      if (state.timer) clearTimeout(state.timer);
+    }
+    this._batchStates.clear();
+
+    // Wait for outstanding message processing to complete
+    if (this.outstandingMessageProcessing.size > 0) {
+      this.logger.log(
+        `Waiting for ${this.outstandingMessageProcessing.size} outstanding message(s) to complete...`,
+      );
+      await Promise.allSettled([...this.outstandingMessageProcessing]);
     }
 
     try {
@@ -337,12 +387,428 @@ export class AmqpConnection {
     return this.isConnected && this.channel !== null;
   }
 
+  // ── Exchange/queue assertion ──────────────────────────────────────
+
   /**
-   * Get or create the assertion channel.
-   * The assertion channel is used exclusively for assertExchange / assertQueue
-   * so that a broker-level error (406 type/durable mismatch, 404 not found)
-   * closes only this channel and never disrupts active consumers.
+   * Assert an exchange.
+   * Uses the dedicated assertion channel so broker errors never kill consumers.
    */
+  async assertExchange(config: RabbitMQExchangeConfig): Promise<void> {
+    const exchangeName = this.getExchangeName(config.name);
+
+    if (this.assertedExchanges.has(exchangeName)) {
+      return;
+    }
+
+    const ch = await this.getOrCreateAssertionChannel();
+    const shouldCreate = config.createIfNotExists !== false;
+
+    if (shouldCreate) {
+      const type = config.type || this.config.defaultExchangeType || "topic";
+      await ch.assertExchange(exchangeName, type, config.options);
+    } else {
+      await ch.checkExchange(exchangeName);
+    }
+
+    this.assertedExchanges.add(exchangeName);
+    this.logger.debug(`Exchange '${exchangeName}' asserted`);
+  }
+
+  /**
+   * Assert a queue and bind it to exchanges.
+   * Uses the dedicated assertion channel so broker errors never kill consumers.
+   */
+  async assertQueue(config: RabbitMQQueueConfig): Promise<string> {
+    const queueName = this.getQueueName(config.name);
+
+    if (this.assertedQueues.has(queueName)) {
+      return queueName;
+    }
+
+    const ch = await this.getOrCreateAssertionChannel();
+
+    const { queue: actualQueue } = await ch.assertQueue(queueName, config.options);
+
+    // Bind queue to exchanges (from bindings array)
+    if (config.bindings) {
+      for (const binding of config.bindings) {
+        const exchangeName = this.getExchangeName(binding.exchange);
+        await ch.bindQueue(
+          actualQueue,
+          exchangeName,
+          binding.routingKey,
+          binding.arguments,
+        );
+      }
+    }
+
+    // Shortcut: bind to exchange directly (for simple cases)
+    if (config.exchange && config.routingKey !== undefined) {
+      const exchangeName = this.getExchangeName(config.exchange);
+      await ch.bindQueue(actualQueue, exchangeName, config.routingKey);
+    }
+
+    this.assertedQueues.add(actualQueue);
+    this.logger.debug(`Queue '${actualQueue}' asserted`);
+
+    return actualQueue;
+  }
+
+  // ── Publishing ────────────────────────────────────────────────────
+
+  /**
+   * Publish a message to an exchange
+   */
+  async publish<T = unknown>(
+    exchange: string,
+    routingKey: string,
+    message: T,
+    options?: RabbitMQPublishOptions,
+  ): Promise<boolean> {
+    if (!this.publisherChannel) {
+      throw new Error("RabbitMQ publisher channel not available");
+    }
+
+    const exchangeName = this.getExchangeName(exchange);
+    const content = this.serializeMessage(message);
+
+    const publishOptions = {
+      ...this.config.defaultPublishOptions,
+      persistent: options?.persistent ?? true,
+      headers: options?.headers,
+      priority: options?.priority,
+      expiration: options?.expiration?.toString(),
+      correlationId: options?.correlationId,
+      replyTo: options?.replyTo,
+      type: options?.type,
+      messageId: options?.messageId,
+    };
+
+    const published = this.publisherChannel.publish(
+      exchangeName,
+      routingKey,
+      content,
+      publishOptions,
+    );
+
+    if (published) {
+      this.logger.debug(`Message published to '${exchangeName}:${routingKey}'`);
+    }
+
+    return published;
+  }
+
+  /**
+   * Send a message directly to a queue
+   */
+  async sendToQueue<T = unknown>(
+    queue: string,
+    message: T,
+    options?: RabbitMQPublishOptions,
+  ): Promise<boolean> {
+    if (!this.publisherChannel) {
+      throw new Error("RabbitMQ publisher channel not available");
+    }
+
+    const queueName = this.getQueueName(queue);
+    const content = this.serializeMessage(message);
+
+    const sent = this.publisherChannel.sendToQueue(queueName, content, {
+      ...this.config.defaultPublishOptions,
+      persistent: options?.persistent ?? true,
+      headers: options?.headers,
+      priority: options?.priority,
+      expiration: options?.expiration?.toString(),
+      correlationId: options?.correlationId,
+      replyTo: options?.replyTo,
+    });
+
+    if (sent) {
+      this.logger.debug(`Message sent to queue '${queueName}'`);
+    }
+
+    return sent;
+  }
+
+  // ── Subscription ──────────────────────────────────────────────────
+
+  /**
+   * Subscribe to messages from a queue (low-level).
+   * Consumer is wrapped for graceful shutdown tracking.
+   */
+  async subscribe<T = unknown>(
+    queue: string,
+    handler: (message: RabbitMQMessage<T>) => Promise<void> | void,
+    options?: { noAck?: boolean; consumerTag?: string },
+  ): Promise<string> {
+    if (!this.channel) {
+      throw new Error("RabbitMQ channel not available");
+    }
+
+    const queueName = this.getQueueName(queue);
+
+    const { consumerTag } = await this.channel.consume(
+      queueName,
+      this.wrapConsumer((msg: ConsumeMessage | null) => {
+        if (!msg) return;
+        const rabbitMessage = this.createRabbitMessage<T>(msg);
+        return Promise.resolve(handler(rabbitMessage)).catch((error: Error) => {
+          this.logger.error("Error handling message:", error);
+          rabbitMessage.nack(false);
+        });
+      }),
+      { noAck: options?.noAck ?? false, consumerTag: options?.consumerTag },
+    );
+
+    this.logger.log(`Subscribed to queue '${queueName}' with consumer tag '${consumerTag}'`);
+
+    return consumerTag;
+  }
+
+  /**
+   * Cancel a consumer subscription
+   */
+  async unsubscribe(consumerTag: string): Promise<void> {
+    if (!this.channel) return;
+
+    try {
+      await this.channel.cancel(consumerTag);
+      this._consumers.delete(consumerTag);
+      this.logger.debug(`Cancelled consumer '${consumerTag}'`);
+    } catch (error) {
+      this.logger.error(`Failed to cancel consumer '${consumerTag}':`, error);
+      throw error;
+    }
+  }
+
+  /**
+   * Cancel a registered consumer by tag. The handler info is preserved for resume.
+   */
+  async cancelConsumer(consumerTag: string): Promise<void> {
+    if (!this.channel) return;
+
+    const consumer = this._consumers.get(consumerTag);
+    if (!consumer) {
+      this.logger.warn(`No registered consumer found for tag '${consumerTag}'`);
+      return;
+    }
+
+    try {
+      await this.channel.cancel(consumerTag);
+      this.logger.log(`Consumer '${consumerTag}' cancelled (can be resumed)`);
+    } catch (error) {
+      this.logger.error(`Failed to cancel consumer '${consumerTag}':`, error);
+      throw error;
+    }
+  }
+
+  /**
+   * Resume a previously cancelled consumer. Creates a new consumer with the same handler.
+   */
+  async resumeConsumer(consumerTag: string): Promise<string> {
+    const consumer = this._consumers.get(consumerTag);
+    if (!consumer) {
+      throw new Error(`No registered consumer found for tag '${consumerTag}'`);
+    }
+
+    // Remove old entry
+    this._consumers.delete(consumerTag);
+
+    // Re-register the handler
+    if (consumer.type === "subscribe") {
+      await this.setupSubscribeHandler(
+        consumer.instance,
+        consumer.handlerName,
+        consumer.methodName,
+        consumer.msgOptions as RabbitSubscribeOptions,
+      );
+    } else if (consumer.type === "rpc") {
+      await this.setupRpcHandler(
+        consumer.instance,
+        consumer.handlerName,
+        consumer.methodName,
+        consumer.msgOptions as RabbitRPCOptions,
+      );
+    }
+
+    // Find the new consumer tag
+    const newTag = [...this._consumers.keys()].pop();
+    this.logger.log(`Consumer '${consumerTag}' resumed as '${newTag}'`);
+
+    return newTag || consumerTag;
+  }
+
+  // ── RPC Request (Direct Reply-To) ─────────────────────────────────
+
+  /**
+   * Make an RPC request using Direct Reply-To queue.
+   */
+  async request<T = unknown, R = unknown>(options: RequestOptions<T>): Promise<R> {
+    if (!this.channel || !this.publisherChannel) {
+      throw new Error("RabbitMQ channel not available");
+    }
+
+    if (!this.isConnected) {
+      throw new Error("RabbitMQ connection is not ready");
+    }
+
+    const {
+      exchange,
+      routingKey,
+      payload,
+      timeout = this.config.defaultRpcTimeout || DEFAULT_RPC_TIMEOUT,
+      headers,
+      correlationId: customCorrelationId,
+    } = options;
+
+    const correlationId = customCorrelationId ?? randomUUID();
+
+    // If Direct Reply-To is enabled, use it
+    if (this.config.enableDirectReplyTo !== false && this._directReplyConsumerTag) {
+      return this.requestViaDirectReplyTo<T, R>(
+        exchange,
+        routingKey,
+        payload,
+        correlationId,
+        timeout,
+        headers,
+      );
+    }
+
+    // Fallback: create a temporary reply queue
+    return this.requestViaTemporaryQueue<T, R>(
+      exchange,
+      routingKey,
+      payload,
+      correlationId,
+      timeout,
+      headers,
+    );
+  }
+
+  // ── Handler registration ──────────────────────────────────────────
+
+  /**
+   * Register RabbitMQ handlers from a service instance.
+   * Scans the instance's class for @RabbitSubscribe and @RabbitRPC decorators.
+   */
+  async registerHandlers(instance: object): Promise<void> {
+    const constructor = instance.constructor as new (...args: unknown[]) => object;
+    const handlerName = constructor.name;
+
+    const subscribeHandlers =
+      (Reflect.getMetadata(RABBIT_SUBSCRIBE_METADATA, constructor) as Array<{
+        methodName: string | symbol;
+        options: RabbitSubscribeOptions;
+      }>) || [];
+
+    const rpcHandlers =
+      (Reflect.getMetadata(RABBIT_RPC_METADATA, constructor) as Array<{
+        methodName: string | symbol;
+        options: RabbitRPCOptions;
+      }>) || [];
+
+    const totalHandlers = subscribeHandlers.length + rpcHandlers.length;
+    if (totalHandlers === 0) return;
+
+    this.logger.log(`Registering rabbitmq handlers from ${handlerName}`);
+
+    for (const { methodName, options: subOpts } of subscribeHandlers) {
+      // Merge with module-level handler configs if name is provided
+      const mergedOptions = this.mergeHandlerConfig(subOpts);
+
+      if (mergedOptions.batch) {
+        await this.setupBatchSubscribeHandler(
+          instance,
+          handlerName,
+          methodName,
+          mergedOptions,
+        );
+      } else {
+        await this.setupSubscribeHandler(instance, handlerName, methodName, mergedOptions);
+      }
+    }
+
+    for (const { methodName, options: rpcOpts } of rpcHandlers) {
+      const mergedOptions = this.mergeHandlerConfig(rpcOpts) as RabbitRPCOptions;
+      await this.setupRpcHandler(instance, handlerName, methodName, mergedOptions);
+    }
+  }
+
+  // ── Accessors ─────────────────────────────────────────────────────
+
+  getLogger(): Logger {
+    return this.logger;
+  }
+
+  getChannel(): Channel | null {
+    return this.channel;
+  }
+
+  getPublisherChannel(): Channel | null {
+    return this.publisherChannel;
+  }
+
+  getConnection(): ChannelModel | null {
+    return this.connection;
+  }
+
+  /** Get all registered consumer tags */
+  get consumerTags(): string[] {
+    return [...this._consumers.keys()];
+  }
+
+  /** Get a registered consumer by tag */
+  getConsumer(consumerTag: string): ConsumerHandler | undefined {
+    return this._consumers.get(consumerTag);
+  }
+
+  // ── Private: connection helpers ───────────────────────────────────
+
+  private validateUrl(url: string): void {
+    if (!AMQP_URL_PATTERN.test(url)) {
+      throw new Error(
+        `Invalid RabbitMQ URL format. Expected: amqp(s)://[user:pass@]host[:port][/vhost]`,
+      );
+    }
+  }
+
+  private sanitizeExchangeName(name: string): string {
+    return MessageSerializer.sanitizeExchangeName(name);
+  }
+
+  private sanitizeQueueName(name: string): string {
+    return MessageSerializer.sanitizeQueueName(name);
+  }
+
+  private async handleReconnect(): Promise<void> {
+    if (!this.config.reconnect) return;
+
+    if (this.reconnectTimeoutId) {
+      clearTimeout(this.reconnectTimeoutId);
+      this.reconnectTimeoutId = null;
+    }
+
+    if (this.reconnectAttempts >= (this.config.reconnectAttempts || DEFAULT_RECONNECT_ATTEMPTS)) {
+      this.logger.error("Max reconnection attempts reached");
+      return;
+    }
+
+    this.reconnectAttempts++;
+    this.logger.log(
+      `Reconnecting to RabbitMQ (attempt ${this.reconnectAttempts}/${
+        this.config.reconnectAttempts ?? DEFAULT_RECONNECT_ATTEMPTS
+      })...`,
+    );
+
+    this.reconnectTimeoutId = setTimeout(() => {
+      this.reconnectTimeoutId = null;
+      this.connect().catch((err: Error) => {
+        this.logger.error("Reconnection failed:", err);
+      });
+    }, this.config.reconnectInterval ?? DEFAULT_RECONNECT_INTERVAL);
+  }
+
   private async getOrCreateAssertionChannel(): Promise<Channel> {
     if (this.assertionChannel) {
       return this.assertionChannel;
@@ -366,201 +832,93 @@ export class AmqpConnection {
     return this.assertionChannel;
   }
 
+  private getExchangeName(name: string): string {
+    if (!name) return name; // allow empty exchange (default exchange)
+    const sanitizedName = this.sanitizeExchangeName(name);
+    return this.config.exchangePrefix
+      ? `${this.config.exchangePrefix}.${sanitizedName}`
+      : sanitizedName;
+  }
+
+  private getQueueName(name: string): string {
+    if (!name) return name; // allow empty queue (server-generated)
+    const sanitizedName = this.sanitizeQueueName(name);
+    return this.config.queuePrefix ? `${this.config.queuePrefix}.${sanitizedName}` : sanitizedName;
+  }
+
+  // ── Private: message helpers ──────────────────────────────────────
+
   /**
-   * Assert an exchange.
-   * Uses the dedicated assertion channel so broker errors never kill consumers.
-   * When createIfNotExists is false, uses checkExchange (passive declare).
+   * Wrap a consumer callback to track outstanding message processing
+   * for graceful shutdown.
    */
-  async assertExchange(config: RabbitMQExchangeConfig): Promise<void> {
-    const exchangeName = this.getExchangeName(config.name);
-
-    // Skip if already asserted to avoid redundant operations
-    if (this.assertedExchanges.has(exchangeName)) {
-      return;
-    }
-
-    const ch = await this.getOrCreateAssertionChannel();
-    const shouldCreate = config.createIfNotExists !== false;
-
-    if (shouldCreate) {
-      const type = config.type || this.config.defaultExchangeType || "topic";
-      await ch.assertExchange(exchangeName, type, config.options);
-    } else {
-      await ch.checkExchange(exchangeName);
-    }
-
-    this.assertedExchanges.add(exchangeName);
-    this.logger.debug(`Exchange '${exchangeName}' asserted`);
+  private wrapConsumer(
+    consumer: (msg: ConsumeMessage | null) => void | Promise<void>,
+  ): (msg: ConsumeMessage | null) => void {
+    return (msg: ConsumeMessage | null) => {
+      const promise = Promise.resolve(consumer(msg)).then(() => {});
+      this.outstandingMessageProcessing.add(promise);
+      promise.finally(() => {
+        this.outstandingMessageProcessing.delete(promise);
+      });
+    };
   }
 
   /**
-   * Assert a queue.
-   * Uses the dedicated assertion channel so broker errors never kill consumers.
+   * Deserialize a message using the per-handler or global deserializer.
    */
-  async assertQueue(config: RabbitMQQueueConfig): Promise<void> {
-    const queueName = this.getQueueName(config.name);
+  private deserializeMessage<T>(
+    msg: ConsumeMessage,
+    options?: { deserializer?: (message: Buffer, msg?: unknown) => unknown; allowNonJsonMessages?: boolean },
+  ): { message: T | undefined; headers: Record<string, unknown> } {
+    const headers = (msg.properties.headers || {}) as Record<string, unknown>;
 
-    // Skip if already asserted to avoid redundant operations
-    if (this.assertedQueues.has(queueName)) {
-      return;
+    if (msg.content.length === 0) {
+      return { message: undefined, headers };
     }
 
-    const ch = await this.getOrCreateAssertionChannel();
+    // Use per-handler deserializer, then global, then default
+    const deserializer = options?.deserializer || this.config.deserializer;
 
-    await ch.assertQueue(queueName, config.options);
-
-    // Bind queue to exchanges (from bindings array)
-    if (config.bindings) {
-      for (const binding of config.bindings) {
-        const exchangeName = this.getExchangeName(binding.exchange);
-        await ch.bindQueue(
-          queueName,
-          exchangeName,
-          binding.routingKey,
-          binding.arguments,
-        );
-      }
+    if (deserializer) {
+      const message = deserializer(msg.content, msg) as T;
+      return { message, headers };
     }
 
-    // Shortcut: bind to exchange directly (for simple cases)
-    if (config.exchange && config.routingKey !== undefined) {
-      const exchangeName = this.getExchangeName(config.exchange);
-      await ch.bindQueue(queueName, exchangeName, config.routingKey);
-    }
-
-    this.assertedQueues.add(queueName);
-    this.logger.debug(`Queue '${queueName}' asserted`);
-  }
-
-  /**
-   * Publish a message to an exchange
-   */
-  async publish<T = unknown>(
-    exchange: string,
-    routingKey: string,
-    message: T,
-    options?: RabbitMQPublishOptions,
-  ): Promise<boolean> {
-    if (!this.publisherChannel) {
-      throw new Error("RabbitMQ publisher channel not available");
-    }
-
-    const exchangeName = this.getExchangeName(exchange);
-    const content = this.serializer.serialize(message);
-
-    const published = this.publisherChannel.publish(exchangeName, routingKey, content, {
-      persistent: options?.persistent ?? true,
-      headers: options?.headers,
-      priority: options?.priority,
-      expiration: options?.expiration?.toString(),
-      correlationId: options?.correlationId,
-      replyTo: options?.replyTo,
-      type: options?.type,
-      messageId: options?.messageId,
-    });
-
-    if (published) {
-      this.logger.debug(`Message published to '${exchangeName}:${routingKey}'`);
-    }
-
-    return published;
-  }
-
-  /**
-   * Send a message directly to a queue
-   */
-  async sendToQueue<T = unknown>(
-    queue: string,
-    message: T,
-    options?: RabbitMQPublishOptions,
-  ): Promise<boolean> {
-    if (!this.publisherChannel) {
-      throw new Error("RabbitMQ publisher channel not available");
-    }
-
-    const queueName = this.getQueueName(queue);
-    const content = this.serializer.serialize(message);
-
-    const sent = this.publisherChannel.sendToQueue(queueName, content, {
-      persistent: options?.persistent ?? true,
-      headers: options?.headers,
-      priority: options?.priority,
-      expiration: options?.expiration?.toString(),
-      correlationId: options?.correlationId,
-      replyTo: options?.replyTo,
-    });
-
-    if (sent) {
-      this.logger.debug(`Message sent to queue '${queueName}'`);
-    }
-
-    return sent;
-  }
-
-  /**
-   * Subscribe to messages from a queue
-   */
-  async subscribe<T = unknown>(
-    queue: string,
-    handler: (message: RabbitMQMessage<T>) => Promise<void> | void,
-    options?: { noAck?: boolean; consumerTag?: string },
-  ): Promise<string> {
-    if (!this.channel) {
-      throw new Error("RabbitMQ channel not available");
-    }
-
-    const queueName = this.getQueueName(queue);
-
-    const { consumerTag } = await this.channel.consume(
-      queueName,
-      (msg: ConsumeMessage | null) => {
-        if (!msg) {
-          return;
-        }
-
-        const rabbitMessage = this.createRabbitMessage<T>(msg);
-
-        Promise.resolve(handler(rabbitMessage)).catch((error: Error) => {
-          this.logger.error("Error handling message:", error);
-          rabbitMessage.nack(false);
-        });
-      },
-      { noAck: options?.noAck ?? false, consumerTag: options?.consumerTag },
-    );
-
-    // Track the consumer for cleanup
-    this.activeConsumers.set(consumerTag, { consumerTag, queue: queueName });
-
-    this.logger.log(`Subscribed to queue '${queueName}' with consumer tag '${consumerTag}'`);
-
-    return consumerTag;
-  }
-
-  /**
-   * Cancel a consumer subscription
-   */
-  async unsubscribe(consumerTag: string): Promise<void> {
-    if (!this.channel) {
-      return;
-    }
-
+    // Default: use MessageSerializer
     try {
-      await this.channel.cancel(consumerTag);
-      this.activeConsumers.delete(consumerTag);
-      this.logger.debug(`Cancelled consumer '${consumerTag}'`);
-    } catch (error) {
-      this.logger.error(`Failed to cancel consumer '${consumerTag}':`, error);
-      throw error;
+      const parsed = this.serializer.parse<T>(msg.content);
+      if (Buffer.isBuffer(parsed)) {
+        // Non-JSON content
+        if (options?.allowNonJsonMessages) {
+          return { message: parsed.toString() as unknown as T, headers };
+        }
+        return { message: parsed as unknown as T, headers };
+      }
+      return { message: parsed, headers };
+    } catch {
+      if (options?.allowNonJsonMessages) {
+        return { message: msg.content.toString() as unknown as T, headers };
+      }
+      throw new Error("Failed to deserialize message");
     }
   }
 
   /**
-   * Create a RabbitMQ message wrapper
+   * Serialize a message using the global serializer or default.
    */
+  private serializeMessage<T>(message: T): Buffer {
+    if (Buffer.isBuffer(message) || message instanceof Uint8Array) {
+      return Buffer.from(message);
+    }
+    if (this.config.serializer) {
+      return this.config.serializer(message);
+    }
+    return this.serializer.serialize(message);
+  }
+
   private createRabbitMessage<T>(msg: ConsumeMessage): RabbitMQMessage<T> {
     const parsedContent = this.serializer.parse<T>(msg.content);
-    // If parseMessageContent returns a Buffer, cast it to unknown first
-    // This handles non-JSON messages gracefully while maintaining type safety
     const content: T = Buffer.isBuffer(parsedContent)
       ? (parsedContent as unknown as T)
       : parsedContent;
@@ -580,250 +938,131 @@ export class AmqpConnection {
     };
   }
 
-  /**
-   * Get full exchange name with prefix
-   */
-  private getExchangeName(name: string): string {
-    const sanitizedName = this.sanitizeExchangeName(name);
-    return this.config.exchangePrefix
-      ? `${this.config.exchangePrefix}.${sanitizedName}`
-      : sanitizedName;
-  }
+  // ── Private: error handling ───────────────────────────────────────
 
   /**
-   * Get full queue name with prefix
+   * Get the error handler for a message based on options.
    */
-  private getQueueName(name: string): string {
-    const sanitizedName = this.sanitizeQueueName(name);
-    return this.config.queuePrefix ? `${this.config.queuePrefix}.${sanitizedName}` : sanitizedName;
-  }
-
-  /**
-   * Get the logger instance
-   */
-  getLogger(): Logger {
-    return this.logger;
-  }
-
-  /**
-   * Get the consumer channel (for consuming messages)
-   */
-  getChannel(): Channel | null {
-    return this.channel;
-  }
-
-  /**
-   * Get the publisher channel (for publishing messages)
-   */
-  getPublisherChannel(): Channel | null {
-    return this.publisherChannel;
-  }
-
-  /**
-   * Get the underlying connection (for advanced usage)
-   */
-  getConnection(): ChannelModel | null {
-    return this.connection;
-  }
-
-  /**
-   * Make an RPC request and wait for a response
-   * This method creates a temporary reply queue, sends the request, and waits for a response
-   *
-   * @param options Request options including exchange, routingKey, and payload
-   * @returns Promise that resolves with the response
-   *
-   * @example
-   * ```typescript
-   * const response = await amqpConnection.request({
-   *   exchange: 'rpc',
-   *   routingKey: 'calculator.add',
-   *   payload: { a: 1, b: 2 },
-   *   timeout: 10000,
-   * });
-   * console.log(response); // { result: 3 }
-   * ```
-   */
-  async request<T = unknown, R = unknown>(options: RequestOptions<T>): Promise<R> {
-    if (!this.channel) {
-      throw new Error("RabbitMQ channel not available");
+  private getErrorHandler(
+    options: RabbitSubscribeOptions | RabbitRPCOptions,
+    isRpc = false,
+  ): MessageErrorHandler {
+    // Per-handler error handler
+    if (options.errorHandler) {
+      return options.errorHandler as unknown as MessageErrorHandler;
     }
 
-    if (!this.isConnected) {
-      throw new Error("RabbitMQ connection is not ready");
+    // Per-handler error behavior (mapped to handler)
+    if (options.errorBehavior) {
+      return this.getHandlerForBehavior(options.errorBehavior);
     }
 
-    const {
-      exchange,
-      routingKey,
-      payload,
-      timeout = DEFAULT_RPC_TIMEOUT,
-      headers,
-      correlationId: customCorrelationId,
-    } = options;
+    // Global RPC error handler
+    if (isRpc && this.config.defaultRpcErrorHandler) {
+      return this.config.defaultRpcErrorHandler;
+    }
 
-    // Create a unique correlation ID using crypto-secure random UUID
-    const correlationId = customCorrelationId ?? randomUUID();
+    // Global subscribe error behavior
+    if (this.config.defaultSubscribeErrorBehavior) {
+      return this.getHandlerForBehavior(this.config.defaultSubscribeErrorBehavior);
+    }
 
-    // Create a temporary reply queue
-    const { queue: replyQueue } = await this.channel.assertQueue("", {
-      exclusive: true,
-      autoDelete: true,
-    });
-
-    let consumerInfo: Replies.Consume | null = null;
-
-    return new Promise<R>((resolve, reject) => {
-      const cleanup = async (): Promise<void> => {
-        // Remove from pending RPCs tracking
-        this.pendingRpcs.delete(correlationId);
-
-        if (consumerInfo) {
-          try {
-            await this.channel?.cancel(consumerInfo.consumerTag);
-          } catch {
-            // Ignore errors during cleanup
-          }
-        }
-
-        // Delete the reply queue
-        try {
-          await this.channel?.deleteQueue(replyQueue);
-        } catch {
-          // Ignore errors during cleanup
-        }
-      };
-
-      const timeoutId = setTimeout(() => {
-        cleanup().catch((err: Error) => {
-          this.logger.error("Error during RPC cleanup on timeout:", err);
-        });
-        reject(new Error(`RPC request timeout after ${timeout}ms`));
-      }, timeout);
-
-      // Track this RPC for cleanup on disconnect
-      this.pendingRpcs.set(correlationId, {
-        replyQueue,
-        timeoutId,
-        consumerTag: "",
-      });
-
-      // Consume from the reply queue
-      this.channel!.consume(
-        replyQueue,
-        (msg: ConsumeMessage | null) => {
-          if (!msg) {
-            return;
-          }
-
-          // Check if this is the response to our request
-          if (msg.properties.correlationId === correlationId) {
-            clearTimeout(timeoutId);
-            cleanup().catch((err: Error) => {
-              this.logger.error("Error during RPC cleanup on response:", err);
-            });
-
-            const content = this.serializer.parse<R>(msg.content);
-            // Handle both parsed JSON and raw Buffer
-            if (Buffer.isBuffer(content)) {
-              resolve(content as unknown as R);
-            } else {
-              resolve(content);
-            }
-          }
-        },
-        { noAck: true },
-      )
-        .then((consumer) => {
-          consumerInfo = consumer;
-
-          // Update tracking with consumer tag
-          const rpc = this.pendingRpcs.get(correlationId);
-          if (rpc) {
-            rpc.consumerTag = consumer.consumerTag;
-          }
-
-          // Publish the request
-          const content = this.serializer.serialize(payload);
-          const published = this.channel!.publish(exchange, routingKey, content, {
-            correlationId,
-            replyTo: replyQueue,
-            headers,
-            persistent: false,
-          });
-
-          if (!published) {
-            clearTimeout(timeoutId);
-            cleanup().catch((err: Error) => {
-              this.logger.error("Error during RPC cleanup on failed publish:", err);
-            });
-            reject(new Error("Failed to publish RPC request"));
-          }
-        })
-        .catch((error) => {
-          clearTimeout(timeoutId);
-          cleanup().catch((err: Error) => {
-            this.logger.error("Error during RPC cleanup on error:", err);
-          });
-          reject(error);
-        });
-    });
+    // Default: NACK without requeue
+    return (_channel: unknown, msg: ConsumeMessage) => {
+      this.channel?.nack(msg, false, false);
+    };
   }
 
-  /**
-   * Register RabbitMQ handlers from a service instance
-   * Scans the instance's class for @RabbitSubscribe and @RabbitRPC decorators
-   * and sets up consumers that invoke the actual methods
-   *
-   * @param instance The handler instance with @RabbitSubscribe/@RabbitRPC methods
-   *
-   * @example
-   * ```typescript
-   * await amqpConnection.registerHandlers(ordersHandlerInstance);
-   * ```
-   */
-  async registerHandlers(instance: object): Promise<void> {
-    const constructor = instance.constructor as new (...args: unknown[]) => object;
-    const handlerName = constructor.name;
-
-    // Get subscribe handlers metadata
-    const subscribeHandlers =
-      (Reflect.getMetadata(RABBIT_SUBSCRIBE_METADATA, constructor) as Array<{
-        methodName: string | symbol;
-        options: RabbitSubscribeOptions;
-      }>) || [];
-
-    // Get RPC handlers metadata
-    const rpcHandlers =
-      (Reflect.getMetadata(RABBIT_RPC_METADATA, constructor) as Array<{
-        methodName: string | symbol;
-        options: RabbitRPCOptions;
-      }>) || [];
-
-    const totalHandlers = subscribeHandlers.length + rpcHandlers.length;
-
-    if (totalHandlers === 0) {
-      return;
-    }
-
-    this.logger.log(`Registering rabbitmq handlers from ${handlerName}`);
-
-    // Register subscribe handlers
-    for (const { methodName, options: subscribeOptions } of subscribeHandlers) {
-      await this.setupSubscribeHandler(instance, handlerName, methodName, subscribeOptions);
-    }
-
-    // Register RPC handlers
-    for (const { methodName, options: rpcOptions } of rpcHandlers) {
-      await this.setupRpcHandler(instance, handlerName, methodName, rpcOptions);
+  private getHandlerForBehavior(behavior: MessageHandlerErrorBehavior): MessageErrorHandler {
+    switch (behavior) {
+      case "ACK":
+        return (_channel: unknown, msg: ConsumeMessage) => {
+          this.channel?.ack(msg);
+        };
+      case "REQUEUE":
+        return (_channel: unknown, msg: ConsumeMessage) => {
+          this.channel?.nack(msg, false, true);
+        };
+      case "NACK":
+      default:
+        return (_channel: unknown, msg: ConsumeMessage) => {
+          this.channel?.nack(msg, false, false);
+        };
     }
   }
 
+  // ── Private: handler config merging ───────────────────────────────
+
   /**
-   * Set up a single @RabbitSubscribe handler:
-   * assert & bind queue, start consuming.
-   * Exchanges must be pre-configured via RabbitMQModule.forRoot({ exchanges }).
+   * Merge decorator-level config with module-level handler configs.
+   * Module-level config takes precedence.
    */
+  private mergeHandlerConfig<T extends RabbitSubscribeOptions>(options: T): T {
+    if (!options.name || !this.config.handlers) {
+      return options;
+    }
+
+    const handlerConfigs = this.config.handlers[options.name];
+    if (!handlerConfigs) return options;
+
+    const moduleConfig = Array.isArray(handlerConfigs) ? handlerConfigs[0] : handlerConfigs;
+    if (!moduleConfig) return options;
+
+    return { ...options, ...moduleConfig } as T;
+  }
+
+  // ── Private: parameter injection ──────────────────────────────────
+
+  /**
+   * Build handler arguments based on @RabbitPayload, @RabbitHeader, @RabbitRequest decorators.
+   */
+  private buildHandlerArgs(
+    instance: object,
+    methodName: string | symbol,
+    message: unknown,
+    rawMessage: ConsumeMessage,
+    headers: Record<string, unknown>,
+  ): unknown[] {
+    const payloadParams = Reflect.getMetadata(RABBIT_PAYLOAD_METADATA, instance, methodName) || [];
+    const headerParams = Reflect.getMetadata(RABBIT_HEADER_METADATA, instance, methodName) || [];
+    const requestParams = Reflect.getMetadata(RABBIT_REQUEST_METADATA, instance, methodName) || [];
+
+    const allParams = [...payloadParams, ...headerParams, ...requestParams];
+
+    // No parameter decorators — pass message as first arg (backward compatible)
+    if (allParams.length === 0) {
+      return [message, rawMessage, headers];
+    }
+
+    const args: unknown[] = [];
+
+    for (const param of allParams) {
+      let value: unknown;
+      switch (param.type) {
+        case 3: // RABBIT_PARAM_TYPE (payload)
+          value = param.propertyKey && message != null
+            ? (message as Record<string, unknown>)[param.propertyKey]
+            : message;
+          break;
+        case 4: // RABBIT_HEADER_TYPE
+          value = param.propertyKey
+            ? headers[param.propertyKey]
+            : headers;
+          break;
+        case 5: // RABBIT_REQUEST_TYPE
+          value = param.propertyKey
+            ? (rawMessage as unknown as Record<string, unknown>)[param.propertyKey]
+            : rawMessage;
+          break;
+      }
+      args[param.index] = value;
+    }
+
+    return args;
+  }
+
+  // ── Private: subscribe handler setup ──────────────────────────────
+
   private async setupSubscribeHandler(
     instance: object,
     handlerName: string,
@@ -840,39 +1079,184 @@ export class AmqpConnection {
       `${handlerName}.${String(methodName)} {subscribe} -> ${exchange}::${routingKeys.join(",")}::${queue}`,
     );
 
-    // Exchanges are asserted during connect() from forRoot() config.
-    // Subscribers only assert queues and bind them to existing exchanges.
+    if (!queue) return;
 
-    // Assert and bind queue
-    if (queue) {
-      await this.assertQueue({
-        name: queue,
-        options: options.queueOptions,
-        bindings: routingKeys.map((rk) => ({ exchange, routingKey: rk })),
-      });
+    // Assert and bind queue (exchanges are asserted during connect())
+    const actualQueue = await this.assertQueue({
+      name: queue,
+      options: options.queueOptions,
+      bindings: routingKeys.map((rk) => ({ exchange, routingKey: rk })),
+    });
 
-      // Subscribe with a callback that invokes the actual method
-      await this.subscribe(queue, async (message) => {
+    const errorHandler = this.getErrorHandler(options);
+
+    if (!this.channel) return;
+
+    const { consumerTag } = await this.channel.consume(
+      actualQueue,
+      this.wrapConsumer(async (msg: ConsumeMessage | null) => {
+        if (!msg) return;
+
         try {
+          const { message, headers } = this.deserializeMessage(msg, options);
           const method = (instance as Record<string | symbol, Function>)[methodName];
-          await method.call(instance, message.content);
-          message.ack();
+          const args = this.buildHandlerArgs(instance, methodName, message, msg, headers);
+          const response = await method.apply(instance, args);
+
+          // Handle Nack return
+          if (response instanceof Nack) {
+            this.channel?.nack(msg, false, response.requeue);
+            return;
+          }
+
+          // If handler returns something non-void for subscribe, warn
+          if (response !== undefined && response !== null) {
+            this.logger.warn(
+              `Received response from subscribe handler [${handlerName}.${String(methodName)}]. ` +
+              `Subscribe handlers should only return void`,
+            );
+          }
+
+          this.channel?.ack(msg);
         } catch (error) {
-          this.logger.error(
-            `Error in ${handlerName}.${String(methodName)}:`,
-            error,
-          );
-          message.nack(false);
+          this.logger.error(`Error in ${handlerName}.${String(methodName)}:`, error);
+          await errorHandler(this.channel!, msg, error);
         }
-      });
-    }
+      }),
+      options.queueOptions?.consumerOptions,
+    );
+
+    // Register consumer for cancel/resume
+    this._consumers.set(consumerTag, {
+      type: "subscribe",
+      consumerTag,
+      handler: (instance as Record<string | symbol, Function>)[methodName],
+      msgOptions: options,
+      instance,
+      methodName,
+      handlerName,
+    });
   }
 
-  /**
-   * Set up a single @RabbitRPC handler:
-   * assert & bind queue, consume and reply.
-   * Exchanges must be pre-configured via RabbitMQModule.forRoot({ exchanges }).
-   */
+  // ── Private: batch subscribe handler setup ────────────────────────
+
+  private async setupBatchSubscribeHandler(
+    instance: object,
+    handlerName: string,
+    methodName: string | symbol,
+    options: RabbitSubscribeOptions,
+  ): Promise<void> {
+    const exchange = options.exchange;
+    const routingKeys = Array.isArray(options.routingKey)
+      ? options.routingKey
+      : [options.routingKey];
+    const queue = options.queue || "";
+    const batch = options.batch!;
+
+    const batchSize = batch.size || DEFAULT_BATCH_SIZE;
+    const batchTimeout = batch.timeout ?? DEFAULT_BATCH_TIMEOUT;
+
+    if (batchSize < 2) {
+      this.logger.warn(`Batch size should be >= 2, got ${batchSize}. Using 2.`);
+    }
+
+    this.logger.log(
+      `${handlerName}.${String(methodName)} {batch-subscribe} -> ${exchange}::${routingKeys.join(",")}::${queue} (batch: ${batchSize}, timeout: ${batchTimeout}ms)`,
+    );
+
+    if (!queue) return;
+
+    const actualQueue = await this.assertQueue({
+      name: queue,
+      options: options.queueOptions,
+      bindings: routingKeys.map((rk) => ({ exchange, routingKey: rk })),
+    });
+
+    const errorHandler = this.getErrorHandler(options);
+    const batchErrorHandler = batch.errorHandler;
+
+    const state: BatchState = {
+      messages: [],
+      timer: null,
+      options: batch,
+      handler: (instance as Record<string | symbol, Function>)[methodName],
+      instance,
+      methodName,
+      handlerName,
+      subscribeOptions: options,
+    };
+
+    this._batchStates.set(actualQueue, state);
+
+    const processBatch = async () => {
+      if (state.timer) {
+        clearTimeout(state.timer);
+        state.timer = null;
+      }
+
+      const msgs = state.messages.splice(0);
+      if (msgs.length === 0) return;
+
+      try {
+        const deserialized = msgs.map((m) => this.deserializeMessage(m, options));
+        const payloads = deserialized.map((d) => d.message);
+        const headers = deserialized.map((d) => d.headers);
+        const rawMessages = msgs;
+
+        const method = (instance as Record<string | symbol, Function>)[methodName];
+        const response = await method.call(instance, payloads, rawMessages, headers);
+
+        if (response instanceof Nack) {
+          for (const m of msgs) this.channel?.nack(m, false, response.requeue);
+          return;
+        }
+
+        for (const m of msgs) this.channel?.ack(m);
+      } catch (error) {
+        this.logger.error(`Error in batch ${handlerName}.${String(methodName)}:`, error);
+        if (batchErrorHandler) {
+          await batchErrorHandler(this.channel!, msgs, error);
+        } else {
+          for (const m of msgs) await errorHandler(this.channel!, m, error);
+        }
+      }
+    };
+
+    if (!this.channel) return;
+
+    const { consumerTag } = await this.channel.consume(
+      actualQueue,
+      this.wrapConsumer(async (msg: ConsumeMessage | null) => {
+        if (!msg) return;
+
+        state.messages.push(msg);
+
+        if (state.messages.length >= Math.max(batchSize, 2)) {
+          await processBatch();
+        } else if (!state.timer) {
+          state.timer = setTimeout(() => {
+            processBatch().catch((err) => {
+              this.logger.error("Error processing batch:", err);
+            });
+          }, batchTimeout);
+        }
+      }),
+      options.queueOptions?.consumerOptions,
+    );
+
+    this._consumers.set(consumerTag, {
+      type: "batch",
+      consumerTag,
+      handler: (instance as Record<string | symbol, Function>)[methodName],
+      msgOptions: options,
+      instance,
+      methodName,
+      handlerName,
+    });
+  }
+
+  // ── Private: RPC handler setup ────────────────────────────────────
+
   private async setupRpcHandler(
     instance: object,
     handlerName: string,
@@ -889,46 +1273,286 @@ export class AmqpConnection {
       `${handlerName}.${String(methodName)} {rpc} -> ${exchange}::${routingKeys.join(",")}::${queue}`,
     );
 
-    // Exchanges are asserted during connect() from forRoot() config.
-    // RPC handlers only assert queues and bind them to existing exchanges.
+    if (!queue) return;
 
-    // Assert and bind queue
-    if (queue) {
+    const entry: RpcHandlerEntry = {
+      routingKey: options.routingKey,
+      handler: (instance as Record<string | symbol, Function>)[methodName],
+      rpcOptions: options,
+      instance,
+      methodName,
+      handlerName,
+    };
+
+    // Support multiple RPC handlers per queue
+    if (!this._rpcHandlersByQueue.has(queue)) {
+      this._rpcHandlersByQueue.set(queue, []);
+    }
+    this._rpcHandlersByQueue.get(queue)!.push(entry);
+
+    // If there's already a consumer for this queue, just bind the queue
+    if (this._rpcConsumerTagByQueue.has(queue)) {
       await this.assertQueue({
         name: queue,
         options: options.queueOptions,
         bindings: routingKeys.map((rk) => ({ exchange, routingKey: rk })),
       });
+      return;
+    }
 
-      // Subscribe with a callback that invokes the method and sends a reply
-      await this.subscribe(queue, async (message) => {
+    // First handler for this queue — set up consumer
+    const actualQueue = await this.assertQueue({
+      name: queue,
+      options: options.queueOptions,
+      bindings: routingKeys.map((rk) => ({ exchange, routingKey: rk })),
+    });
+
+    if (!this.channel) return;
+
+    const errorHandler = this.getErrorHandler(options, true);
+
+    const { consumerTag } = await this.channel.consume(
+      actualQueue,
+      this.wrapConsumer(async (msg: ConsumeMessage | null) => {
+        if (!msg) return;
+
         try {
-          const method = (instance as Record<string | symbol, Function>)[methodName];
-          const result = await method.call(instance, message.content);
+          // Find the matching handler by routing key
+          const handlers = this._rpcHandlersByQueue.get(queue) || [];
+          const matched = this.findRpcHandler(handlers, msg.fields.routingKey);
 
-          // Send RPC reply if replyTo is set
-          if (message.properties.replyTo && message.properties.correlationId) {
-            const content = this.serializer.serialize(result);
-            this.publisherChannel?.sendToQueue(
-              message.properties.replyTo,
-              content,
-              {
-                correlationId: message.properties.correlationId,
-                persistent: false,
-              },
+          if (!matched) {
+            this.channel?.nack(msg, false, false);
+            this.logger.error(
+              `No RPC handler found for routing key "${msg.fields.routingKey}" on queue "${queue}"`,
             );
+            return;
           }
 
-          message.ack();
-        } catch (error) {
-          this.logger.error(
-            `Error in ${handlerName}.${String(methodName)}:`,
-            error,
+          const { message, headers } = this.deserializeMessage(msg, matched.rpcOptions);
+          const args = this.buildHandlerArgs(
+            matched.instance,
+            matched.methodName,
+            message,
+            msg,
+            headers,
           );
-          message.nack(false);
+          const response = await matched.handler.apply(matched.instance, args);
+
+          // Handle Nack return
+          if (response instanceof Nack) {
+            this.channel?.nack(msg, false, response.requeue);
+            return;
+          }
+
+          // Send RPC reply if replyTo is set
+          const { replyTo, correlationId, expiration, headers: msgHeaders } = msg.properties;
+          if (replyTo && this.publisherChannel) {
+            const content = this.serializeMessage(response);
+            this.publisherChannel.sendToQueue(replyTo, content, {
+              correlationId,
+              expiration,
+              headers: msgHeaders,
+              persistent: matched.rpcOptions.usePersistentReplyTo ?? false,
+            });
+          }
+
+          this.channel?.ack(msg);
+        } catch (error) {
+          this.logger.error(`Error in RPC handler for queue "${queue}":`, error);
+          await errorHandler(this.channel!, msg, error);
         }
-      });
+      }),
+      options.queueOptions?.consumerOptions,
+    );
+
+    this._rpcConsumerTagByQueue.set(queue, consumerTag);
+
+    this._consumers.set(consumerTag, {
+      type: "rpc",
+      consumerTag,
+      handler: entry.handler,
+      msgOptions: options,
+      instance,
+      methodName,
+      handlerName,
+    });
+  }
+
+  /**
+   * Find the matching RPC handler for a given routing key.
+   * Exact match first, then wildcard pattern matching.
+   */
+  private findRpcHandler(
+    handlers: RpcHandlerEntry[],
+    routingKey: string,
+  ): RpcHandlerEntry | null {
+    // Exact match
+    for (const entry of handlers) {
+      const keys = Array.isArray(entry.routingKey) ? entry.routingKey : [entry.routingKey];
+      if (keys.includes(routingKey)) return entry;
     }
+
+    // Wildcard pattern matching
+    for (const entry of handlers) {
+      if (matchesRoutingKey(routingKey, entry.routingKey)) return entry;
+    }
+
+    // If only one handler, use it as fallback
+    if (handlers.length === 1) return handlers[0];
+
+    return null;
+  }
+
+  // ── Private: Direct Reply-To ──────────────────────────────────────
+
+  private async initDirectReplyQueue(): Promise<void> {
+    if (!this.channel) return;
+
+    try {
+      const { consumerTag } = await this.channel.consume(
+        DIRECT_REPLY_QUEUE,
+        (msg: ConsumeMessage | null) => {
+          if (!msg) return;
+
+          const correlationId = msg.properties.correlationId;
+          if (!correlationId) return;
+
+          const pending = this._rpcResponseHandlers.get(correlationId);
+          if (pending) {
+            clearTimeout(pending.timeoutId);
+            this._rpcResponseHandlers.delete(correlationId);
+
+            try {
+              const content = this.serializer.parse(msg.content);
+              if (Buffer.isBuffer(content)) {
+                pending.resolve(content);
+              } else {
+                pending.resolve(content);
+              }
+            } catch (err) {
+              pending.reject(err);
+            }
+          }
+        },
+        { noAck: true },
+      );
+
+      this._directReplyConsumerTag = consumerTag;
+    } catch {
+      // Direct Reply-To not supported (some brokers don't support it)
+      this.logger.warn("Direct Reply-To queue not available, falling back to temporary queues for RPC");
+      this._directReplyConsumerTag = null;
+    }
+  }
+
+  private async requestViaDirectReplyTo<T, R>(
+    exchange: string,
+    routingKey: string,
+    payload: T,
+    correlationId: string,
+    timeout: number,
+    headers?: Record<string, unknown>,
+  ): Promise<R> {
+    return new Promise<R>((resolve, reject) => {
+      const timeoutId = setTimeout(() => {
+        this._rpcResponseHandlers.delete(correlationId);
+        reject(new Error(`RPC request timeout after ${timeout}ms`));
+      }, timeout);
+
+      this._rpcResponseHandlers.set(correlationId, {
+        resolve: resolve as (value: unknown) => void,
+        reject,
+        timeoutId,
+      });
+
+      const content = this.serializeMessage(payload);
+      const published = this.publisherChannel!.publish(
+        this.getExchangeName(exchange),
+        routingKey,
+        content,
+        {
+          correlationId,
+          replyTo: DIRECT_REPLY_QUEUE,
+          headers,
+          persistent: false,
+        },
+      );
+
+      if (!published) {
+        clearTimeout(timeoutId);
+        this._rpcResponseHandlers.delete(correlationId);
+        reject(new Error("Failed to publish RPC request"));
+      }
+    });
+  }
+
+  private async requestViaTemporaryQueue<T, R>(
+    exchange: string,
+    routingKey: string,
+    payload: T,
+    correlationId: string,
+    timeout: number,
+    headers?: Record<string, unknown>,
+  ): Promise<R> {
+    if (!this.channel) {
+      throw new Error("RabbitMQ channel not available");
+    }
+
+    const { queue: replyQueue } = await this.channel.assertQueue("", {
+      exclusive: true,
+      autoDelete: true,
+    });
+
+    let consumerInfo: Replies.Consume | null = null;
+
+    return new Promise<R>((resolve, reject) => {
+      const cleanup = async (): Promise<void> => {
+        if (consumerInfo) {
+          try { await this.channel?.cancel(consumerInfo.consumerTag); } catch { /* ignore */ }
+        }
+        try { await this.channel?.deleteQueue(replyQueue); } catch { /* ignore */ }
+      };
+
+      const timeoutId = setTimeout(() => {
+        cleanup().catch(() => {});
+        reject(new Error(`RPC request timeout after ${timeout}ms`));
+      }, timeout);
+
+      this.channel!.consume(
+        replyQueue,
+        (msg: ConsumeMessage | null) => {
+          if (!msg) return;
+          if (msg.properties.correlationId === correlationId) {
+            clearTimeout(timeoutId);
+            cleanup().catch(() => {});
+            const content = this.serializer.parse<R>(msg.content);
+            resolve(Buffer.isBuffer(content) ? (content as unknown as R) : content);
+          }
+        },
+        { noAck: true },
+      )
+        .then((consumer) => {
+          consumerInfo = consumer;
+          const content = this.serializeMessage(payload);
+          const published = this.channel!.publish(
+            this.getExchangeName(exchange),
+            routingKey,
+            content,
+            { correlationId, replyTo: replyQueue, headers, persistent: false },
+          );
+          if (!published) {
+            clearTimeout(timeoutId);
+            cleanup().catch(() => {});
+            reject(new Error("Failed to publish RPC request"));
+          }
+        })
+        .catch((error) => {
+          clearTimeout(timeoutId);
+          cleanup().catch(() => {});
+          reject(error);
+        });
+    });
   }
 }
 
@@ -937,3 +1561,57 @@ export class AmqpConnection {
  * @deprecated Use AmqpConnection instead
  */
 export const RabbitMQService = AmqpConnection;
+
+// ── Routing key pattern matching ──────────────────────────────────
+
+/**
+ * Match a routing key against an AMQP routing key pattern.
+ * Supports: exact match, single word wildcard (*), multi word wildcard (#).
+ */
+function matchesRoutingKey(
+  routingKey: string,
+  pattern: string | string[] | undefined,
+): boolean {
+  if (pattern === undefined || pattern === null) return true;
+  const patterns = Array.isArray(pattern) ? pattern : [pattern];
+  return patterns.some((p) => matchSinglePattern(routingKey, p));
+}
+
+function matchSinglePattern(routingKey: string, pattern: string): boolean {
+  if (routingKey === pattern) return true;
+  const routingParts = routingKey.split(".");
+  const patternParts = pattern.split(".");
+  return matchParts(routingParts, 0, patternParts, 0);
+}
+
+function matchParts(
+  routingParts: string[],
+  ri: number,
+  patternParts: string[],
+  pi: number,
+): boolean {
+  if (ri === routingParts.length && pi === patternParts.length) return true;
+  if (pi === patternParts.length) return false;
+
+  const patternPart = patternParts[pi];
+
+  if (patternPart === "#") {
+    if (pi === patternParts.length - 1) return true;
+    for (let i = ri; i <= routingParts.length; i++) {
+      if (matchParts(routingParts, i, patternParts, pi + 1)) return true;
+    }
+    return false;
+  }
+
+  if (ri === routingParts.length) return false;
+
+  if (patternPart === "*") {
+    return matchParts(routingParts, ri + 1, patternParts, pi + 1);
+  }
+
+  if (routingParts[ri] === patternPart) {
+    return matchParts(routingParts, ri + 1, patternParts, pi + 1);
+  }
+
+  return false;
+}

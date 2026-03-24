@@ -303,43 +303,96 @@ export function RabbitConnection(connectionName: string): ClassDecorator {
   };
 }
 
-// Metadata key for RabbitPayload
+// Metadata keys for parameter decorators
 export const RABBIT_PAYLOAD_METADATA = "__rabbitPayload__";
+export const RABBIT_HEADER_METADATA = "__rabbitHeader__";
+export const RABBIT_REQUEST_METADATA = "__rabbitRequest__";
+
+// Parameter types (matching golevelup constants)
+export const RABBIT_PARAM_TYPE = 3;
+export const RABBIT_HEADER_TYPE = 4;
+export const RABBIT_REQUEST_TYPE = 5;
 
 /**
- * Parameter decorator to extract the message payload
- * In @nestelia/rabbitmq this extracts the actual message content
+ * Parameter decorator to extract the message payload.
+ * Supports optional property key for nested extraction.
  *
  * @example
  * ```typescript
- * @RabbitSubscribe({
- *   exchange: 'orders',
- *   routingKey: 'order.created',
- *   queue: 'orders-queue',
- * })
- * async handleOrder(@RabbitPayload() data: OrderData) {
- *   console.log('Order:', data);
- * }
+ * @RabbitSubscribe({ exchange: 'orders', routingKey: 'order.created', queue: 'q' })
+ * async handleOrder(@RabbitPayload() data: OrderData) { }
+ *
+ * // Extract specific property
+ * async handleOrder(@RabbitPayload('orderId') id: string) { }
  * ```
  */
-export function RabbitPayload(): ParameterDecorator {
+export function RabbitPayload(): ParameterDecorator;
+export function RabbitPayload(propertyKey: string): ParameterDecorator;
+export function RabbitPayload(propertyKey?: string): ParameterDecorator {
   return (
     target: object,
-    propertyKey: string | symbol | undefined,
+    propertyName: string | symbol | undefined,
     parameterIndex: number,
   ) => {
     const existingParams =
-      Reflect.getMetadata(
-        RABBIT_PAYLOAD_METADATA,
-        target as object,
-        propertyKey as string | symbol,
-      ) || [];
+      Reflect.getMetadata(RABBIT_PAYLOAD_METADATA, target, propertyName!) || [];
+    existingParams.push({ index: parameterIndex, propertyKey, type: RABBIT_PARAM_TYPE });
+    Reflect.defineMetadata(RABBIT_PAYLOAD_METADATA, existingParams, target, propertyName!);
+  };
+}
 
-    Reflect.defineMetadata(
-      RABBIT_PAYLOAD_METADATA,
-      [...existingParams, { index: parameterIndex }],
-      target as object,
-      propertyKey as string | symbol,
-    );
+/**
+ * Parameter decorator to extract message headers.
+ * Supports optional property key for specific header extraction.
+ *
+ * @example
+ * ```typescript
+ * @RabbitSubscribe({ exchange: 'orders', routingKey: 'order.created', queue: 'q' })
+ * async handleOrder(@RabbitHeader() headers: Record<string, unknown>) { }
+ *
+ * // Extract specific header
+ * async handleOrder(@RabbitHeader('x-request-id') requestId: string) { }
+ * ```
+ */
+export function RabbitHeader(): ParameterDecorator;
+export function RabbitHeader(propertyKey: string): ParameterDecorator;
+export function RabbitHeader(propertyKey?: string): ParameterDecorator {
+  return (
+    target: object,
+    propertyName: string | symbol | undefined,
+    parameterIndex: number,
+  ) => {
+    const existingParams =
+      Reflect.getMetadata(RABBIT_HEADER_METADATA, target, propertyName!) || [];
+    existingParams.push({ index: parameterIndex, propertyKey, type: RABBIT_HEADER_TYPE });
+    Reflect.defineMetadata(RABBIT_HEADER_METADATA, existingParams, target, propertyName!);
+  };
+}
+
+/**
+ * Parameter decorator to extract the raw ConsumeMessage.
+ * Supports optional property key for specific property extraction.
+ *
+ * @example
+ * ```typescript
+ * @RabbitSubscribe({ exchange: 'orders', routingKey: 'order.created', queue: 'q' })
+ * async handleOrder(@RabbitRequest() msg: ConsumeMessage) { }
+ *
+ * // Extract specific property
+ * async handleOrder(@RabbitRequest('fields') fields: MessageFields) { }
+ * ```
+ */
+export function RabbitRequest(): ParameterDecorator;
+export function RabbitRequest(propertyKey: string): ParameterDecorator;
+export function RabbitRequest(propertyKey?: string): ParameterDecorator {
+  return (
+    target: object,
+    propertyName: string | symbol | undefined,
+    parameterIndex: number,
+  ) => {
+    const existingParams =
+      Reflect.getMetadata(RABBIT_REQUEST_METADATA, target, propertyName!) || [];
+    existingParams.push({ index: parameterIndex, propertyKey, type: RABBIT_REQUEST_TYPE });
+    Reflect.defineMetadata(RABBIT_REQUEST_METADATA, existingParams, target, propertyName!);
   };
 }

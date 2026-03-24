@@ -50,6 +50,7 @@ function createMockChannel() {
     prefetch: jest.fn(async () => {}),
     close: jest.fn(async () => {}),
     on: jest.fn(),
+    bindExchange: jest.fn(async () => ({})),
     _simulateMessage(queue: string, content: unknown, properties: Record<string, unknown> = {}) {
       const cb = consumers.get(queue);
       if (cb) {
@@ -648,6 +649,336 @@ describe("AmqpConnection", () => {
       expect(received).toHaveLength(1);
       expect(received[0]).toEqual({ orderId: "abc", amount: 42 });
       expect(mockChannel.ack).toHaveBeenCalled();
+    });
+  });
+
+  // ── Nack return from handlers ───────────────────────────────────
+
+  describe("Nack return", () => {
+    it("nacks message when subscribe handler returns Nack", async () => {
+      const { Nack } = await import("../src/nack");
+
+      class TestHandler {
+        @RabbitSubscribe({ exchange: "ex", routingKey: "rk", queue: "nack-q" })
+        handle() {
+          return new Nack(false);
+        }
+      }
+
+      await conn.registerHandlers(new TestHandler());
+      mockChannel._simulateMessage("nack-q", { test: true });
+
+      await new Promise((r) => setTimeout(r, 10));
+
+      expect(mockChannel.nack).toHaveBeenCalled();
+      expect(mockChannel.ack).not.toHaveBeenCalled();
+    });
+
+    it("nacks with requeue when Nack(true)", async () => {
+      const { Nack } = await import("../src/nack");
+
+      class TestHandler {
+        @RabbitSubscribe({ exchange: "ex", routingKey: "rk", queue: "requeue-q" })
+        handle() {
+          return new Nack(true);
+        }
+      }
+
+      await conn.registerHandlers(new TestHandler());
+      mockChannel.nack.mockClear();
+      mockChannel._simulateMessage("requeue-q", { test: true });
+
+      await new Promise((r) => setTimeout(r, 10));
+
+      expect(mockChannel.nack).toHaveBeenCalledWith(
+        expect.anything(), false, true,
+      );
+    });
+  });
+
+  // ── Error behaviors ─────────────────────────────────────────────
+
+  describe("error behaviors", () => {
+    it("ACK error behavior acks on error", async () => {
+      class TestHandler {
+        @RabbitSubscribe({ exchange: "ex", routingKey: "rk", queue: "ack-err-q", errorBehavior: "ACK" })
+        handle() {
+          throw new Error("boom");
+        }
+      }
+
+      await conn.registerHandlers(new TestHandler());
+      mockChannel.ack.mockClear();
+      mockChannel._simulateMessage("ack-err-q", {});
+
+      await new Promise((r) => setTimeout(r, 10));
+
+      expect(mockChannel.ack).toHaveBeenCalled();
+    });
+
+    it("REQUEUE error behavior nacks with requeue on error", async () => {
+      class TestHandler {
+        @RabbitSubscribe({ exchange: "ex", routingKey: "rk", queue: "req-err-q", errorBehavior: "REQUEUE" })
+        handle() {
+          throw new Error("boom");
+        }
+      }
+
+      await conn.registerHandlers(new TestHandler());
+      mockChannel.nack.mockClear();
+      mockChannel._simulateMessage("req-err-q", {});
+
+      await new Promise((r) => setTimeout(r, 10));
+
+      expect(mockChannel.nack).toHaveBeenCalledWith(
+        expect.anything(), false, true,
+      );
+    });
+
+    it("NACK error behavior nacks without requeue on error", async () => {
+      class TestHandler {
+        @RabbitSubscribe({ exchange: "ex", routingKey: "rk", queue: "nack-err-q", errorBehavior: "NACK" })
+        handle() {
+          throw new Error("boom");
+        }
+      }
+
+      await conn.registerHandlers(new TestHandler());
+      mockChannel.nack.mockClear();
+      mockChannel._simulateMessage("nack-err-q", {});
+
+      await new Promise((r) => setTimeout(r, 10));
+
+      expect(mockChannel.nack).toHaveBeenCalledWith(
+        expect.anything(), false, false,
+      );
+    });
+  });
+
+  // ── Exchange bindings ───────────────────────────────────────────
+
+  describe("exchange bindings", () => {
+    it("binds exchanges on connect", async () => {
+      mockChannel.bindExchange = jest.fn(async () => ({}));
+
+      const conn2 = createConnection({
+        exchanges: [
+          { name: "source-ex", type: "topic" },
+          { name: "dest-ex", type: "topic" },
+        ],
+        exchangeBindings: [
+          { source: "source-ex", destination: "dest-ex", pattern: "order.*" },
+        ],
+      });
+      await conn2.connect();
+
+      expect(mockChannel.bindExchange).toHaveBeenCalledWith(
+        "dest-ex", "source-ex", "order.*", undefined,
+      );
+    });
+  });
+
+  // ── Graceful shutdown ───────────────────────────────────────────
+
+  describe("graceful shutdown", () => {
+    it("waits for outstanding messages before disconnecting", async () => {
+      let resolveHandler: () => void;
+      const handlerPromise = new Promise<void>((r) => { resolveHandler = r; });
+
+      class TestHandler {
+        @RabbitSubscribe({ exchange: "ex", routingKey: "rk", queue: "slow-q" })
+        async handle() {
+          await handlerPromise;
+        }
+      }
+
+      await conn.registerHandlers(new TestHandler());
+      mockChannel._simulateMessage("slow-q", {});
+
+      // Start disconnect (should wait for handler)
+      const disconnectPromise = conn.disconnect();
+
+      // Handler is still running
+      resolveHandler!();
+
+      await disconnectPromise;
+
+      // Should complete without errors
+      expect(mockChannel.close).toHaveBeenCalled();
+    });
+  });
+
+  // ── Consumer cancel/resume ──────────────────────────────────────
+
+  describe("consumer cancel/resume", () => {
+    it("cancelConsumer cancels without removing handler info", async () => {
+      class TestHandler {
+        @RabbitSubscribe({ exchange: "ex", routingKey: "rk", queue: "cancel-q" })
+        handle() {}
+      }
+
+      await conn.registerHandlers(new TestHandler());
+
+      const tags = conn.consumerTags;
+      expect(tags.length).toBeGreaterThan(0);
+
+      const tag = tags[tags.length - 1];
+      await conn.cancelConsumer(tag);
+
+      expect(mockChannel.cancel).toHaveBeenCalledWith(tag);
+      // Handler info still available for resume
+      expect(conn.getConsumer(tag)).toBeDefined();
+    });
+  });
+
+  // ── Multiple RPC handlers per queue ─────────────────────────────
+
+  describe("multiple RPC handlers per queue", () => {
+    it("routes to correct handler by routing key", async () => {
+      const addResults: unknown[] = [];
+      const subResults: unknown[] = [];
+
+      class CalcHandler {
+        @RabbitRPC({ exchange: "rpc", routingKey: "calc.add", queue: "shared-rpc-q" })
+        add(data: { a: number; b: number }) {
+          addResults.push(data);
+          return { result: data.a + data.b };
+        }
+
+        @RabbitRPC({ exchange: "rpc", routingKey: "calc.sub", queue: "shared-rpc-q" })
+        sub(data: { a: number; b: number }) {
+          subResults.push(data);
+          return { result: data.a - data.b };
+        }
+      }
+
+      await conn.registerHandlers(new CalcHandler());
+
+      // Simulate message with routing key "calc.add"
+      const addCb = mockChannel._consumers.get("shared-rpc-q");
+      addCb?.({
+        content: Buffer.from(JSON.stringify({ a: 10, b: 3 })),
+        fields: { deliveryTag: 1, redelivered: false, exchange: "rpc", routingKey: "calc.add" },
+        properties: { headers: {}, replyTo: "reply-q", correlationId: "c1" },
+      });
+
+      await new Promise((r) => setTimeout(r, 10));
+
+      expect(addResults).toHaveLength(1);
+      expect(subResults).toHaveLength(0);
+
+      // Simulate message with routing key "calc.sub"
+      addCb?.({
+        content: Buffer.from(JSON.stringify({ a: 10, b: 3 })),
+        fields: { deliveryTag: 2, redelivered: false, exchange: "rpc", routingKey: "calc.sub" },
+        properties: { headers: {}, replyTo: "reply-q2", correlationId: "c2" },
+      });
+
+      await new Promise((r) => setTimeout(r, 10));
+
+      expect(subResults).toHaveLength(1);
+    });
+  });
+
+  // ── Handler config merging ──────────────────────────────────────
+
+  describe("handler config merging", () => {
+    it("merges module-level config with decorator config", async () => {
+      const conn2 = createConnection({
+        handlers: {
+          "my-handler": { errorBehavior: "ACK" as const },
+        },
+      });
+      await conn2.connect();
+
+      class TestHandler {
+        @RabbitSubscribe({ exchange: "ex", routingKey: "rk", queue: "merge-q", name: "my-handler" })
+        handle() {
+          throw new Error("test error");
+        }
+      }
+
+      await conn2.registerHandlers(new TestHandler());
+
+      mockChannel.ack.mockClear();
+      mockChannel._simulateMessage("merge-q", {});
+
+      await new Promise((r) => setTimeout(r, 10));
+
+      // ACK behavior from module config should be applied
+      expect(mockChannel.ack).toHaveBeenCalled();
+    });
+  });
+
+  // ── @RabbitHeader / @RabbitPayload parameter decorators ─────────
+
+  describe("parameter decorators", () => {
+    it("@RabbitPayload extracts message, @RabbitHeader extracts headers", async () => {
+      const { RabbitPayload, RabbitHeader } = await import("../src/decorators/rabbitmq.decorators");
+
+      const received: { payload: unknown; headers: unknown }[] = [];
+
+      class TestHandler {
+        @RabbitSubscribe({ exchange: "ex", routingKey: "rk", queue: "param-q" })
+        handle(@RabbitPayload() data: unknown, @RabbitHeader() hdrs: unknown) {
+          received.push({ payload: data, headers: hdrs });
+        }
+      }
+
+      await conn.registerHandlers(new TestHandler());
+
+      // Simulate message with headers
+      const cb = mockChannel._consumers.get("param-q");
+      cb?.({
+        content: Buffer.from(JSON.stringify({ name: "test" })),
+        fields: { deliveryTag: 1, redelivered: false, exchange: "", routingKey: "rk" },
+        properties: { headers: { "x-custom": "value" } },
+      });
+
+      await new Promise((r) => setTimeout(r, 10));
+
+      expect(received).toHaveLength(1);
+      expect(received[0].payload).toEqual({ name: "test" });
+      expect(received[0].headers).toEqual({ "x-custom": "value" });
+    });
+
+    it("@RabbitPayload('key') extracts nested property", async () => {
+      const { RabbitPayload } = await import("../src/decorators/rabbitmq.decorators");
+
+      const received: unknown[] = [];
+
+      class TestHandler {
+        @RabbitSubscribe({ exchange: "ex", routingKey: "rk", queue: "nested-q" })
+        handle(@RabbitPayload("name") name: string) {
+          received.push(name);
+        }
+      }
+
+      await conn.registerHandlers(new TestHandler());
+      mockChannel._simulateMessage("nested-q", { name: "Alice", age: 30 });
+
+      await new Promise((r) => setTimeout(r, 10));
+
+      expect(received).toHaveLength(1);
+      expect(received[0]).toBe("Alice");
+    });
+  });
+
+  // ── defaultPublishOptions ───────────────────────────────────────
+
+  describe("defaultPublishOptions", () => {
+    it("merges default publish options", async () => {
+      const conn2 = createConnection({
+        defaultPublishOptions: { appId: "test-app" },
+      });
+      await conn2.connect();
+
+      await conn2.publish("ex", "rk", { test: true });
+
+      expect(mockChannel.publish).toHaveBeenCalledWith(
+        "ex", "rk", expect.any(Buffer),
+        expect.objectContaining({ appId: "test-app" }),
+      );
     });
   });
 });

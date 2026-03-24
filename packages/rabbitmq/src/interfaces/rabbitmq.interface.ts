@@ -1,3 +1,5 @@
+import type { Channel, ConsumeMessage } from "amqplib";
+
 /**
  * RabbitMQ connection configuration (single URL)
  */
@@ -29,7 +31,35 @@ export interface ConnectionInitOptions {
 /**
  * Error behavior for message handlers
  */
-export type MessageHandlerErrorBehavior = "ACK" | "NACK" | "REQUEUE" | "REJECT";
+export type MessageHandlerErrorBehavior = "ACK" | "NACK" | "REQUEUE";
+
+/**
+ * Error handler for a single message
+ */
+export type MessageErrorHandler = (
+  channel: Channel,
+  msg: ConsumeMessage,
+  error: unknown,
+) => Promise<void> | void;
+
+/**
+ * Error handler for batch messages
+ */
+export type BatchMessageErrorHandler = (
+  channel: Channel,
+  msgs: ConsumeMessage[],
+  error: unknown,
+) => Promise<void> | void;
+
+/**
+ * Error handler for queue assertion failures
+ */
+export type AssertQueueErrorHandler = (
+  channel: Channel,
+  queueName: string,
+  queueOptions: unknown,
+  error: unknown,
+) => Promise<string> | string;
 
 /**
  * Channel configuration
@@ -37,8 +67,91 @@ export type MessageHandlerErrorBehavior = "ACK" | "NACK" | "REQUEUE" | "REJECT";
 export interface RabbitMQChannelConfig {
   /** Prefetch count for this channel */
   prefetchCount?: number;
-  /** Default publish exchange */
+  /** Whether this is the default channel */
   default?: boolean;
+}
+
+/**
+ * Exchange-to-exchange binding configuration
+ */
+export interface RabbitMQExchangeBindingConfig {
+  /** Destination exchange name */
+  destination: string;
+  /** Source exchange name */
+  source: string;
+  /** Routing pattern */
+  pattern: string;
+  /** Binding arguments */
+  args?: Record<string, unknown>;
+}
+
+/**
+ * Batch subscribe options
+ */
+export interface BatchOptions {
+  /** Number of messages to accumulate before calling handler */
+  size: number;
+  /** Timeout in ms to flush partial batch (default: 200) */
+  timeout?: number;
+  /** Error handler for batch failures */
+  errorHandler?: BatchMessageErrorHandler;
+}
+
+/**
+ * Queue options with consumer configuration
+ */
+export interface QueueOptions {
+  durable?: boolean;
+  exclusive?: boolean;
+  autoDelete?: boolean;
+  arguments?: Record<string, unknown>;
+  /** Message TTL in milliseconds */
+  messageTtl?: number;
+  /** Queue expiry in milliseconds */
+  expires?: number;
+  /** Dead letter exchange */
+  deadLetterExchange?: string;
+  /** Dead letter routing key */
+  deadLetterRoutingKey?: string;
+  /** Maximum number of messages in queue */
+  maxLength?: number;
+  /** Maximum queue size in bytes */
+  maxLengthBytes?: number;
+  /** Maximum priority (0-255) */
+  maxPriority?: number;
+  /** Arguments for bindQueue */
+  bindQueueArguments?: Record<string, unknown>;
+  /** Route to specific named channel */
+  channel?: string;
+  /** Consumer options */
+  consumerOptions?: {
+    consumerTag?: string;
+    noAck?: boolean;
+    exclusive?: boolean;
+    priority?: number;
+    arguments?: Record<string, unknown>;
+  };
+}
+
+/**
+ * Module-level handler configuration for merging with decorator options
+ */
+export interface MessageHandlerOptions {
+  exchange?: string;
+  routingKey?: string | string[];
+  queue?: string;
+  queueOptions?: QueueOptions;
+  errorHandler?: MessageErrorHandler;
+  errorBehavior?: MessageHandlerErrorBehavior;
+  allowNonJsonMessages?: boolean;
+  createQueueIfNotExists?: boolean;
+  assertQueueErrorHandler?: AssertQueueErrorHandler;
+  deserializer?: (message: Buffer, msg?: unknown) => unknown;
+  usePersistentReplyTo?: boolean;
+  /** Lookup key for handler config merging */
+  name?: string;
+  /** Batch options */
+  batch?: BatchOptions;
 }
 
 /**
@@ -55,7 +168,7 @@ export interface RabbitMQConfig {
   exchangePrefix?: string;
   /** Connection timeout in milliseconds */
   timeout?: number;
-  /** Prefetch count (number of messages processed concurrently) */
+  /** Prefetch count (number of messages processed concurrently, default: 10) */
   prefetchCount?: number;
   /** Enable automatic reconnection */
   reconnect?: boolean;
@@ -65,15 +178,19 @@ export interface RabbitMQConfig {
   reconnectInterval?: number;
   /** Exchanges to assert on connection */
   exchanges?: RabbitMQExchangeConfig[];
+  /** Exchange-to-exchange bindings */
+  exchangeBindings?: RabbitMQExchangeBindingConfig[];
   /** Queues to assert on connection */
   queues?: RabbitMQQueueConfig[];
   /** Channel configurations */
   channels?: Record<string, RabbitMQChannelConfig>;
   /** Default error behavior for RPC handlers */
   defaultRpcErrorBehavior?: MessageHandlerErrorBehavior;
+  /** Default error handler for RPC handlers */
+  defaultRpcErrorHandler?: MessageErrorHandler;
   /** Default error behavior for subscribe handlers */
   defaultSubscribeErrorBehavior?: MessageHandlerErrorBehavior;
-  /** Default RPC timeout in milliseconds */
+  /** Default RPC timeout in milliseconds (default: 10000) */
   defaultRpcTimeout?: number;
   /** Connection initialization options */
   connectionInitOptions?: ConnectionInitOptions;
@@ -85,6 +202,16 @@ export interface RabbitMQConfig {
   defaultExchangeType?: RabbitMQExchangeType;
   /** Maximum message size in bytes (default: 10MB) */
   maxMessageSize?: number;
+  /** Enable Direct Reply-To queue for RPC (default: true) */
+  enableDirectReplyTo?: boolean;
+  /** Default publish options merged into every publish call */
+  defaultPublishOptions?: Record<string, unknown>;
+  /** Custom message serializer */
+  serializer?: (value: unknown) => Buffer;
+  /** Custom message deserializer */
+  deserializer?: (message: Buffer, msg?: unknown) => unknown;
+  /** Module-level handler configs for merging with decorator options */
+  handlers?: Record<string, MessageHandlerOptions | MessageHandlerOptions[]>;
 }
 
 /**
@@ -174,17 +301,23 @@ export interface RabbitSubscribeOptions {
   /** Queue name (auto-generated if not provided) */
   queue?: string;
   /** Queue options */
-  queueOptions?: RabbitMQQueueConfig["options"];
-  /** Error handler */
-  errorHandler?: (error: Error, message: unknown) => void | Promise<void>;
-  /** Enable message retry on failure */
-  retry?: boolean;
-  /** Number of retry attempts */
-  retryAttempts?: number;
-  /** Retry delay in milliseconds */
-  retryDelay?: number;
-  /** Whether to allow non-json messages */
+  queueOptions?: QueueOptions;
+  /** Per-handler error handler */
+  errorHandler?: MessageErrorHandler;
+  /** Per-handler error behavior */
+  errorBehavior?: MessageHandlerErrorBehavior;
+  /** Whether to allow non-JSON messages */
   allowNonJsonMessages?: boolean;
+  /** Create queue if it doesn't exist (default: true) */
+  createQueueIfNotExists?: boolean;
+  /** Custom assertion error handler */
+  assertQueueErrorHandler?: AssertQueueErrorHandler;
+  /** Custom deserializer for this handler */
+  deserializer?: (message: Buffer, msg?: unknown) => unknown;
+  /** Lookup key for merging with module-level handler config */
+  name?: string;
+  /** Batch subscribe options */
+  batch?: BatchOptions;
 }
 
 /**
@@ -193,6 +326,8 @@ export interface RabbitSubscribeOptions {
 export interface RabbitRPCOptions extends RabbitSubscribeOptions {
   /** RPC timeout in milliseconds */
   timeout?: number;
+  /** Whether to use persistent messages for RPC replies (default: false) */
+  usePersistentReplyTo?: boolean;
 }
 
 /**
