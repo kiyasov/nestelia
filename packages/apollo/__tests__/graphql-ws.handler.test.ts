@@ -207,6 +207,13 @@ describe("message routing", () => {
     expect(socket.messages("pong")).toHaveLength(1);
   });
 
+  it("does not close on pong message", async () => {
+    const { callbacks } = setup();
+    const socket = await connect(callbacks);
+    await callbacks.message!(socket, { type: "pong" });
+    expect(socket.closedWith).toBeUndefined();
+  });
+
   it("closes with BadRequest on unknown message type", async () => {
     const { callbacks } = setup();
     const socket = await connect(callbacks);
@@ -419,5 +426,52 @@ describe("safeSend", () => {
       error = e;
     }
     expect(error).toBeUndefined();
+  });
+});
+
+// ─── Server-side keepalive ──────────────────────────────────────────────────
+
+describe("keepAlive", () => {
+  it("sends periodic ping messages after connection_init", async () => {
+    const { callbacks } = setup({ wsOptions: { keepAlive: 20 } });
+    const socket = await connect(callbacks);
+
+    // Wait for at least 2 keepalive pings
+    await wait(55);
+    callbacks.close!(socket);
+
+    expect(socket.messages("ping").length).toBeGreaterThanOrEqual(2);
+  });
+
+  it("stops pings after connection closes", async () => {
+    const { callbacks } = setup({ wsOptions: { keepAlive: 20 } });
+    const socket = await connect(callbacks);
+
+    await wait(30);
+    callbacks.close!(socket);
+    const countAfterClose = socket.messages("ping").length;
+
+    await wait(40);
+    expect(socket.messages("ping").length).toBe(countAfterClose);
+  });
+
+  it("does not send pings when keepAlive is false", async () => {
+    const { callbacks } = setup({ wsOptions: { keepAlive: false } });
+    const socket = await connect(callbacks);
+
+    await wait(50);
+    callbacks.close!(socket);
+
+    expect(socket.messages("ping")).toHaveLength(0);
+  });
+
+  it("does not send pings when keepAlive is 0", async () => {
+    const { callbacks } = setup({ wsOptions: { keepAlive: 0 } });
+    const socket = await connect(callbacks);
+
+    await wait(50);
+    callbacks.close!(socket);
+
+    expect(socket.messages("ping")).toHaveLength(0);
   });
 });

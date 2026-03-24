@@ -94,6 +94,13 @@ export interface GraphQLWsSubscriptionsOptions {
   path?: string;
   /** Timeout for connection initialization in milliseconds. */
   connectionInitWaitTimeout?: number;
+  /**
+   * Server-side keep-alive interval in milliseconds.
+   * Sends periodic `ping` messages to prevent idle connections
+   * from being closed by proxies, load balancers, or NAT.
+   * Set to `0` or `false` to disable. @default 12000
+   */
+  keepAlive?: number | false;
   /** Callback when a client connects. */
   onConnect?: (
     context: GraphQLWsContext,

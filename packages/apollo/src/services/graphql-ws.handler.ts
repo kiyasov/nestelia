@@ -50,10 +50,15 @@ interface ConnectionState {
   subscriptions: Map<string, AbortController>;
   /** Timer for connectionInitWaitTimeout (cleared after init). */
   initTimer?: ReturnType<typeof setTimeout>;
+  /** Interval for server-side keepalive pings (cleared on close). */
+  keepAliveInterval?: ReturnType<typeof setInterval>;
 }
 
 /** Default timeout to wait for connection_init before closing (ms). */
 const DEFAULT_INIT_TIMEOUT_MS = 3_000;
+
+/** Default server-side keep-alive interval (ms). */
+const DEFAULT_KEEP_ALIVE_MS = 12_000;
 
 /**
  * Handler for GraphQL WebSocket subscriptions using the graphql-ws protocol.
@@ -143,6 +148,7 @@ export class GraphQLWsHandler {
     const state = this.connections.get(socket.id);
     if (state) {
       clearTimeout(state.initTimer);
+      clearInterval(state.keepAliveInterval);
       for (const sub of state.subscriptions.values()) {
         sub.abort();
       }
@@ -210,6 +216,10 @@ export class GraphQLWsHandler {
         break;
       }
 
+      case "pong":
+        // Client response to server-sent ping — no action needed.
+        break;
+
       default:
         socket.close(CloseCode.BadRequest);
     }
@@ -242,6 +252,19 @@ export class GraphQLWsHandler {
     clearTimeout(state.initTimer);
     state.isInitialized = true;
     this.safeSend(socket, JSON.stringify({ type: "connection_ack" }));
+    this.startKeepAlive(state);
+  }
+
+  private startKeepAlive(state: ConnectionState): void {
+    const intervalMs = this.wsOptions.keepAlive;
+    // Disabled explicitly with `false` or `0`.
+    if (intervalMs === false || intervalMs === 0) {
+      return;
+    }
+    const ms = typeof intervalMs === "number" ? intervalMs : DEFAULT_KEEP_ALIVE_MS;
+    state.keepAliveInterval = setInterval(() => {
+      this.safeSend(state.socket, JSON.stringify({ type: "ping" }));
+    }, ms);
   }
 
   private async handleSubscribe(
