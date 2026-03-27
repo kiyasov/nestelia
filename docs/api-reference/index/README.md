@@ -217,6 +217,7 @@
 | [Post](variables/Post.md) | - |
 | [Put](variables/Put.md) | - |
 | [Query](variables/Query.md) | - |
+| [RawBody](variables/RawBody.md) | - |
 | [Req](variables/Req.md) | - |
 | [Request](variables/Request.md) | - |
 | [Res](variables/Res.md) | - |

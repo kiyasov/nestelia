@@ -133,5 +133,6 @@ export const Response = Res;
 export const Ip = createParamDecorator("ip");
 export const Session = createParamDecorator("session");
 
+export const RawBody = createParamDecorator("raw-body");
 export const Ctx = createParamDecorator("context");
 export const ElysiaContext = createParamDecorator("elysiaContext");

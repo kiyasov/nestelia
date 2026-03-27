@@ -19,6 +19,7 @@ import {
   Post,
   Put,
   Query,
+  RawBody,
   Req,
   Res,
   Session,
@@ -349,6 +350,38 @@ describe("Parameter Decorators", () => {
       );
       expect(params).toHaveLength(1);
       expect(params[0].type).toBe("session");
+    });
+  });
+
+  describe("@RawBody()", () => {
+    it("should register raw-body parameter", () => {
+      class TestController {
+        handle(@RawBody() body: string) {}
+      }
+
+      const params = Reflect.getMetadata(
+        PARAMS_METADATA,
+        TestController,
+        "handle",
+      );
+      expect(params).toHaveLength(1);
+      expect(params[0].type).toBe("raw-body");
+      expect(params[0].index).toBe(0);
+    });
+
+    it("should work alongside other parameter decorators", () => {
+      class TestController {
+        handle(@Headers("x-signature") sig: string, @RawBody() body: string) {}
+      }
+
+      const params = Reflect.getMetadata(
+        PARAMS_METADATA,
+        TestController,
+        "handle",
+      );
+      expect(params).toHaveLength(2);
+      expect(params[0]).toEqual({ index: 0, type: "headers", data: "x-signature" });
+      expect(params[1]).toEqual({ index: 1, type: "raw-body" });
     });
   });
 

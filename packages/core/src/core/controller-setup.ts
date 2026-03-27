@@ -76,7 +76,12 @@ export async function setupController(
       }
     }
 
+    // If any parameter uses @RawBody(), tell Elysia to deliver the body as plain text
+    // instead of parsing it as JSON. This is required for webhook signature verification.
+    const hasRawBody = paramDefinitions.some((p) => p.type === "raw-body");
+
     const schemaOptions: Record<string, unknown> = {
+      ...(hasRawBody ? { type: "text" } : {}),
       ...paramSchemas,
       ...decoratorSchema,
       error: applyExceptionFilters,

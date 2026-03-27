@@ -31,6 +31,8 @@ function compileResolver(meta: ParamMetadata): ParamResolver | null {
   switch (meta.type) {
     case "param":
       return data ? (ctx) => ctx.params?.[data] : (ctx) => ctx.params || {};
+    case "raw-body":
+      return (ctx) => ctx.body;
     case "body":
       return data ? (ctx) => (ctx.body as any)?.[data] : (ctx) => ctx.body || {};
     case "query":
