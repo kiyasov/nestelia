@@ -1,6 +1,13 @@
 import type { Elysia } from "elysia";
 import type { ElysiaWS } from "elysia/ws";
-import { parse, subscribe, validate, type GraphQLSchema } from "graphql";
+import {
+  createSourceEventStream,
+  execute,
+  parse,
+  validate,
+  type ExecutionArgs,
+  type GraphQLSchema,
+} from "graphql";
 import {
   CloseCode,
   type ConnectionInitMessage,
@@ -306,25 +313,38 @@ export class GraphQLWsHandler {
       return;
     }
 
-    const result = await subscribe({
+    const subscribeArgs = {
       schema: this.schema,
       document,
       contextValue,
-      variableValues: message.payload.variables,
-      operationName: message.payload.operationName,
-    });
+      variableValues: message.payload.variables ?? undefined,
+      operationName: message.payload.operationName ?? undefined,
+    };
 
-    if (Symbol.asyncIterator in result || Symbol.iterator in result) {
+    // Use createSourceEventStream instead of subscribe() to get the raw
+    // event stream without graphql-js's mapAsyncIterator wrapper.
+    // This avoids a critical issue where mapAsyncIterator calls
+    // iterator.return() (killing the subscription permanently) when
+    // execute() throws for a single event.
+    const resultOrStream = await createSourceEventStream(subscribeArgs);
+
+    if (
+      typeof resultOrStream === "object" &&
+      resultOrStream !== null &&
+      Symbol.asyncIterator in resultOrStream
+    ) {
       // Run the subscription loop in the background so the message handler
       // is not blocked and can process subsequent messages (ping, complete,
       // new subscriptions) on the same connection.
       void this.handleAsyncIterator(
         state,
         message.id,
-        result as AsyncIterable<unknown>,
+        resultOrStream as AsyncIterable<unknown>,
+        subscribeArgs,
       );
     } else {
-      this.sendNext(state.socket, message.id, result);
+      // Error result from createSourceEventStream.
+      this.sendNext(state.socket, message.id, resultOrStream);
       this.sendComplete(state.socket, message.id);
     }
   }
@@ -333,6 +353,7 @@ export class GraphQLWsHandler {
     state: ConnectionState,
     id: string,
     iterable: AsyncIterable<unknown>,
+    subscribeArgs: ExecutionArgs,
   ): Promise<void> {
     const abortController = new AbortController();
     state.subscriptions.set(id, abortController);
@@ -350,7 +371,22 @@ export class GraphQLWsHandler {
           this.sendComplete(state.socket, id);
           return;
         }
-        this.sendNext(state.socket, id, next.value);
+
+        // Map the source event to a GraphQL response by running execute().
+        // Errors are sent to the client but do NOT kill the subscription —
+        // unlike graphql-js's mapAsyncIterator which calls iterator.return()
+        // on the first execute() error, permanently destroying the stream.
+        try {
+          const result = await execute({
+            ...subscribeArgs,
+            rootValue: next.value,
+          });
+          this.sendNext(state.socket, id, result);
+        } catch (err) {
+          if (!abortController.signal.aborted) {
+            this.sendError(state.socket, id, [{ message: String(err) }]);
+          }
+        }
       }
     } catch (err) {
       if (!abortController.signal.aborted) {
@@ -363,7 +399,12 @@ export class GraphQLWsHandler {
       } catch {
         // ignore errors from iterator cleanup
       }
-      state.subscriptions.delete(id);
+      // Only delete if this is still OUR abort controller (guards against
+      // a race where the client sent "complete" + re-subscribed with the
+      // same ID before our finally block ran).
+      if (state.subscriptions.get(id) === abortController) {
+        state.subscriptions.delete(id);
+      }
     }
   }
 

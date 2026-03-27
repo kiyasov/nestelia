@@ -408,6 +408,68 @@ describe("abort on disconnect", () => {
   });
 });
 
+// ─── execute() error resilience ──────────────────────────────────────────────
+
+describe("execute error resilience", () => {
+  it("continues delivering messages after a resolver throws (error in result, not lost)", async () => {
+    let callCount = 0;
+    async function* counter() {
+      yield 1;
+      yield 2;
+      yield 3;
+    }
+
+    // Resolver that throws on the second call
+    const schema = new GraphQLSchema({
+      query: new GraphQLObjectType({
+        name: "Query",
+        fields: { _: { type: GraphQLString, resolve: () => null } },
+      }),
+      subscription: new GraphQLObjectType({
+        name: "Subscription",
+        fields: {
+          count: {
+            type: GraphQLInt,
+            subscribe: counter,
+            resolve: (val: unknown) => {
+              callCount++;
+              if (callCount === 2) {
+                throw new Error("transient failure");
+              }
+              return val;
+            },
+          },
+        },
+      }),
+    });
+
+    const { callbacks } = setup({ schema });
+    const socket = await connect(callbacks);
+
+    await callbacks.message!(socket, {
+      type: "subscribe",
+      id: "res",
+      payload: { query: "subscription { count }" },
+    });
+
+    await wait(50);
+
+    // All 3 events are delivered as "next" messages. The resolver error for
+    // event 2 is included in the payload's errors array, NOT as a separate
+    // "error" protocol message. This is correct GraphQL behaviour: execute()
+    // catches resolver errors and includes them in the ExecutionResult.
+    const nexts = socket.messages("next");
+    expect(nexts.length).toBe(3);
+    expect((nexts[0].payload as { data: { count: number } }).data.count).toBe(1);
+    // Second event: resolver threw → data.count is null, errors present
+    expect((nexts[1].payload as { data: { count: number | null } }).data.count).toBeNull();
+    expect((nexts[1].payload as { errors?: unknown[] }).errors).toBeDefined();
+    expect((nexts[2].payload as { data: { count: number } }).data.count).toBe(3);
+    // Subscription survived the error — "complete" sent after iterator exhausted
+    expect(socket.messages("complete")).toHaveLength(1);
+  });
+});
+
 // ─── safeSend resilience ──────────────────────────────────────────────────────
 
 describe("safeSend", () => {
