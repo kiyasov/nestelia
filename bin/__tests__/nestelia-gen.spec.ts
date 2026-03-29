@@ -12,6 +12,8 @@ const starFixtureDir = join(import.meta.dir, "fixtures/star-reexport");
 const starFixtureTmpOut = join(tmpdir(), `nestelia-gen-star-${Date.now()}.ts`);
 const rtFixtureDir = join(import.meta.dir, "fixtures/return-types");
 const rtFixtureTmpOut = join(tmpdir(), `nestelia-gen-rt-${Date.now()}.ts`);
+const nestedFixtureDir = join(import.meta.dir, "fixtures/nested-reference");
+const nestedFixtureTmpOut = join(tmpdir(), `nestelia-gen-nested-${Date.now()}.ts`);
 
 function runGen(outputPath = tmpOut, { fixtureCwd }: { fixtureCwd?: string } = {}) {
   const extraArgs = fixtureCwd ? ["--tsconfig", join(fixtureCwd, "tsconfig.json")] : [];
@@ -27,6 +29,7 @@ afterAll(() => {
   try { rmSync(fixtureTmpOut); } catch {}
   try { rmSync(starFixtureTmpOut); } catch {}
   try { rmSync(rtFixtureTmpOut); } catch {}
+  try { rmSync(nestedFixtureTmpOut); } catch {}
 });
 
 describe("nestelia-gen", () => {
@@ -137,6 +140,29 @@ describe("nestelia-gen: return type expansion", () => {
     const imports = content.match(/^import .*/gm) ?? [];
     expect(imports).toHaveLength(1);
     expect(imports[0]).toContain("elysia");
+  });
+});
+
+describe("nestelia-gen: nested schema reference inlining", () => {
+  it("inlines nested variable references inside schema expressions", () => {
+    const result = runGen(nestedFixtureTmpOut, { fixtureCwd: nestedFixtureDir });
+    expect(result.exitCode).toBe(0);
+    const content = readFileSync(nestedFixtureTmpOut, "utf8");
+    // t.Array(webhookItemSchema) should become t.Array(t.Object({ event: t.String(), payload: t.String() }))
+    expect(content).not.toContain("webhookItemSchema");
+    expect(content).not.toContain("webhookListSchema");
+    expect(content).not.toContain("webhookRequestSchema");
+    // The inlined content must contain the expanded inner schema
+    expect(content).toContain("t.Array(t.Object(");
+    expect(content).toContain("t.String()");
+  });
+
+  it("inlines nested references inside t.Object properties", () => {
+    const result = runGen(nestedFixtureTmpOut, { fixtureCwd: nestedFixtureDir });
+    expect(result.exitCode).toBe(0);
+    const content = readFileSync(nestedFixtureTmpOut, "utf8");
+    // webhookRequestSchema has events: t.Array(webhookItemSchema) — both levels should be inlined
+    expect(content).toContain("events: t.Array(t.Object(");
   });
 });
 

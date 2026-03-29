@@ -168,6 +168,64 @@ function resolveExpression(node: Node, sf: SourceFile): string {
 }
 
 /**
+ * Inline all identifier references inside an expression by recursively
+ * resolving them to their initializer text. Skips property-access names
+ * (e.g. the `foo` in `obj.foo`) and property-assignment names.
+ */
+function inlineExpression(
+  expr: Node,
+  sf: SourceFile,
+  seen: Set<string>,
+): string {
+  let text = expr.getText();
+
+  const identifiers = expr.getDescendantsOfKind(SyntaxKind.Identifier);
+
+  // Process from last to first so replacement offsets stay valid
+  const exprStart = expr.getStart();
+  const replacements: { start: number; end: number; replacement: string }[] = [];
+
+  for (const id of identifiers) {
+    const parent = id.getParent();
+    if (!parent) continue;
+
+    // Skip property access names: `obj.prop` — skip `prop`
+    if (
+      Node.isPropertyAccessExpression(parent) &&
+      parent.getNameNode() === id
+    ) continue;
+
+    // Skip property assignment names: `{ key: value }` — skip `key`
+    if (
+      Node.isPropertyAssignment(parent) &&
+      parent.getNameNode() === id
+    ) continue;
+
+    // Skip shorthand property assignment names: `{ key }` — skip `key`
+    if (Node.isShorthandPropertyAssignment(parent)) continue;
+
+    const idName = id.getText();
+    // Skip `t` (the TypeBox namespace) and other single-char common names
+    if (idName === "t") continue;
+
+    const resolved = resolveIdentifier(idName, sf, new Set(seen));
+    if (resolved && resolved !== idName) {
+      const start = id.getStart() - exprStart;
+      const end = id.getEnd() - exprStart;
+      replacements.push({ start, end, replacement: resolved });
+    }
+  }
+
+  // Apply replacements from last to first
+  replacements.sort((a, b) => b.start - a.start);
+  for (const { start, end, replacement } of replacements) {
+    text = text.slice(0, start) + replacement + text.slice(end);
+  }
+
+  return text;
+}
+
+/**
  * Recursively resolve an identifier to its TypeBox initializer text.
  * Follows: local variables → named imports → re-exports → star re-exports.
  * `seen` prevents infinite loops on circular re-exports.
@@ -185,7 +243,7 @@ function resolveIdentifier(
   const local = sf.getVariableDeclaration(name);
   if (local) {
     const init = local.getInitializer();
-    if (init) return init.getText();
+    if (init) return inlineExpression(init, sf, seen);
   }
 
   // 2. Named imports: `import { schema } from "./dto"`

@@ -1,0 +1,18 @@
+{
+  "compilerOptions": {
+    "target": "ESNext",
+    "module": "ESNext",
+    "moduleResolution": "bundler",
+    "lib": ["ESNext"],
+    "strict": true,
+    "experimentalDecorators": true,
+    "emitDecoratorMetadata": true,
+    "skipLibCheck": true,
+    "noEmit": true,
+    "types": ["bun", "reflect-metadata"],
+    "paths": {
+      "elysia-nest": ["../../../../index.ts"]
+    }
+  },
+  "include": ["src/**/*"]
+}
