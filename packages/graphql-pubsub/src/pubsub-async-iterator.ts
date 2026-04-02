@@ -128,6 +128,11 @@ export class PubSubAsyncIterator<T> implements AsyncIterator<T> {
 
   /** Unsubscribes from all triggers and drains both queues. */
   private async unsubscribeAll(): Promise<void> {
+    // Wait for in-flight subscriptions to complete before unsubscribing.
+    // Without this, a return() call racing against subscribeAll() sees
+    // subscriptionIds === undefined, no-ops, and leaks the subscriptions.
+    await this.subscribePromise;
+
     if (!this.subscriptionIds) return;
 
     for (const subId of this.subscriptionIds) {

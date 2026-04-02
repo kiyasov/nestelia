@@ -358,6 +358,55 @@ describe("complete", () => {
 // ─── Abort on disconnect ───────────────────────────────────────────────────────
 
 describe("abort on disconnect", () => {
+  it("cleans up iterator when disconnect races with subscription setup", async () => {
+    let returnCalled = false;
+    let resolveSubscribe: (() => void) | undefined;
+
+    // Simulate a slow subscription resolver — the iterator is created but
+    // createSourceEventStream takes time to resolve.
+    const iter: AsyncIterator<number> = {
+      async next() {
+        await new Promise<void>(() => {}); // hang forever
+        return { value: 0, done: false };
+      },
+      async return() {
+        returnCalled = true;
+        return { value: undefined as unknown as number, done: true };
+      },
+    };
+
+    const schema = makeSchema(() => {
+      // Return a promise that delays, simulating slow resolver setup
+      return new Promise<AsyncIterable<unknown>>((resolve) => {
+        resolveSubscribe = () =>
+          resolve({ [Symbol.asyncIterator]: () => iter });
+      });
+    });
+
+    const { callbacks } = setup({ schema });
+    const socket = await connect(callbacks);
+
+    // Start subscription (resolver is slow, will hang)
+    const subPromise = callbacks.message!(socket, {
+      type: "subscribe",
+      id: "race",
+      payload: { query: "subscription { count }" },
+    });
+
+    // Dirty disconnect BEFORE subscription resolver completes
+    await wait(5);
+    callbacks.close!(socket);
+
+    // Now let the subscription resolver complete
+    resolveSubscribe!();
+    await subPromise;
+    await wait(10);
+
+    // The iterator must be cleaned up even though disconnect happened
+    // before the iterator was handed to handleAsyncIterator
+    expect(returnCalled).toBe(true);
+  });
+
   it("exits the iterator immediately when connection closes (no wait for next value)", async () => {
     let returnCalled = false;
     let resolveHang: (() => void) | undefined;

@@ -111,4 +111,35 @@ describe("PubSubAsyncIterator", () => {
     const result = await pending;
     expect(result.done).toBe(true);
   });
+
+  it("return() during pending subscribeAll() still unsubscribes", async () => {
+    let subscribeResolve: ((id: number) => void) | undefined;
+    const unsubscribed: number[] = [];
+
+    const slowPubSub: PubSubEngine = {
+      subscribe(_trigger: string, _handler: (msg: unknown) => void): Promise<number> {
+        return new Promise((resolve) => {
+          subscribeResolve = resolve;
+        });
+      },
+      unsubscribe(id: number): void {
+        unsubscribed.push(id);
+      },
+      async publish(): Promise<void> {},
+      asyncIterator<T>(triggers: string | string[]): AsyncIterator<T> {
+        return new PubSubAsyncIterator<T>(this, Array.isArray(triggers) ? triggers : [triggers]);
+      },
+    };
+
+    const iter = new PubSubAsyncIterator<string>(slowPubSub, ["ch"]);
+
+    // Call return() while subscribeAll() is still pending
+    const returnPromise = iter.return();
+
+    // Now let subscribe complete
+    subscribeResolve!(42);
+
+    await returnPromise;
+    expect(unsubscribed).toEqual([42]);
+  });
 });

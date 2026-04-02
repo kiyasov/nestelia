@@ -297,55 +297,79 @@ export class GraphQLWsHandler {
     message: SubscribeMessage,
     state: ConnectionState,
   ): Promise<void> {
-    const contextValue = await this.buildContext(
-      state.context.request,
-      state.context.connectionParams ?? {},
-    );
+    // Register the AbortController BEFORE any await so that handleClose()
+    // can abort this subscription even if the connection drops during
+    // createSourceEventStream() or buildContext().
+    const abortController = new AbortController();
+    state.subscriptions.set(message.id, abortController);
 
-    const document = parse(message.payload.query);
-    const validationErrors = validate(this.schema, document);
-    if (validationErrors.length > 0) {
-      this.sendError(
-        state.socket,
-        message.id,
-        validationErrors.map((e) => ({ message: e.message })),
+    let ownershipTransferred = false;
+    try {
+      const contextValue = await this.buildContext(
+        state.context.request,
+        state.context.connectionParams ?? {},
       );
-      return;
-    }
 
-    const subscribeArgs = {
-      schema: this.schema,
-      document,
-      contextValue,
-      variableValues: message.payload.variables ?? undefined,
-      operationName: message.payload.operationName ?? undefined,
-    };
+      const document = parse(message.payload.query);
+      const validationErrors = validate(this.schema, document);
+      if (validationErrors.length > 0) {
+        this.sendError(
+          state.socket,
+          message.id,
+          validationErrors.map((e) => ({ message: e.message })),
+        );
+        return;
+      }
 
-    // Use createSourceEventStream instead of subscribe() to get the raw
-    // event stream without graphql-js's mapAsyncIterator wrapper.
-    // This avoids a critical issue where mapAsyncIterator calls
-    // iterator.return() (killing the subscription permanently) when
-    // execute() throws for a single event.
-    const resultOrStream = await createSourceEventStream(subscribeArgs);
+      // If the connection was closed while we were setting up, bail out.
+      if (abortController.signal.aborted) {
+        return;
+      }
 
-    if (
-      typeof resultOrStream === "object" &&
-      resultOrStream !== null &&
-      Symbol.asyncIterator in resultOrStream
-    ) {
-      // Run the subscription loop in the background so the message handler
-      // is not blocked and can process subsequent messages (ping, complete,
-      // new subscriptions) on the same connection.
-      void this.handleAsyncIterator(
-        state,
-        message.id,
-        resultOrStream as AsyncIterable<unknown>,
-        subscribeArgs,
-      );
-    } else {
+      const subscribeArgs = {
+        schema: this.schema,
+        document,
+        contextValue,
+        variableValues: message.payload.variables ?? undefined,
+        operationName: message.payload.operationName ?? undefined,
+      };
+
+      // Use createSourceEventStream instead of subscribe() to get the raw
+      // event stream without graphql-js's mapAsyncIterator wrapper.
+      // This avoids a critical issue where mapAsyncIterator calls
+      // iterator.return() (killing the subscription permanently) when
+      // execute() throws for a single event.
+      const resultOrStream = await createSourceEventStream(subscribeArgs);
+
+      if (
+        typeof resultOrStream === "object" &&
+        resultOrStream !== null &&
+        Symbol.asyncIterator in resultOrStream
+      ) {
+        // Run the subscription loop in the background so the message handler
+        // is not blocked and can process subsequent messages (ping, complete,
+        // new subscriptions) on the same connection.
+        ownershipTransferred = true;
+        void this.handleAsyncIterator(
+          state,
+          message.id,
+          resultOrStream as AsyncIterable<unknown>,
+          subscribeArgs,
+          abortController,
+        );
+        return;
+      }
+
       // Error result from createSourceEventStream.
       this.sendNext(state.socket, message.id, resultOrStream);
       this.sendComplete(state.socket, message.id);
+    } finally {
+      // Clean up the registration for paths that did NOT hand off to
+      // handleAsyncIterator (validation errors, non-iterable results,
+      // exceptions, or early abort).
+      if (!ownershipTransferred && state.subscriptions.get(message.id) === abortController) {
+        state.subscriptions.delete(message.id);
+      }
     }
   }
 
@@ -354,10 +378,8 @@ export class GraphQLWsHandler {
     id: string,
     iterable: AsyncIterable<unknown>,
     subscribeArgs: ExecutionArgs,
+    abortController: AbortController,
   ): Promise<void> {
-    const abortController = new AbortController();
-    state.subscriptions.set(id, abortController);
-
     const iter = iterable[Symbol.asyncIterator]();
     try {
       while (!abortController.signal.aborted) {
