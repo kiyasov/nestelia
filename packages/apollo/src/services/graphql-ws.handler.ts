@@ -45,6 +45,14 @@ interface WsHandlerOptions {
   close?: (socket: WsSocket) => void;
 }
 
+/** Handle for a single active subscription within a connection. */
+interface SubscriptionHandle {
+  /** Controller used to abort the subscription loop. */
+  abortController: AbortController;
+  /** The upstream async iterator — stored so handleClose can call return(). */
+  iterator?: AsyncIterator<unknown>;
+}
+
 /** State for a WebSocket connection. */
 interface ConnectionState {
   /** WebSocket socket instance. */
@@ -54,7 +62,7 @@ interface ConnectionState {
   /** Whether the connection has been initialized. */
   isInitialized: boolean;
   /** Active subscriptions for this connection. */
-  subscriptions: Map<string, AbortController>;
+  subscriptions: Map<string, SubscriptionHandle>;
   /** Timer for connectionInitWaitTimeout (cleared after init). */
   initTimer?: ReturnType<typeof setTimeout>;
   /** Interval for server-side keepalive pings (cleared on close). */
@@ -156,9 +164,17 @@ export class GraphQLWsHandler {
     if (state) {
       clearTimeout(state.initTimer);
       clearInterval(state.keepAliveInterval);
-      for (const sub of state.subscriptions.values()) {
-        sub.abort();
+      for (const handle of state.subscriptions.values()) {
+        handle.abortController.abort();
+        // Call return() directly — don't rely on the async finally chain
+        // which can silently fail or race with GC.
+        try {
+          handle.iterator?.return?.();
+        } catch {
+          // iterator already closed or errored
+        }
       }
+      state.subscriptions.clear();
       this.wsOptions.onDisconnect?.(state.context);
       this.connections.delete(socket.id);
     }
@@ -210,9 +226,14 @@ export class GraphQLWsHandler {
 
       case "complete": {
         const id = String(message.id);
-        const sub = state.subscriptions.get(id);
-        if (sub) {
-          sub.abort();
+        const handle = state.subscriptions.get(id);
+        if (handle) {
+          handle.abortController.abort();
+          try {
+            handle.iterator?.return?.();
+          } catch {
+            // iterator already closed
+          }
           state.subscriptions.delete(id);
         }
         break;
@@ -301,7 +322,8 @@ export class GraphQLWsHandler {
     // can abort this subscription even if the connection drops during
     // createSourceEventStream() or buildContext().
     const abortController = new AbortController();
-    state.subscriptions.set(message.id, abortController);
+    const handle: SubscriptionHandle = { abortController };
+    state.subscriptions.set(message.id, handle);
 
     let ownershipTransferred = false;
     try {
@@ -318,11 +340,6 @@ export class GraphQLWsHandler {
           message.id,
           validationErrors.map((e) => ({ message: e.message })),
         );
-        return;
-      }
-
-      // If the connection was closed while we were setting up, bail out.
-      if (abortController.signal.aborted) {
         return;
       }
 
@@ -346,6 +363,18 @@ export class GraphQLWsHandler {
         resultOrStream !== null &&
         Symbol.asyncIterator in resultOrStream
       ) {
+        // If the connection was closed while we were setting up, clean up
+        // the iterable immediately instead of leaking it.
+        if (abortController.signal.aborted) {
+          const iter = (resultOrStream as AsyncIterable<unknown>)[Symbol.asyncIterator]();
+          try {
+            iter.return?.();
+          } catch {
+            // ignore
+          }
+          return;
+        }
+
         // Run the subscription loop in the background so the message handler
         // is not blocked and can process subsequent messages (ping, complete,
         // new subscriptions) on the same connection.
@@ -355,7 +384,7 @@ export class GraphQLWsHandler {
           message.id,
           resultOrStream as AsyncIterable<unknown>,
           subscribeArgs,
-          abortController,
+          handle,
         );
         return;
       }
@@ -367,7 +396,7 @@ export class GraphQLWsHandler {
       // Clean up the registration for paths that did NOT hand off to
       // handleAsyncIterator (validation errors, non-iterable results,
       // exceptions, or early abort).
-      if (!ownershipTransferred && state.subscriptions.get(message.id) === abortController) {
+      if (!ownershipTransferred && state.subscriptions.get(message.id) === handle) {
         state.subscriptions.delete(message.id);
       }
     }
@@ -378,9 +407,13 @@ export class GraphQLWsHandler {
     id: string,
     iterable: AsyncIterable<unknown>,
     subscribeArgs: ExecutionArgs,
-    abortController: AbortController,
+    handle: SubscriptionHandle,
   ): Promise<void> {
     const iter = iterable[Symbol.asyncIterator]();
+    // Store the iterator so handleClose() can call return() directly.
+    handle.iterator = iter;
+
+    const { abortController } = handle;
     try {
       while (!abortController.signal.aborted) {
         // Race the next value against the abort signal so the loop exits
@@ -421,10 +454,10 @@ export class GraphQLWsHandler {
       } catch {
         // ignore errors from iterator cleanup
       }
-      // Only delete if this is still OUR abort controller (guards against
-      // a race where the client sent "complete" + re-subscribed with the
-      // same ID before our finally block ran).
-      if (state.subscriptions.get(id) === abortController) {
+      // Only delete if this is still OUR handle (guards against a race
+      // where the client sent "complete" + re-subscribed with the same
+      // ID before our finally block ran).
+      if (state.subscriptions.get(id) === handle) {
         state.subscriptions.delete(id);
       }
     }

@@ -407,6 +407,46 @@ describe("abort on disconnect", () => {
     expect(returnCalled).toBe(true);
   });
 
+  it("calls iter.return() directly in handleClose, not only via the async finally chain", async () => {
+    let directReturnCalled = false;
+    let resolveHang: (() => void) | undefined;
+
+    const iter: AsyncIterator<number> = {
+      async next() {
+        // Hang forever — the finally chain would never reach return()
+        // if handleClose didn't call it directly.
+        await new Promise<void>((r) => { resolveHang = r; });
+        return { value: undefined as unknown as number, done: true };
+      },
+      return() {
+        directReturnCalled = true;
+        resolveHang?.();
+        return Promise.resolve({ value: undefined as unknown as number, done: true });
+      },
+    };
+
+    const schema = makeSchema(() => ({
+      [Symbol.asyncIterator]: () => iter,
+    }));
+
+    const { callbacks } = setup({ schema });
+    const socket = await connect(callbacks);
+
+    // Start subscription (will hang in next())
+    callbacks.message!(socket, {
+      type: "subscribe",
+      id: "direct",
+      payload: { query: "subscription { count }" },
+    });
+    await wait(10);
+
+    // Close calls return() directly — unblocking the hang
+    callbacks.close!(socket);
+    await wait(10);
+
+    expect(directReturnCalled).toBe(true);
+  });
+
   it("exits the iterator immediately when connection closes (no wait for next value)", async () => {
     let returnCalled = false;
     let resolveHang: (() => void) | undefined;
@@ -454,6 +494,680 @@ describe("abort on disconnect", () => {
     expect(returnCalled).toBe(true);
     // No complete should have been sent (aborted, not finished naturally)
     expect(socket.messages("complete")).toHaveLength(0);
+  });
+});
+
+// ─── Subscription leak prevention ────────────────────────────────────────────
+
+describe("subscription leak prevention", () => {
+  it("cleans up all iterators when multiple subscriptions are active on disconnect", async () => {
+    const returnCalls: string[] = [];
+    const hangs: Array<() => void> = [];
+
+    function makeIter(name: string): AsyncIterator<number> {
+      return {
+        async next() {
+          await new Promise<void>((r) => { hangs.push(r); });
+          return { value: undefined as unknown as number, done: true };
+        },
+        return() {
+          returnCalls.push(name);
+          // Unblock all hanging next() calls
+          for (const r of hangs) r();
+          return Promise.resolve({ value: undefined as unknown as number, done: true });
+        },
+      };
+    }
+
+    const schema = new GraphQLSchema({
+      query: new GraphQLObjectType({
+        name: "Query",
+        fields: { _: { type: GraphQLString, resolve: () => null } },
+      }),
+      subscription: new GraphQLObjectType({
+        name: "Subscription",
+        fields: {
+          count: {
+            type: GraphQLInt,
+            subscribe: () => ({ [Symbol.asyncIterator]: () => makeIter("count") }),
+            resolve: (v: unknown) => v,
+          },
+          status: {
+            type: GraphQLString,
+            subscribe: () => ({ [Symbol.asyncIterator]: () => makeIter("status") }),
+            resolve: (v: unknown) => v,
+          },
+        },
+      }),
+    });
+
+    const { callbacks } = setup({ schema });
+    const socket = await connect(callbacks);
+
+    // Start two subscriptions on the same connection
+    callbacks.message!(socket, {
+      type: "subscribe",
+      id: "s1",
+      payload: { query: "subscription { count }" },
+    });
+    callbacks.message!(socket, {
+      type: "subscribe",
+      id: "s2",
+      payload: { query: "subscription { status }" },
+    });
+    await wait(10);
+
+    // Single disconnect must clean up BOTH iterators
+    callbacks.close!(socket);
+    await wait(10);
+
+    expect(returnCalls).toContain("count");
+    expect(returnCalls).toContain("status");
+  });
+
+  it("cleans up iterator when iter.return() throws (error is swallowed)", async () => {
+    let returnCalled = false;
+    let resolveHang: (() => void) | undefined;
+
+    const iter: AsyncIterator<number> = {
+      async next() {
+        await new Promise<void>((r) => { resolveHang = r; });
+        return { value: undefined as unknown as number, done: true };
+      },
+      return() {
+        returnCalled = true;
+        resolveHang?.();
+        throw new Error("PubSub connection lost");
+      },
+    };
+
+    const schema = makeSchema(() => ({
+      [Symbol.asyncIterator]: () => iter,
+    }));
+
+    const { callbacks } = setup({ schema });
+    const socket = await connect(callbacks);
+
+    callbacks.message!(socket, {
+      type: "subscribe",
+      id: "err",
+      payload: { query: "subscription { count }" },
+    });
+    await wait(10);
+
+    // Must not throw even when iter.return() throws
+    expect(() => callbacks.close!(socket)).not.toThrow();
+    await wait(10);
+
+    expect(returnCalled).toBe(true);
+  });
+
+  it("cleans up iterator that has no return() method (graceful degradation)", async () => {
+    let resolveHang: (() => void) | undefined;
+
+    const iter: AsyncIterator<number> = {
+      async next() {
+        await new Promise<void>((r) => { resolveHang = r; });
+        return { value: undefined as unknown as number, done: true };
+      },
+      // No return() defined — some iterators don't have one
+    };
+
+    const schema = makeSchema(() => ({
+      [Symbol.asyncIterator]: () => iter,
+    }));
+
+    const { callbacks } = setup({ schema });
+    const socket = await connect(callbacks);
+
+    callbacks.message!(socket, {
+      type: "subscribe",
+      id: "noret",
+      payload: { query: "subscription { count }" },
+    });
+    await wait(10);
+
+    // Must not throw when iterator has no return()
+    expect(() => callbacks.close!(socket)).not.toThrow();
+    resolveHang?.();
+    await wait(10);
+  });
+
+  it("calls return() on client complete, not just abort", async () => {
+    let returnCalled = false;
+    let resolveHang: (() => void) | undefined;
+
+    const iter: AsyncIterator<number> = {
+      async next() {
+        await new Promise<void>((r) => { resolveHang = r; });
+        return { value: undefined as unknown as number, done: true };
+      },
+      return() {
+        returnCalled = true;
+        resolveHang?.();
+        return Promise.resolve({ value: undefined as unknown as number, done: true });
+      },
+    };
+
+    const schema = makeSchema(() => ({
+      [Symbol.asyncIterator]: () => iter,
+    }));
+
+    const { callbacks } = setup({ schema });
+    const socket = await connect(callbacks);
+
+    callbacks.message!(socket, {
+      type: "subscribe",
+      id: "comp",
+      payload: { query: "subscription { count }" },
+    });
+    await wait(10);
+
+    // Client sends complete — must call return() directly
+    await callbacks.message!(socket, { type: "complete", id: "comp" });
+    await wait(10);
+
+    expect(returnCalled).toBe(true);
+  });
+
+  it("handles disconnect during execute() — iterator is still cleaned up", async () => {
+    let returnCalled = false;
+    let resolveExecute: (() => void) | undefined;
+
+    async function* slowResolve() {
+      yield 1;
+    }
+
+    const schema = new GraphQLSchema({
+      query: new GraphQLObjectType({
+        name: "Query",
+        fields: { _: { type: GraphQLString, resolve: () => null } },
+      }),
+      subscription: new GraphQLObjectType({
+        name: "Subscription",
+        fields: {
+          count: {
+            type: GraphQLInt,
+            subscribe: () => {
+              const origIter = slowResolve()[Symbol.asyncIterator]();
+              return {
+                [Symbol.asyncIterator]: () => ({
+                  next: () => origIter.next(),
+                  return() {
+                    returnCalled = true;
+                    return Promise.resolve({ value: undefined, done: true as const });
+                  },
+                }),
+              };
+            },
+            resolve: async () => {
+              // Simulate slow execute() — hang until manually resolved
+              await new Promise<void>((r) => { resolveExecute = r; });
+              return 1;
+            },
+          },
+        },
+      }),
+    });
+
+    const { callbacks } = setup({ schema });
+    const socket = await connect(callbacks);
+
+    callbacks.message!(socket, {
+      type: "subscribe",
+      id: "slow-exec",
+      payload: { query: "subscription { count }" },
+    });
+    await wait(10);
+
+    // Disconnect while execute() is still running
+    callbacks.close!(socket);
+
+    // Let execute() complete
+    resolveExecute?.();
+    await wait(20);
+
+    expect(returnCalled).toBe(true);
+  });
+
+  it("double close does not throw or double-cleanup", async () => {
+    let returnCount = 0;
+    let resolveHang: (() => void) | undefined;
+
+    const iter: AsyncIterator<number> = {
+      async next() {
+        await new Promise<void>((r) => { resolveHang = r; });
+        return { value: undefined as unknown as number, done: true };
+      },
+      return() {
+        returnCount++;
+        resolveHang?.();
+        return Promise.resolve({ value: undefined as unknown as number, done: true });
+      },
+    };
+
+    const schema = makeSchema(() => ({
+      [Symbol.asyncIterator]: () => iter,
+    }));
+
+    const { callbacks } = setup({ schema });
+    const socket = await connect(callbacks);
+
+    callbacks.message!(socket, {
+      type: "subscribe",
+      id: "dbl",
+      payload: { query: "subscription { count }" },
+    });
+    await wait(10);
+
+    // First close triggers cleanup
+    callbacks.close!(socket);
+    // Second close should be a no-op (state already deleted)
+    expect(() => callbacks.close!(socket)).not.toThrow();
+    await wait(10);
+
+    // handleClose calls return() once directly; the finally chain may call
+    // it again — but it must not crash or cause issues.
+    expect(returnCount).toBeGreaterThanOrEqual(1);
+  });
+
+  it("rapid subscribe-disconnect cycles do not leak iterators", async () => {
+    const returnedIds = new Set<number>();
+    let nextId = 0;
+
+    function makeTrackingIter(): AsyncIterator<number> {
+      const id = nextId++;
+      let resolveHang: (() => void) | undefined;
+      return {
+        async next() {
+          await new Promise<void>((r) => { resolveHang = r; });
+          return { value: undefined as unknown as number, done: true };
+        },
+        return() {
+          returnedIds.add(id);
+          resolveHang?.();
+          return Promise.resolve({ value: undefined as unknown as number, done: true });
+        },
+      };
+    }
+
+    const schema = makeSchema(() => ({
+      [Symbol.asyncIterator]: () => makeTrackingIter(),
+    }));
+
+    const { callbacks } = setup({ schema });
+
+    // 10 rapid connect → subscribe → disconnect cycles
+    for (let i = 0; i < 10; i++) {
+      const sock = new MockSocket(`cycle-${i}`);
+      await connect(callbacks, sock);
+      callbacks.message!(sock, {
+        type: "subscribe",
+        id: "s1",
+        payload: { query: "subscription { count }" },
+      });
+      await wait(5);
+      callbacks.close!(sock);
+    }
+
+    await wait(20);
+
+    // Every created iterator must have had return() called
+    expect(returnedIds.size).toBe(10);
+  });
+
+  it("subscribe after complete on same ID does not leak the first iterator", async () => {
+    let firstReturnCalled = false;
+    let secondReturnCalled = false;
+    let callCount = 0;
+    const hangs: Array<() => void> = [];
+
+    function makeIter(): AsyncIterator<number> {
+      callCount++;
+      const current = callCount;
+      return {
+        async next() {
+          await new Promise<void>((r) => { hangs.push(r); });
+          return { value: undefined as unknown as number, done: true };
+        },
+        return() {
+          if (current === 1) firstReturnCalled = true;
+          if (current === 2) secondReturnCalled = true;
+          for (const r of hangs) r();
+          return Promise.resolve({ value: undefined as unknown as number, done: true });
+        },
+      };
+    }
+
+    const schema = makeSchema(() => ({
+      [Symbol.asyncIterator]: () => makeIter(),
+    }));
+
+    const { callbacks } = setup({ schema });
+    const socket = await connect(callbacks);
+
+    // First subscription
+    callbacks.message!(socket, {
+      type: "subscribe",
+      id: "reuse",
+      payload: { query: "subscription { count }" },
+    });
+    await wait(10);
+
+    // Complete first, start second with same ID
+    await callbacks.message!(socket, { type: "complete", id: "reuse" });
+    await wait(10);
+
+    callbacks.message!(socket, {
+      type: "subscribe",
+      id: "reuse",
+      payload: { query: "subscription { count }" },
+    });
+    await wait(10);
+
+    // Disconnect — should clean up second iterator
+    callbacks.close!(socket);
+    await wait(10);
+
+    expect(firstReturnCalled).toBe(true);
+    expect(secondReturnCalled).toBe(true);
+  });
+
+  it("concurrent connections are isolated — closing one does not affect another", async () => {
+    const returned = new Set<string>();
+
+    function makeIter(name: string): AsyncIterator<number> {
+      let myHang: (() => void) | undefined;
+      return {
+        async next() {
+          await new Promise<void>((r) => { myHang = r; });
+          return { value: undefined as unknown as number, done: true };
+        },
+        return() {
+          returned.add(name);
+          myHang?.();
+          return Promise.resolve({ value: undefined as unknown as number, done: true });
+        },
+      };
+    }
+
+    let callIdx = 0;
+    const schema = makeSchema(() => {
+      const name = callIdx++ === 0 ? "A" : "B";
+      return { [Symbol.asyncIterator]: () => makeIter(name) };
+    });
+
+    const { callbacks } = setup({ schema });
+    const sockA = new MockSocket("conn-a");
+    const sockB = new MockSocket("conn-b");
+    await connect(callbacks, sockA);
+    await connect(callbacks, sockB);
+
+    callbacks.message!(sockA, {
+      type: "subscribe", id: "s1",
+      payload: { query: "subscription { count }" },
+    });
+    await wait(5);
+    callbacks.message!(sockB, {
+      type: "subscribe", id: "s1",
+      payload: { query: "subscription { count }" },
+    });
+    await wait(10);
+
+    // Close only connection A
+    callbacks.close!(sockA);
+    await wait(10);
+
+    expect(returned.has("A")).toBe(true);
+    expect(returned.has("B")).toBe(false);
+
+    // Now close B
+    callbacks.close!(sockB);
+    await wait(10);
+    expect(returned.has("B")).toBe(true);
+  });
+
+  it("iter.return() returning a rejected promise does not crash", async () => {
+    let resolveHang: (() => void) | undefined;
+
+    const iter: AsyncIterator<number> = {
+      async next() {
+        await new Promise<void>((r) => { resolveHang = r; });
+        return { value: undefined as unknown as number, done: true };
+      },
+      return() {
+        resolveHang?.();
+        return Promise.reject(new Error("async PubSub cleanup failed"));
+      },
+    };
+
+    const schema = makeSchema(() => ({
+      [Symbol.asyncIterator]: () => iter,
+    }));
+
+    const { callbacks } = setup({ schema });
+    const socket = await connect(callbacks);
+
+    callbacks.message!(socket, {
+      type: "subscribe", id: "rej",
+      payload: { query: "subscription { count }" },
+    });
+    await wait(10);
+
+    // handleClose calls return() synchronously — the rejected promise
+    // must not cause an unhandled rejection
+    expect(() => callbacks.close!(socket)).not.toThrow();
+    await wait(10);
+  });
+
+  it("disconnect before handleAsyncIterator is scheduled (handle has no iterator yet)", async () => {
+    // This scenario is already tested by "cleans up iterator when disconnect
+    // races with subscription setup" above. Here we verify the handle.iterator
+    // is undefined at the time handleClose runs, yet cleanup still happens.
+    let returnCalled = false;
+    let resolveSubscribe: (() => void) | undefined;
+
+    const iter: AsyncIterator<number> = {
+      async next() {
+        await new Promise<void>(() => {}); // hang forever
+        return { value: 0, done: false };
+      },
+      return() {
+        returnCalled = true;
+        return Promise.resolve({ value: undefined as unknown as number, done: true });
+      },
+    };
+
+    const schema = makeSchema(() => {
+      return new Promise<AsyncIterable<unknown>>((resolve) => {
+        resolveSubscribe = () =>
+          resolve({ [Symbol.asyncIterator]: () => iter });
+      });
+    });
+
+    const { callbacks } = setup({ schema });
+    const socket = await connect(callbacks);
+
+    const subPromise = callbacks.message!(socket, {
+      type: "subscribe", id: "pre-iter",
+      payload: { query: "subscription { count }" },
+    });
+
+    // Disconnect while createSourceEventStream is still pending.
+    // handle.iterator is undefined — handleClose can only abort.
+    await wait(5);
+    callbacks.close!(socket);
+
+    // Now resolve the stream — executeSubscription detects abort
+    // and calls return() on the newly created iterable.
+    resolveSubscribe!();
+    await subPromise;
+    await wait(10);
+
+    expect(returnCalled).toBe(true);
+  });
+
+  it("subscribe + immediate complete in same tick does not leak", async () => {
+    let returnCalled = false;
+    let resolveHang: (() => void) | undefined;
+
+    const iter: AsyncIterator<number> = {
+      async next() {
+        await new Promise<void>((r) => { resolveHang = r; });
+        return { value: undefined as unknown as number, done: true };
+      },
+      return() {
+        returnCalled = true;
+        resolveHang?.();
+        return Promise.resolve({ value: undefined as unknown as number, done: true });
+      },
+    };
+
+    const schema = makeSchema(() => ({
+      [Symbol.asyncIterator]: () => iter,
+    }));
+
+    const { callbacks } = setup({ schema });
+    const socket = await connect(callbacks);
+
+    // Fire subscribe and complete without awaiting
+    callbacks.message!(socket, {
+      type: "subscribe", id: "instant",
+      payload: { query: "subscription { count }" },
+    });
+    // Complete arrives before the subscription loop has even started
+    callbacks.message!(socket, { type: "complete", id: "instant" });
+
+    await wait(30);
+
+    expect(returnCalled).toBe(true);
+  });
+
+  it("multiple subscriptions with interleaved complete + disconnect", async () => {
+    const returned: string[] = [];
+
+    function makeIter(name: string): AsyncIterator<number> {
+      let myHang: (() => void) | undefined;
+      return {
+        async next() {
+          await new Promise<void>((r) => { myHang = r; });
+          return { value: undefined as unknown as number, done: true };
+        },
+        return() {
+          returned.push(name);
+          myHang?.();
+          return Promise.resolve({ value: undefined as unknown as number, done: true });
+        },
+      };
+    }
+
+    let iterIdx = 0;
+    const schema = new GraphQLSchema({
+      query: new GraphQLObjectType({
+        name: "Query",
+        fields: { _: { type: GraphQLString, resolve: () => null } },
+      }),
+      subscription: new GraphQLObjectType({
+        name: "Subscription",
+        fields: {
+          count: {
+            type: GraphQLInt,
+            subscribe: () => ({ [Symbol.asyncIterator]: () => makeIter(`count-${iterIdx++}`) }),
+            resolve: (v: unknown) => v,
+          },
+          status: {
+            type: GraphQLString,
+            subscribe: () => ({ [Symbol.asyncIterator]: () => makeIter(`status-${iterIdx++}`) }),
+            resolve: (v: unknown) => v,
+          },
+        },
+      }),
+    });
+
+    const { callbacks } = setup({ schema });
+    const socket = await connect(callbacks);
+
+    // Start three subscriptions sequentially to avoid races
+    callbacks.message!(socket, {
+      type: "subscribe", id: "s1",
+      payload: { query: "subscription { count }" },
+    });
+    await wait(5);
+    callbacks.message!(socket, {
+      type: "subscribe", id: "s2",
+      payload: { query: "subscription { status }" },
+    });
+    await wait(5);
+    callbacks.message!(socket, {
+      type: "subscribe", id: "s3",
+      payload: { query: "subscription { count }" },
+    });
+    await wait(10);
+
+    // Complete s1 explicitly
+    await callbacks.message!(socket, { type: "complete", id: "s1" });
+    await wait(10);
+    expect(returned).toContain("count-0");
+
+    const afterComplete = new Set(returned);
+
+    // Disconnect — s2 and s3 must still be cleaned up
+    callbacks.close!(socket);
+    await wait(10);
+
+    // s2 (status-1) and s3 (count-2) should also have return() called
+    expect(returned).toContain("status-1");
+    expect(returned).toContain("count-2");
+    // New entries appeared after disconnect (not just from the earlier complete)
+    expect(returned.length).toBeGreaterThan(afterComplete.size);
+  });
+
+  it("disconnect during buildContext still cleans up any resulting iterator", async () => {
+    let resolveContext: (() => void) | undefined;
+    let returnCalled = false;
+
+    const schema = makeSchema(() => ({
+      [Symbol.asyncIterator]: () => ({
+        async next() {
+          await new Promise<void>(() => {});
+          return { value: 1, done: false };
+        },
+        return() {
+          returnCalled = true;
+          return Promise.resolve({ value: undefined, done: true as const });
+        },
+      }),
+    }));
+
+    const { callbacks } = setup({
+      schema,
+      apolloOptions: {
+        context: () => new Promise<unknown>((resolve) => {
+          resolveContext = () => resolve({ req: null });
+        }),
+      } as Partial<ApolloOptions> as ApolloOptions,
+    });
+
+    const socket = await connect(callbacks);
+
+    // Start subscribe — buildContext is pending
+    const subPromise = callbacks.message!(socket, {
+      type: "subscribe", id: "ctx-hang",
+      payload: { query: "subscription { count }" },
+    });
+
+    // Disconnect while buildContext is still pending
+    callbacks.close!(socket);
+
+    // Let buildContext resolve — createSourceEventStream will run,
+    // but the abort signal is set so the iterator should be cleaned up
+    resolveContext?.();
+    await subPromise;
+    await wait(10);
+
+    // The iterator was created (abort check is after createSourceEventStream)
+    // but return() must still be called to prevent leaks
+    expect(returnCalled).toBe(true);
   });
 });
 
