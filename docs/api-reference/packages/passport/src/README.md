@@ -1,5 +1,11 @@
 # packages/passport/src
 
+## Classes
+
+| Class | Description |
+| ------ | ------ |
+| [PassportModule](classes/PassportModule.md) | PassportModule clears strategy registries on module destroy to prevent memory leaks across application restarts. |
+
 ## Functions
 
 | Function | Description |

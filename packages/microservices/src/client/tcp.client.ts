@@ -140,7 +140,10 @@ export class TcpClient extends ClientProxy {
   /** Destroys the socket and clears pending requests. */
   close(): void {
     this.pendingRequests.clear();
-    this.socket?.destroy();
+    if (this.socket) {
+      this.socket.removeAllListeners();
+      this.socket.destroy();
+    }
     this.isConnected = false;
     this.buffer = "";
   }

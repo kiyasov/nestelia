@@ -1,8 +1,8 @@
 import type { Redis } from "ioredis";
 
-import { Module } from "nestelia";
+import { Inject, Module } from "nestelia";
 import { Global } from "nestelia";
-import type { Provider, ProviderToken } from "nestelia";
+import type { OnModuleDestroy, Provider, ProviderToken } from "nestelia";
 import type { RedisPubSubOptions } from "./interfaces";
 import { RedisPubSub } from "./redis-pubsub";
 
@@ -41,6 +41,22 @@ export interface GraphQLPubSubModuleOptions {
    * importing this module in every feature module.
    */
   isGlobal?: boolean;
+}
+
+// ─── Shutdown hook ───────────────────────────────────────────────────────────
+
+/**
+ * Internal service that closes the {@link RedisPubSub} instance on application
+ * shutdown, preventing leaked Redis connections.
+ */
+class GraphQLPubSubShutdownService implements OnModuleDestroy {
+  constructor(
+    @Inject(GRAPHQL_PUBSUB) private readonly pubsub: RedisPubSub,
+  ) {}
+
+  async onModuleDestroy(): Promise<void> {
+    await this.pubsub.close();
+  }
 }
 
 // ─── Internal module classes ──────────────────────────────────────────────────
@@ -108,6 +124,7 @@ export class GraphQLPubSubModule {
               keyPrefix: options.useExisting.keyPrefix,
             }),
           },
+          GraphQLPubSubShutdownService,
         ]
       : [
           {
@@ -120,6 +137,7 @@ export class GraphQLPubSubModule {
             provide: GRAPHQL_PUBSUB_OPTIONS,
             useValue: options.useValue ?? {},
           },
+          GraphQLPubSubShutdownService,
         ];
 
     const moduleClass =
@@ -171,6 +189,7 @@ export class GraphQLPubSubModule {
         useFactory: options.useFactory,
         inject: options.inject ?? [],
       },
+      GraphQLPubSubShutdownService,
     ];
 
     const moduleClass =

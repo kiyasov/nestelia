@@ -117,6 +117,28 @@ export class GraphQLWsHandler {
     });
   }
 
+  /**
+   * Disposes all active connections, clearing keepalive timers and aborting
+   * every active subscription. Call this when the server is shutting down
+   * to prevent leaked timers and iterators.
+   */
+  dispose(): void {
+    for (const state of this.connections.values()) {
+      clearTimeout(state.initTimer);
+      clearInterval(state.keepAliveInterval);
+      for (const handle of state.subscriptions.values()) {
+        handle.abortController.abort();
+        try {
+          handle.iterator?.return?.();
+        } catch {
+          // iterator already closed or errored
+        }
+      }
+      state.subscriptions.clear();
+    }
+    this.connections.clear();
+  }
+
   private handleOpen(socket: WsSocket): void {
     const timeoutMs =
       this.wsOptions.connectionInitWaitTimeout ?? DEFAULT_INIT_TIMEOUT_MS;

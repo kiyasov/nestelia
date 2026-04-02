@@ -1,3 +1,4 @@
+import type { OnModuleDestroy } from "nestelia";
 import type { CronExpression } from "../interfaces/cron.interface";
 import { isValidCronExpression } from "../interfaces/cron.interface";
 import type {
@@ -23,7 +24,7 @@ export interface SchedulerConfig {
 /**
  * Service for scheduling tasks
  */
-export class Scheduler implements IScheduler {
+export class Scheduler implements IScheduler, OnModuleDestroy {
   /**
    * Map of all active tasks
    */
@@ -44,6 +45,10 @@ export class Scheduler implements IScheduler {
    */
   constructor(config: SchedulerConfig = {}) {
     this.maxTasks = config.maxTasks ?? 10000;
+  }
+
+  onModuleDestroy(): void {
+    this.cancelAllTasks();
   }
 
   /**
@@ -210,8 +215,12 @@ export class Scheduler implements IScheduler {
 /**
  * Registry for managing multiple schedulers
  */
-export class SchedulerRegistry {
+export class SchedulerRegistry implements OnModuleDestroy {
   private readonly schedulers: Map<string, Scheduler> = new Map();
+
+  onModuleDestroy(): void {
+    this.clear();
+  }
 
   /**
    * Add a scheduler to the registry

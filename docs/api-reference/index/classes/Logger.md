@@ -337,7 +337,7 @@ Defined in: [packages/core/src/logger/logger.service.ts:146](https://github.com/
 static getTimestamp(): string;
 ```
 
-Defined in: [packages/core/src/logger/logger.service.ts:162](https://github.com/nestelia/nestelia/blob/main/packages/core/src/logger/logger.service.ts#L162)
+Defined in: [packages/core/src/logger/logger.service.ts:163](https://github.com/nestelia/nestelia/blob/main/packages/core/src/logger/logger.service.ts#L163)
 
 #### Returns
 
@@ -351,7 +351,7 @@ Defined in: [packages/core/src/logger/logger.service.ts:162](https://github.com/
 static isLevelEnabled(level): boolean;
 ```
 
-Defined in: [packages/core/src/logger/logger.service.ts:183](https://github.com/nestelia/nestelia/blob/main/packages/core/src/logger/logger.service.ts#L183)
+Defined in: [packages/core/src/logger/logger.service.ts:184](https://github.com/nestelia/nestelia/blob/main/packages/core/src/logger/logger.service.ts#L184)
 
 #### Parameters
 
@@ -392,7 +392,7 @@ Defined in: [packages/core/src/logger/logger.service.ts:116](https://github.com/
 static overrideLogger(logger): void;
 ```
 
-Defined in: [packages/core/src/logger/logger.service.ts:166](https://github.com/nestelia/nestelia/blob/main/packages/core/src/logger/logger.service.ts#L166)
+Defined in: [packages/core/src/logger/logger.service.ts:167](https://github.com/nestelia/nestelia/blob/main/packages/core/src/logger/logger.service.ts#L167)
 
 #### Parameters
 

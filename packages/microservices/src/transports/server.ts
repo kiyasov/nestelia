@@ -64,6 +64,17 @@ export abstract class BaseServer
   ): void | Promise<void>;
 
   /**
+   * Removes all EventEmitter listeners and clears both handler maps.
+   * Subclasses should call this in their `close()` implementation to
+   * prevent memory leaks.
+   */
+  protected cleanup(): void {
+    this.removeAllListeners();
+    this.messageHandlers.clear();
+    this.eventHandlers.clear();
+  }
+
+  /**
    * Dispatches an incoming request to the matching message handler.
    * @throws When no handler is registered for `pattern`.
    */

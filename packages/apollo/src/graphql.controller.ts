@@ -169,8 +169,12 @@ async function drainChunked(
   iter: AsyncIterableIterator<string>,
 ): Promise<string> {
   const chunks: string[] = [];
-  for await (const chunk of iter) {
-    chunks.push(chunk);
+  try {
+    for await (const chunk of iter) {
+      chunks.push(chunk);
+    }
+  } finally {
+    await iter.return?.();
   }
   return chunks.join("");
 }

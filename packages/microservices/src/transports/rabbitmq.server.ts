@@ -403,5 +403,6 @@ export class RabbitMQServer extends BaseServer {
     void this.channel?.close().catch(() => void 0);
     void this.connection?.close().catch(() => void 0);
     this.isListening = false;
+    this.cleanup();
   }
 }

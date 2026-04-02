@@ -18,6 +18,22 @@ new LifecycleManager(): LifecycleManager;
 
 ## Methods
 
+### clear()
+
+```ts
+clear(): void;
+```
+
+Defined in: [packages/core/src/lifecycle/lifecycle-manager.ts:83](https://github.com/nestelia/nestelia/blob/main/packages/core/src/lifecycle/lifecycle-manager.ts#L83)
+
+Clear all registered providers to prevent memory leaks
+
+#### Returns
+
+`void`
+
+***
+
 ### register()
 
 ```ts
@@ -78,7 +94,7 @@ Trigger onApplicationBootstrap hooks for all registered providers
 triggerOnApplicationShutdown(): void;
 ```
 
-Defined in: [packages/core/src/lifecycle/lifecycle-manager.ts:83](https://github.com/nestelia/nestelia/blob/main/packages/core/src/lifecycle/lifecycle-manager.ts#L83)
+Defined in: [packages/core/src/lifecycle/lifecycle-manager.ts:90](https://github.com/nestelia/nestelia/blob/main/packages/core/src/lifecycle/lifecycle-manager.ts#L90)
 
 Trigger onApplicationShutdown hooks for all registered providers
 

@@ -1,8 +1,12 @@
 # Class: SchedulerRegistry
 
-Defined in: [packages/scheduler/src/services/scheduler.service.ts:213](https://github.com/nestelia/nestelia/blob/main/packages/scheduler/src/services/scheduler.service.ts#L213)
+Defined in: [packages/scheduler/src/services/scheduler.service.ts:218](https://github.com/nestelia/nestelia/blob/main/packages/scheduler/src/services/scheduler.service.ts#L218)
 
 Registry for managing multiple schedulers
+
+## Implements
+
+- [`OnModuleDestroy`](../../../../index/interfaces/OnModuleDestroy.md)
 
 ## Constructors
 
@@ -24,7 +28,7 @@ new SchedulerRegistry(): SchedulerRegistry;
 addScheduler(name, scheduler): void;
 ```
 
-Defined in: [packages/scheduler/src/services/scheduler.service.ts:219](https://github.com/nestelia/nestelia/blob/main/packages/scheduler/src/services/scheduler.service.ts#L219)
+Defined in: [packages/scheduler/src/services/scheduler.service.ts:228](https://github.com/nestelia/nestelia/blob/main/packages/scheduler/src/services/scheduler.service.ts#L228)
 
 Add a scheduler to the registry
 
@@ -47,7 +51,7 @@ Add a scheduler to the registry
 clear(): void;
 ```
 
-Defined in: [packages/scheduler/src/services/scheduler.service.ts:251](https://github.com/nestelia/nestelia/blob/main/packages/scheduler/src/services/scheduler.service.ts#L251)
+Defined in: [packages/scheduler/src/services/scheduler.service.ts:260](https://github.com/nestelia/nestelia/blob/main/packages/scheduler/src/services/scheduler.service.ts#L260)
 
 Clear all schedulers
 
@@ -63,7 +67,7 @@ Clear all schedulers
 getScheduler(name): Scheduler | undefined;
 ```
 
-Defined in: [packages/scheduler/src/services/scheduler.service.ts:226](https://github.com/nestelia/nestelia/blob/main/packages/scheduler/src/services/scheduler.service.ts#L226)
+Defined in: [packages/scheduler/src/services/scheduler.service.ts:235](https://github.com/nestelia/nestelia/blob/main/packages/scheduler/src/services/scheduler.service.ts#L235)
 
 Get a scheduler by name
 
@@ -85,7 +89,7 @@ Get a scheduler by name
 getSchedulerNames(): string[];
 ```
 
-Defined in: [packages/scheduler/src/services/scheduler.service.ts:244](https://github.com/nestelia/nestelia/blob/main/packages/scheduler/src/services/scheduler.service.ts#L244)
+Defined in: [packages/scheduler/src/services/scheduler.service.ts:253](https://github.com/nestelia/nestelia/blob/main/packages/scheduler/src/services/scheduler.service.ts#L253)
 
 Get all scheduler names
 
@@ -95,13 +99,31 @@ Get all scheduler names
 
 ***
 
+### onModuleDestroy()
+
+```ts
+onModuleDestroy(): void;
+```
+
+Defined in: [packages/scheduler/src/services/scheduler.service.ts:221](https://github.com/nestelia/nestelia/blob/main/packages/scheduler/src/services/scheduler.service.ts#L221)
+
+#### Returns
+
+`void`
+
+#### Implementation of
+
+[`OnModuleDestroy`](../../../../index/interfaces/OnModuleDestroy.md).[`onModuleDestroy`](../../../../index/interfaces/OnModuleDestroy.md#onmoduledestroy)
+
+***
+
 ### removeScheduler()
 
 ```ts
 removeScheduler(name): void;
 ```
 
-Defined in: [packages/scheduler/src/services/scheduler.service.ts:233](https://github.com/nestelia/nestelia/blob/main/packages/scheduler/src/services/scheduler.service.ts#L233)
+Defined in: [packages/scheduler/src/services/scheduler.service.ts:242](https://github.com/nestelia/nestelia/blob/main/packages/scheduler/src/services/scheduler.service.ts#L242)
 
 Remove a scheduler from the registry
 

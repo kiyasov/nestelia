@@ -1233,5 +1233,11 @@ export class AmqpConnection {
     await Promise.all(managedChannels.map((channel) => channel.close()));
 
     await this.managedConnection.close();
+
+    this.messageSubject.complete();
+    this.initialized.complete();
+    this._rpcHandlersByQueue.clear();
+    this._rpcConsumerTagByQueue.clear();
+    this._consumers = {};
   }
 }

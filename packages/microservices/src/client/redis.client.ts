@@ -143,7 +143,9 @@ export class RedisClient extends ClientProxy {
 
   /** Disconnects both Redis clients and clears pending state. */
   close(): void {
+    this.pubClient?.removeAllListeners();
     this.pubClient?.disconnect();
+    this.subClient?.removeAllListeners();
     this.subClient?.disconnect();
     this.isConnected = false;
     this.replyChannels.clear();

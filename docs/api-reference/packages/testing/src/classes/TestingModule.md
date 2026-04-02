@@ -63,6 +63,22 @@ Defined in: [packages/testing/src/testing.module-builder.ts:285](https://github.
 
 ## Methods
 
+### close()
+
+```ts
+close(): Promise<void>;
+```
+
+Defined in: [packages/testing/src/testing.module-builder.ts:369](https://github.com/nestelia/nestelia/blob/main/packages/testing/src/testing.module-builder.ts#L369)
+
+Clean up the testing module, clearing the container and releasing resources.
+
+#### Returns
+
+`Promise`\<`void`\>
+
+***
+
 ### get()
 
 ```ts

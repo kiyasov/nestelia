@@ -1,5 +1,5 @@
 import { Container, Injectable, STATIC_CONTEXT } from "nestelia";
-import type { OnApplicationBootstrap } from "nestelia";
+import type { OnApplicationBootstrap, OnModuleDestroy } from "nestelia";
 
 import { ON_EVENT_METADATA } from "./event-emitter.constants";
 import { EventEmitterService } from "./event-emitter.service";
@@ -14,8 +14,14 @@ import type { OnEventMetadata } from "./interfaces";
  * @internal
  */
 @Injectable()
-export class EventEmitterExplorer implements OnApplicationBootstrap {
+export class EventEmitterExplorer
+  implements OnApplicationBootstrap, OnModuleDestroy
+{
   constructor(private readonly eventEmitter: EventEmitterService) {}
+
+  onModuleDestroy(): void {
+    this.eventEmitter.removeAllListeners();
+  }
 
   onApplicationBootstrap(): void {
     for (const moduleRef of Container.instance.getModules().values()) {

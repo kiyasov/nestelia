@@ -4,6 +4,10 @@ import { CATCH_EXCEPTIONS_METADATA } from "../exceptions/catch.decorator";
 
 const _globalExceptionFilters: ExceptionFilter[] = [];
 
+export function clearGlobalExceptionFilters(): void {
+  _globalExceptionFilters.length = 0;
+}
+
 export function addGlobalExceptionFilter(filter: ExceptionFilter): void {
   _globalExceptionFilters.push(filter);
 }

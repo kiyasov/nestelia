@@ -156,6 +156,7 @@ export class Logger implements LoggerService {
   }
 
   public static detachBuffer() {
+    this.logBuffer = [];
     this.isBufferAttached = false;
   }
 

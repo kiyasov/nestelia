@@ -13,7 +13,7 @@ Handles schema resolution, server startup, context creation, and WebSocket subsc
 new ApolloService(options?, elysiaApp?): ApolloService;
 ```
 
-Defined in: [packages/apollo/src/services/apollo.service.ts:40](https://github.com/nestelia/nestelia/blob/main/packages/apollo/src/services/apollo.service.ts#L40)
+Defined in: [packages/apollo/src/services/apollo.service.ts:41](https://github.com/nestelia/nestelia/blob/main/packages/apollo/src/services/apollo.service.ts#L41)
 
 Creates a new ApolloService instance.
 
@@ -36,7 +36,7 @@ Creates a new ApolloService instance.
 createContext(elysiaContext): Promise<unknown>;
 ```
 
-Defined in: [packages/apollo/src/services/apollo.service.ts:95](https://github.com/nestelia/nestelia/blob/main/packages/apollo/src/services/apollo.service.ts#L95)
+Defined in: [packages/apollo/src/services/apollo.service.ts:97](https://github.com/nestelia/nestelia/blob/main/packages/apollo/src/services/apollo.service.ts#L97)
 
 Creates a GraphQL context for a request.
 
@@ -77,7 +77,7 @@ The GraphQL context.
 getServer(): ApolloServer<BaseContext> | undefined;
 ```
 
-Defined in: [packages/apollo/src/services/apollo.service.ts:86](https://github.com/nestelia/nestelia/blob/main/packages/apollo/src/services/apollo.service.ts#L86)
+Defined in: [packages/apollo/src/services/apollo.service.ts:88](https://github.com/nestelia/nestelia/blob/main/packages/apollo/src/services/apollo.service.ts#L88)
 
 Gets the Apollo Server instance.
 
@@ -95,7 +95,7 @@ The ApolloServer instance or undefined if not started.
 start(): Promise<void>;
 ```
 
-Defined in: [packages/apollo/src/services/apollo.service.ts:52](https://github.com/nestelia/nestelia/blob/main/packages/apollo/src/services/apollo.service.ts#L52)
+Defined in: [packages/apollo/src/services/apollo.service.ts:53](https://github.com/nestelia/nestelia/blob/main/packages/apollo/src/services/apollo.service.ts#L53)
 
 Starts the Apollo Server and registers WebSocket handlers if configured.
 
@@ -111,7 +111,7 @@ Starts the Apollo Server and registers WebSocket handlers if configured.
 stop(): Promise<void>;
 ```
 
-Defined in: [packages/apollo/src/services/apollo.service.ts:78](https://github.com/nestelia/nestelia/blob/main/packages/apollo/src/services/apollo.service.ts#L78)
+Defined in: [packages/apollo/src/services/apollo.service.ts:79](https://github.com/nestelia/nestelia/blob/main/packages/apollo/src/services/apollo.service.ts#L79)
 
 Stops the Apollo Server.
 

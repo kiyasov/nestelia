@@ -62,7 +62,7 @@ Defined in: [packages/graphql-pubsub/src/redis-pubsub.ts:70](https://github.com/
 asyncIterator<T>(triggers): AsyncIterator<T>;
 ```
 
-Defined in: [packages/graphql-pubsub/src/redis-pubsub.ts:300](https://github.com/nestelia/nestelia/blob/main/packages/graphql-pubsub/src/redis-pubsub.ts#L300)
+Defined in: [packages/graphql-pubsub/src/redis-pubsub.ts:304](https://github.com/nestelia/nestelia/blob/main/packages/graphql-pubsub/src/redis-pubsub.ts#L304)
 
 Creates an `AsyncIterator` over the given `triggers` for use in
 GraphQL subscription resolvers.
@@ -104,7 +104,7 @@ subscribe() {
 close(): Promise<void>;
 ```
 
-Defined in: [packages/graphql-pubsub/src/redis-pubsub.ts:325](https://github.com/nestelia/nestelia/blob/main/packages/graphql-pubsub/src/redis-pubsub.ts#L325)
+Defined in: [packages/graphql-pubsub/src/redis-pubsub.ts:329](https://github.com/nestelia/nestelia/blob/main/packages/graphql-pubsub/src/redis-pubsub.ts#L329)
 
 Gracefully closes both Redis connections.
 
@@ -122,7 +122,7 @@ Call this during application shutdown to allow open sockets to drain.
 getPublisher(): Redis;
 ```
 
-Defined in: [packages/graphql-pubsub/src/redis-pubsub.ts:316](https://github.com/nestelia/nestelia/blob/main/packages/graphql-pubsub/src/redis-pubsub.ts#L316)
+Defined in: [packages/graphql-pubsub/src/redis-pubsub.ts:320](https://github.com/nestelia/nestelia/blob/main/packages/graphql-pubsub/src/redis-pubsub.ts#L320)
 
 Returns the underlying publisher Redis client.
 
@@ -138,7 +138,7 @@ Returns the underlying publisher Redis client.
 getSubscriber(): Redis;
 ```
 
-Defined in: [packages/graphql-pubsub/src/redis-pubsub.ts:311](https://github.com/nestelia/nestelia/blob/main/packages/graphql-pubsub/src/redis-pubsub.ts#L311)
+Defined in: [packages/graphql-pubsub/src/redis-pubsub.ts:315](https://github.com/nestelia/nestelia/blob/main/packages/graphql-pubsub/src/redis-pubsub.ts#L315)
 
 Returns the underlying subscriber Redis client.
 
@@ -232,7 +232,7 @@ A numeric subscription ID used with [unsubscribe](#unsubscribe).
 unsubscribe(subId): void;
 ```
 
-Defined in: [packages/graphql-pubsub/src/redis-pubsub.ts:252](https://github.com/nestelia/nestelia/blob/main/packages/graphql-pubsub/src/redis-pubsub.ts#L252)
+Defined in: [packages/graphql-pubsub/src/redis-pubsub.ts:256](https://github.com/nestelia/nestelia/blob/main/packages/graphql-pubsub/src/redis-pubsub.ts#L256)
 
 Cancels the subscription identified by `subId`.
 

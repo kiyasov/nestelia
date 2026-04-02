@@ -78,6 +78,13 @@ export class LifecycleManager {
   }
 
   /**
+   * Clear all registered providers to prevent memory leaks
+   */
+  public clear(): void {
+    this.providers = [];
+  }
+
+  /**
    * Trigger onApplicationShutdown hooks for all registered providers
    */
   public triggerOnApplicationShutdown() {

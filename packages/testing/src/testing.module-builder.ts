@@ -362,4 +362,11 @@ export class TestingModule {
   get container(): Container {
     return this._container;
   }
+
+  /**
+   * Clean up the testing module, clearing the container and releasing resources.
+   */
+  async close(): Promise<void> {
+    this._container.clear();
+  }
 }

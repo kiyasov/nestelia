@@ -1,10 +1,11 @@
 import type { Elysia } from "elysia";
 
 import { Module } from "nestelia";
-import type { DynamicModule, ProviderToken } from "nestelia";
+import type { DynamicModule, OnModuleDestroy, ProviderToken } from "nestelia";
 import { registerGraphQLRoutes } from "./graphql.controller";
 import type { ApolloOptions } from "./interfaces";
 import { ApolloService } from "./services";
+import { typeMetadataStorage } from "./storages/type-metadata.storage";
 
 /**
  * GraphQL module for nestelia backed by Apollo Server.
@@ -20,7 +21,11 @@ import { ApolloService } from "./services";
  * ```
  */
 @Module({})
-export class GraphQLModule {
+export class GraphQLModule implements OnModuleDestroy {
+  onModuleDestroy(): void {
+    typeMetadataStorage.clear();
+  }
+
   /**
    * Configures GraphQL with static options.
    * The Apollo Server is started eagerly during module bootstrap.

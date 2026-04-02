@@ -102,6 +102,17 @@ export class EventEmitter implements IEventEmitter {
   }
 
   /**
+   * Remove all listeners, or all listeners for a specific event
+   */
+  removeAllListeners(event?: string | symbol): void {
+    if (event !== undefined) {
+      this.handlers.delete(event);
+    } else {
+      this.handlers.clear();
+    }
+  }
+
+  /**
    * Register a handler with metadata
    */
   private registerHandler<T = any>(

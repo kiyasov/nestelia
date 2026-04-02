@@ -223,6 +223,13 @@ export function dtoToArraySchema(dto: any): PropertySchema {
 const schemaCache = new Map<any, OpenAPISchema>();
 
 /**
+ * Clears the schema cache to prevent memory leaks across application restarts.
+ */
+export function clearSchemaCache(): void {
+  schemaCache.clear();
+}
+
+/**
  * Gets or creates a schema for a DTO, using cache for performance
  * @param dto DTO class
  * @returns OpenAPI Schema or null if no DTO provided

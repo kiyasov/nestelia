@@ -243,5 +243,6 @@ export class RedisServer extends BaseServer {
     this.pubClient?.disconnect();
     this.isConnected = false;
     this.subscribedChannels.clear();
+    this.cleanup();
   }
 }

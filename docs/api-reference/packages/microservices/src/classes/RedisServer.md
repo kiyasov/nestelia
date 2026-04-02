@@ -220,6 +220,28 @@ the caller.
 
 ***
 
+### cleanup()
+
+```ts
+protected cleanup(): void;
+```
+
+Defined in: [packages/microservices/src/transports/server.ts:71](https://github.com/nestelia/nestelia/blob/main/packages/microservices/src/transports/server.ts#L71)
+
+Removes all EventEmitter listeners and clears both handler maps.
+Subclasses should call this in their `close()` implementation to
+prevent memory leaks.
+
+#### Returns
+
+`void`
+
+#### Inherited from
+
+[`BaseServer`](BaseServer.md).[`cleanup`](BaseServer.md#cleanup)
+
+***
+
 ### close()
 
 ```ts
@@ -421,7 +443,7 @@ protected handleEvent<T>(
    ctx): void;
 ```
 
-Defined in: [packages/microservices/src/transports/server.ts:86](https://github.com/nestelia/nestelia/blob/main/packages/microservices/src/transports/server.ts#L86)
+Defined in: [packages/microservices/src/transports/server.ts:97](https://github.com/nestelia/nestelia/blob/main/packages/microservices/src/transports/server.ts#L97)
 
 Dispatches an incoming event to the matching event handler.
 Silently ignores events without a registered handler.
@@ -459,7 +481,7 @@ protected handleMessage<T, R>(
    ctx): unknown;
 ```
 
-Defined in: [packages/microservices/src/transports/server.ts:70](https://github.com/nestelia/nestelia/blob/main/packages/microservices/src/transports/server.ts#L70)
+Defined in: [packages/microservices/src/transports/server.ts:81](https://github.com/nestelia/nestelia/blob/main/packages/microservices/src/transports/server.ts#L81)
 
 Dispatches an incoming request to the matching message handler.
 

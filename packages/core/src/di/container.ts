@@ -2,6 +2,10 @@ import { AsyncLocalStorage } from "node:async_hooks";
 
 import type { ContextId } from "./constants";
 import { STATIC_CONTEXT } from "./constants";
+import { clearGlobalExceptionFilters } from "../core/exception-filter.registry";
+import { getEventEmitter } from "../events/event-emitter.container";
+import { getLifecycleManager } from "../lifecycle/lifecycle-manager";
+import { clearSchemaCache } from "../swagger/dto-to-schema";
 import { Injector } from "./injector";
 import type { InstanceWrapper } from "./instance-wrapper";
 import { Module } from "./module";
@@ -209,6 +213,10 @@ export class Container {
     this._globalModules.clear();
     this._moduleByMetatype.clear();
     this._sessionInitialized.clear();
+    getLifecycleManager().clear();
+    clearGlobalExceptionFilters();
+    getEventEmitter().removeAllListeners();
+    clearSchemaCache();
   }
 
   public beginInitSession(): void {

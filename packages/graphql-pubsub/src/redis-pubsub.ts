@@ -222,19 +222,23 @@ export class RedisPubSub implements PubSubEngine {
   /** Resolves once the subscriber connection reaches the `ready` state. */
   private waitForReady(): Promise<void> {
     return new Promise<void>((resolve, reject) => {
-      const timer = setTimeout(() => {
-        reject(new Error("Timeout waiting for Redis subscriber to be ready"));
-      }, 10_000);
-
       const onReady = () => {
         clearTimeout(timer);
+        this.redisSubscriber.removeListener("error", onError);
         resolve();
       };
 
       const onError = (err: Error) => {
         clearTimeout(timer);
+        this.redisSubscriber.removeListener("ready", onReady);
         reject(err);
       };
+
+      const timer = setTimeout(() => {
+        this.redisSubscriber.removeListener("ready", onReady);
+        this.redisSubscriber.removeListener("error", onError);
+        reject(new Error("Timeout waiting for Redis subscriber to be ready"));
+      }, 10_000);
 
       this.redisSubscriber.once("ready", onReady);
       this.redisSubscriber.once("error", onError);

@@ -1,12 +1,13 @@
 # Class: Scheduler
 
-Defined in: [packages/scheduler/src/services/scheduler.service.ts:26](https://github.com/nestelia/nestelia/blob/main/packages/scheduler/src/services/scheduler.service.ts#L26)
+Defined in: [packages/scheduler/src/services/scheduler.service.ts:27](https://github.com/nestelia/nestelia/blob/main/packages/scheduler/src/services/scheduler.service.ts#L27)
 
 Service for scheduling tasks
 
 ## Implements
 
 - [`IScheduler`](../interfaces/IScheduler.md)
+- [`OnModuleDestroy`](../../../../index/interfaces/OnModuleDestroy.md)
 
 ## Constructors
 
@@ -16,7 +17,7 @@ Service for scheduling tasks
 new Scheduler(config?): Scheduler;
 ```
 
-Defined in: [packages/scheduler/src/services/scheduler.service.ts:45](https://github.com/nestelia/nestelia/blob/main/packages/scheduler/src/services/scheduler.service.ts#L45)
+Defined in: [packages/scheduler/src/services/scheduler.service.ts:46](https://github.com/nestelia/nestelia/blob/main/packages/scheduler/src/services/scheduler.service.ts#L46)
 
 Create a new scheduler
 
@@ -38,7 +39,7 @@ Create a new scheduler
 cancelAllTasks(): void;
 ```
 
-Defined in: [packages/scheduler/src/services/scheduler.service.ts:181](https://github.com/nestelia/nestelia/blob/main/packages/scheduler/src/services/scheduler.service.ts#L181)
+Defined in: [packages/scheduler/src/services/scheduler.service.ts:186](https://github.com/nestelia/nestelia/blob/main/packages/scheduler/src/services/scheduler.service.ts#L186)
 
 Cancel all scheduled tasks
 
@@ -58,7 +59,7 @@ Cancel all scheduled tasks
 getTasks(): TaskHandle[];
 ```
 
-Defined in: [packages/scheduler/src/services/scheduler.service.ts:192](https://github.com/nestelia/nestelia/blob/main/packages/scheduler/src/services/scheduler.service.ts#L192)
+Defined in: [packages/scheduler/src/services/scheduler.service.ts:197](https://github.com/nestelia/nestelia/blob/main/packages/scheduler/src/services/scheduler.service.ts#L197)
 
 Get all active tasks
 
@@ -72,6 +73,24 @@ Get all active tasks
 
 ***
 
+### onModuleDestroy()
+
+```ts
+onModuleDestroy(): void;
+```
+
+Defined in: [packages/scheduler/src/services/scheduler.service.ts:50](https://github.com/nestelia/nestelia/blob/main/packages/scheduler/src/services/scheduler.service.ts#L50)
+
+#### Returns
+
+`void`
+
+#### Implementation of
+
+[`OnModuleDestroy`](../../../../index/interfaces/OnModuleDestroy.md).[`onModuleDestroy`](../../../../index/interfaces/OnModuleDestroy.md#onmoduledestroy)
+
+***
+
 ### scheduleAt()
 
 ```ts
@@ -81,7 +100,7 @@ scheduleAt(
    options?): TaskHandle;
 ```
 
-Defined in: [packages/scheduler/src/services/scheduler.service.ts:151](https://github.com/nestelia/nestelia/blob/main/packages/scheduler/src/services/scheduler.service.ts#L151)
+Defined in: [packages/scheduler/src/services/scheduler.service.ts:156](https://github.com/nestelia/nestelia/blob/main/packages/scheduler/src/services/scheduler.service.ts#L156)
 
 Schedule a task to run at a specific date
 
@@ -112,7 +131,7 @@ scheduleCron(
    options?): TaskHandle;
 ```
 
-Defined in: [packages/scheduler/src/services/scheduler.service.ts:77](https://github.com/nestelia/nestelia/blob/main/packages/scheduler/src/services/scheduler.service.ts#L77)
+Defined in: [packages/scheduler/src/services/scheduler.service.ts:82](https://github.com/nestelia/nestelia/blob/main/packages/scheduler/src/services/scheduler.service.ts#L82)
 
 Schedule a task to run at a cron time
 
@@ -143,7 +162,7 @@ scheduleInterval(
    options?): TaskHandle;
 ```
 
-Defined in: [packages/scheduler/src/services/scheduler.service.ts:102](https://github.com/nestelia/nestelia/blob/main/packages/scheduler/src/services/scheduler.service.ts#L102)
+Defined in: [packages/scheduler/src/services/scheduler.service.ts:107](https://github.com/nestelia/nestelia/blob/main/packages/scheduler/src/services/scheduler.service.ts#L107)
 
 Schedule a task to run at fixed intervals
 
@@ -174,7 +193,7 @@ scheduleTimeout(
    options?): TaskHandle;
 ```
 
-Defined in: [packages/scheduler/src/services/scheduler.service.ts:124](https://github.com/nestelia/nestelia/blob/main/packages/scheduler/src/services/scheduler.service.ts#L124)
+Defined in: [packages/scheduler/src/services/scheduler.service.ts:129](https://github.com/nestelia/nestelia/blob/main/packages/scheduler/src/services/scheduler.service.ts#L129)
 
 Schedule a task to run once after a delay
 

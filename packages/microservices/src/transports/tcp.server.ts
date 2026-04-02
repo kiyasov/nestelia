@@ -206,5 +206,6 @@ export class TcpServer extends BaseServer {
     this.pendingReplies.clear();
     this.server?.close();
     this.isListening = false;
+    this.cleanup();
   }
 }

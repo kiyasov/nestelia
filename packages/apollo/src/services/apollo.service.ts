@@ -29,6 +29,7 @@ interface ElysiaWithWs {
  */
 export class ApolloService {
   private apolloServer?: ApolloServer;
+  private wsHandler?: GraphQLWsHandler;
   private readonly options: ApolloOptions;
   private readonly elysiaApp?: Elysia;
 
@@ -76,6 +77,7 @@ export class ApolloService {
    * Stops the Apollo Server.
    */
   async stop(): Promise<void> {
+    this.wsHandler?.dispose();
     await this.apolloServer?.stop();
   }
 
@@ -186,13 +188,13 @@ export class ApolloService {
       this.options.path ??
       "/graphql";
 
-    const handler = new GraphQLWsHandler(
+    this.wsHandler = new GraphQLWsHandler(
       schema,
       wsOptions,
       this.options,
       this.elysiaApp,
     );
-    handler.register(path);
+    this.wsHandler.register(path);
   }
 
   private getGraphQLWsOptions(
