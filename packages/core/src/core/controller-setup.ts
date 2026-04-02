@@ -50,6 +50,15 @@ export async function setupController(
     (typeof controllerMeta === "string" ? controllerMeta : controllerMeta?.prefix) || "";
   const routes: RouteMetadata[] = Reflect.getMetadata(ROUTE_METADATA, controllerClass) || [];
 
+  // Static routes must be registered before parameterized ones
+  // so that e.g. /stats is matched before /:id
+  routes.sort((a, b) => {
+    const aHasParam = a.path.includes(":");
+    const bHasParam = b.path.includes(":");
+    if (aHasParam === bHasParam) return 0;
+    return aHasParam ? 1 : -1;
+  });
+
   const routesLogger = new Logger("RoutesResolver");
   const routerExplorerLogger = new Logger("RouterExplorer");
 
