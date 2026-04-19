@@ -168,6 +168,7 @@ interface RouteMetadata {
   guards: unknown[];
   interceptors: any[];
   paramDefinitions: ParamMetadata[];
+  paramDefsByIndex: Map<number, ParamMetadata>;
   paramTypes: any[];
   fileParamDefs: Array<{ index: number }>;
   httpCode: number | undefined;
@@ -191,11 +192,15 @@ function collectMetadata(controllerClass: Type, method: string): RouteMetadata {
   const compiledResolvers =
     paramTypes.length > 0 ? compileResolvers(paramDefinitions, paramTypes) : null;
 
+  const paramDefsByIndex = new Map<number, ParamMetadata>();
+  for (const def of paramDefinitions) paramDefsByIndex.set(def.index, def);
+
   return {
     guards: [...classGuards, ...methodGuards],
     interceptors:
       Reflect.getMetadata(INTERCEPTORS_METADATA, controllerClass, method) || [],
     paramDefinitions,
+    paramDefsByIndex,
     paramTypes,
     fileParamDefs:
       Reflect.getMetadata(FILE_PARAMS_METADATA, controllerClass, method) || [],
@@ -378,7 +383,7 @@ export function createRouteHandler(
       } else if (hasParams) {
         resolvedParams = await Promise.all(
           meta.paramTypes.map(async (paramType: any, index: number) => {
-            const paramMeta = meta.paramDefinitions.find((p) => p.index === index);
+            const paramMeta = meta.paramDefsByIndex.get(index);
             try {
               return await resolveParam(paramMeta, paramType, elysiaContext, moduleinstance as Type<any>);
             } catch {

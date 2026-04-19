@@ -1,3 +1,4 @@
+import { Logger } from "../logger/logger.service";
 import type {
   EventHandler,
   EventHandlerRegistration,
@@ -78,9 +79,10 @@ export class EventEmitter implements IEventEmitter {
           oneTimeHandlers.push(registration);
         }
       } catch (error) {
-        console.error(
-          `Error in event handler for event "${String(event)}":`,
-          error,
+        Logger.error(
+          `Error in event handler for event "${String(event)}": ${error instanceof Error ? error.message : String(error)}`,
+          error instanceof Error ? error.stack : undefined,
+          "EventEmitter",
         );
       }
     });

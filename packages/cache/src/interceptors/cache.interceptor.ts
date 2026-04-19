@@ -99,6 +99,15 @@ export class CacheInterceptor implements NestInterceptor {
    */
   protected readonly allowedMethods: readonly string[] = ["GET"];
 
+  private readonly ttlMetaCache = new WeakMap<
+    object,
+    number | CacheTTLFactory | null
+  >();
+  private readonly keyMetaCache = new WeakMap<
+    object,
+    string | CacheKeyFactory | null
+  >();
+
   /**
    * @param cacheManager - The cache manager instance.
    * @param reflector - The reflector for reading metadata.
@@ -124,10 +133,21 @@ export class CacheInterceptor implements NestInterceptor {
     next: CallHandler,
   ): Promise<Observable<unknown>> {
     const key = this.trackBy(context);
-    const ttlValueOrFactory: number | CacheTTLFactory | null =
-      this.reflector.get(CACHE_TTL_METADATA, context.getHandler()) ??
-      this.reflector.get(CACHE_TTL_METADATA, context.getClass()) ??
-      null;
+    const handler = context.getHandler() as unknown as object;
+    let ttlValueOrFactory = this.ttlMetaCache.get(handler);
+    if (ttlValueOrFactory === undefined) {
+      ttlValueOrFactory =
+        (this.reflector.get(CACHE_TTL_METADATA, handler) as
+          | number
+          | CacheTTLFactory
+          | undefined) ??
+        (this.reflector.get(CACHE_TTL_METADATA, context.getClass()) as
+          | number
+          | CacheTTLFactory
+          | undefined) ??
+        null;
+      this.ttlMetaCache.set(handler, ttlValueOrFactory);
+    }
 
     if (!key) {
       return next.handle();
@@ -213,8 +233,16 @@ export class CacheInterceptor implements NestInterceptor {
     const httpAdapter = this.httpAdapterHost?.httpAdapter;
     const isHttpApp =
       httpAdapter !== undefined && isFunction(httpAdapter.getRequestMethod);
-    const cacheMetadataOrFactory: string | CacheKeyFactory | null =
-      this.reflector.get(CACHE_KEY_METADATA, context.getHandler()) ?? null;
+    const handler = context.getHandler() as unknown as object;
+    let cacheMetadataOrFactory = this.keyMetaCache.get(handler);
+    if (cacheMetadataOrFactory === undefined) {
+      cacheMetadataOrFactory =
+        (this.reflector.get(CACHE_KEY_METADATA, handler) as
+          | string
+          | CacheKeyFactory
+          | undefined) ?? null;
+      this.keyMetaCache.set(handler, cacheMetadataOrFactory);
+    }
 
     if (!isHttpApp || cacheMetadataOrFactory !== null) {
       if (isFunction(cacheMetadataOrFactory)) {

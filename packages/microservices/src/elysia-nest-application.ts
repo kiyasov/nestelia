@@ -213,9 +213,10 @@ export class ElysiaNestApplication<TApp extends AnyElysia = Elysia> {
    * Exceptions are passed through global filters when registered.
    */
   private createHandler(controller: Type, methodName: string, pattern: string) {
+    const invoke = this.buildInvoker(controller, methodName);
     return async (data: unknown, ctx: Record<string, unknown>): Promise<unknown> => {
       try {
-        return await this.invokeControllerMethod(controller, methodName, data, ctx);
+        return await invoke(data, ctx);
       } catch (error) {
         const exception = error instanceof Error ? error : new Error(String(error));
         if (this.globalFilters.length > 0) {
@@ -235,9 +236,10 @@ export class ElysiaNestApplication<TApp extends AnyElysia = Elysia> {
    * Exceptions are logged but not re-thrown to avoid breaking the transport.
    */
   private createEventHandler(controller: Type, methodName: string, pattern: string) {
+    const invoke = this.buildInvoker(controller, methodName);
     return async (data: unknown, ctx: Record<string, unknown>): Promise<void> => {
       try {
-        await this.invokeControllerMethod(controller, methodName, data, ctx);
+        await invoke(data, ctx);
       } catch (error) {
         const exception = error instanceof Error ? error : new Error(String(error));
 
@@ -259,71 +261,55 @@ export class ElysiaNestApplication<TApp extends AnyElysia = Elysia> {
   }
 
   /**
-   * Resolves controller method parameters (honouring `@Payload` and
-   * `@MessageCtx` decorators) and calls the method.
+   * Builds a cached invoker that resolves `@Payload` / `@MessageCtx` metadata
+   * once at registration time and reuses it for every incoming message.
    */
-  private async invokeControllerMethod(
+  private buildInvoker(
     controller: Type,
     methodName: string,
-    data: unknown,
-    ctx: Record<string, unknown>,
-  ): Promise<unknown> {
-    const instance = await DIContainer.get(controller);
-    if (!instance) {
-      throw new Error(`Controller not found in DI container: ${controller.name}`);
-    }
+  ): (data: unknown, ctx: Record<string, unknown>) => Promise<unknown> {
+    const proto = controller.prototype as object;
+    const paramTypes = (Reflect.getMetadata("design:paramtypes", proto, methodName) ?? []) as unknown[];
+    const payloadMeta = (Reflect.getMetadata(MESSAGE_DATA_METADATA, proto, methodName) ?? []) as Array<{
+      index: number;
+      property?: string;
+    }>;
+    const ctxMeta = (Reflect.getMetadata(MESSAGE_PATTERN_CTX_METADATA, proto, methodName) ?? []) as Array<{
+      index: number;
+    }>;
+    const paramCount = paramTypes.length;
+    const fallbackDataFirst =
+      payloadMeta.length === 0 && ctxMeta.length === 0 && paramCount > 0;
 
-    const method = (instance as Record<string, unknown>)[methodName];
-    if (typeof method !== "function") {
-      throw new Error(`Method "${methodName}" not found on ${controller.name}`);
-    }
+    return async (data, ctx) => {
+      const instance = await DIContainer.get(controller);
+      if (!instance) {
+        throw new Error(`Controller not found in DI container: ${controller.name}`);
+      }
 
-    const params = this.resolveMethodParams(controller, methodName, data, ctx);
-    return (method as (...args: unknown[]) => unknown).apply(instance, params);
-  }
+      const method = (instance as Record<string, unknown>)[methodName];
+      if (typeof method !== "function") {
+        throw new Error(`Method "${methodName}" not found on ${controller.name}`);
+      }
 
-  /**
-   * Builds the positional argument list for a controller method by reading
-   * `@Payload` and `@MessageCtx` metadata.
-   *
-   * Falls back to passing `data` as the first argument when no decorators are
-   * present.
-   */
-  private resolveMethodParams(
-    controller: Type,
-    methodName: string,
-    data: unknown,
-    ctx: Record<string, unknown>,
-  ): unknown[] {
-    const paramTypes: unknown[] =
-      Reflect.getMetadata("design:paramtypes", controller.prototype as object, methodName) ?? [];
+      const params: unknown[] = new Array(paramCount);
+      for (let i = 0; i < paramCount; i++) params[i] = undefined;
 
-    const params: unknown[] = new Array(paramTypes.length).fill(undefined);
+      for (let i = 0; i < payloadMeta.length; i++) {
+        const { index, property } = payloadMeta[i];
+        params[index] = property ? (data as Record<string, unknown>)?.[property] : data;
+      }
 
-    const payloadMeta: Array<{ index: number; property?: string }> =
-      Reflect.getMetadata(MESSAGE_DATA_METADATA, controller.prototype as object, methodName) ?? [];
+      for (let i = 0; i < ctxMeta.length; i++) {
+        params[ctxMeta[i].index] = ctx;
+      }
 
-    for (const { index, property } of payloadMeta) {
-      params[index] = property ? (data as Record<string, unknown>)?.[property] : data;
-    }
+      if (fallbackDataFirst) {
+        params[0] = data;
+      }
 
-    const ctxMeta: Array<{ index: number }> =
-      Reflect.getMetadata(
-        MESSAGE_PATTERN_CTX_METADATA,
-        controller.prototype as object,
-        methodName,
-      ) ?? [];
-
-    for (const { index } of ctxMeta) {
-      params[index] = ctx;
-    }
-
-    // No decorators → pass data as the first parameter.
-    if (payloadMeta.length === 0 && ctxMeta.length === 0 && paramTypes.length > 0) {
-      params[0] = data;
-    }
-
-    return params;
+      return (method as (...args: unknown[]) => unknown).apply(instance, params);
+    };
   }
 
   // ─── HTTP server / filters ─────────────────────────────────────────────────

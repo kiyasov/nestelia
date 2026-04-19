@@ -4,7 +4,7 @@
 function PassportStrategy<TBase, TValidationResult>(Strategy, name?): Constructor<PassportStrategyMixin<TValidationResult>>;
 ```
 
-Defined in: [packages/passport/src/passport-strategy.ts:18](https://github.com/nestelia/nestelia/blob/main/packages/passport/src/passport-strategy.ts#L18)
+Defined in: [packages/passport/src/passport-strategy.ts:19](https://github.com/nestelia/nestelia/blob/main/packages/passport/src/passport-strategy.ts#L19)
 
 ## Type Parameters
 

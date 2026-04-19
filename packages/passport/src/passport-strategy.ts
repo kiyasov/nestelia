@@ -1,6 +1,7 @@
 import passport from "passport";
 
 type Constructor<T = object> = new (...args: unknown[]) => T;
+type AbstractConstructor<T = object> = abstract new (...args: unknown[]) => T;
 type Done = (error: unknown, user?: unknown, info?: unknown) => void;
 type StrategyConstructor = Constructor<passport.Strategy>;
 type StrategyInstance = passport.Strategy & {
@@ -42,9 +43,7 @@ export function PassportStrategy<
 
         try {
           const validateArgs = params.slice(0, -1);
-          const user = await (this as unknown as StrategyWithMixin).validate(
-            ...validateArgs,
-          );
+          const user = await this.validate(...validateArgs);
           doneFn(null, user);
         } catch (error) {
           doneFn(error);
@@ -54,9 +53,9 @@ export function PassportStrategy<
       super(...args, callback);
       if (name) {
         strategyInstanceRegistry.set(name, this as StrategyInstance);
-        passport.use(name, this as unknown as passport.Strategy);
+        passport.use(name, this as passport.Strategy);
       } else {
-        passport.use(this as unknown as passport.Strategy);
+        passport.use(this as passport.Strategy);
       }
     }
   }
@@ -68,13 +67,13 @@ export function PassportStrategy<
     registeredNames.add(name);
     strategyClassRegistry.set(
       name,
-      StrategyWithMixin as unknown as StrategyConstructor,
+      StrategyWithMixin as AbstractConstructor<passport.Strategy> as StrategyConstructor,
     );
   }
 
-  return StrategyWithMixin as unknown as Constructor<
+  return StrategyWithMixin as AbstractConstructor<
     PassportStrategyMixin<TValidationResult>
-  >;
+  > as Constructor<PassportStrategyMixin<TValidationResult>>;
 }
 
 export function getRegisteredStrategyClass(

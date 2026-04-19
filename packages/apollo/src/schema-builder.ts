@@ -22,6 +22,7 @@ import {
 } from "graphql";
 
 import {
+  ForbiddenException,
   GUARDS_METADATA,
   PARAMS_METADATA,
 } from "nestelia";
@@ -898,7 +899,7 @@ export class SchemaBuilder {
         }
       ).canActivate(executionContext);
       if (!allowed) {
-        throw new Error("Forbidden resource");
+        throw new ForbiddenException();
       }
     }
   }

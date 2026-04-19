@@ -1,4 +1,4 @@
-import { Injectable } from "nestelia";
+import { Injectable, Logger } from "nestelia";
 
 import type { EventEmitterModuleOptions } from "./interfaces";
 
@@ -109,9 +109,10 @@ export class EventEmitterService {
           if (reg.once) toRemove.push(reg);
           return result;
         } catch (err) {
-          console.error(
-            `Error in event handler for "${String(event)}":`,
-            err,
+          Logger.error(
+            `Error in event handler for "${String(event)}": ${err instanceof Error ? err.message : String(err)}`,
+            err instanceof Error ? err.stack : undefined,
+            "EventEmitterService",
           );
           return undefined;
         }
@@ -197,9 +198,10 @@ export class EventEmitterService {
       typeof pattern === "string" &&
       this.handlers.filter((r) => r.pattern === pattern).length >= this.maxListeners
     ) {
-      console.warn(
-        `[EventEmitterService] Possible memory leak: ${this.maxListeners}+ listeners for "${pattern}". ` +
+      Logger.warn(
+        `Possible memory leak: ${this.maxListeners}+ listeners for "${pattern}". ` +
           `Increase maxListeners via EventEmitterModule.forRoot({ maxListeners: N }).`,
+        "EventEmitterService",
       );
     }
     this.handlers.push({ pattern, handler, once });

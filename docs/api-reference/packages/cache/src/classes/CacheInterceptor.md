@@ -52,7 +52,7 @@ new CacheInterceptor(
    httpAdapterHost?): CacheInterceptor;
 ```
 
-Defined in: [packages/cache/src/interceptors/cache.interceptor.ts:107](https://github.com/nestelia/nestelia/blob/main/packages/cache/src/interceptors/cache.interceptor.ts#L107)
+Defined in: [packages/cache/src/interceptors/cache.interceptor.ts:116](https://github.com/nestelia/nestelia/blob/main/packages/cache/src/interceptors/cache.interceptor.ts#L116)
 
 #### Parameters
 
@@ -74,7 +74,7 @@ Defined in: [packages/cache/src/interceptors/cache.interceptor.ts:107](https://g
 intercept(context, next): Promise<Observable<unknown>>;
 ```
 
-Defined in: [packages/cache/src/interceptors/cache.interceptor.ts:122](https://github.com/nestelia/nestelia/blob/main/packages/cache/src/interceptors/cache.interceptor.ts#L122)
+Defined in: [packages/cache/src/interceptors/cache.interceptor.ts:131](https://github.com/nestelia/nestelia/blob/main/packages/cache/src/interceptors/cache.interceptor.ts#L131)
 
 Intercepts the request and handles caching logic.
 
@@ -103,7 +103,7 @@ An observable of the response.
 protected isRequestCacheable(context): boolean;
 ```
 
-Defined in: [packages/cache/src/interceptors/cache.interceptor.ts:245](https://github.com/nestelia/nestelia/blob/main/packages/cache/src/interceptors/cache.interceptor.ts#L245)
+Defined in: [packages/cache/src/interceptors/cache.interceptor.ts:273](https://github.com/nestelia/nestelia/blob/main/packages/cache/src/interceptors/cache.interceptor.ts#L273)
 
 Checks if the current request method is cacheable.
 
@@ -127,7 +127,7 @@ True if the request method is in allowedMethods.
 protected setHeadersWhenHttp(context, value): void;
 ```
 
-Defined in: [packages/cache/src/interceptors/cache.interceptor.ts:262](https://github.com/nestelia/nestelia/blob/main/packages/cache/src/interceptors/cache.interceptor.ts#L262)
+Defined in: [packages/cache/src/interceptors/cache.interceptor.ts:290](https://github.com/nestelia/nestelia/blob/main/packages/cache/src/interceptors/cache.interceptor.ts#L290)
 
 Sets cache headers (X-Cache: HIT/MISS) on HTTP response.
 
@@ -150,7 +150,7 @@ Sets cache headers (X-Cache: HIT/MISS) on HTTP response.
 protected trackBy(context): string | undefined;
 ```
 
-Defined in: [packages/cache/src/interceptors/cache.interceptor.ts:212](https://github.com/nestelia/nestelia/blob/main/packages/cache/src/interceptors/cache.interceptor.ts#L212)
+Defined in: [packages/cache/src/interceptors/cache.interceptor.ts:232](https://github.com/nestelia/nestelia/blob/main/packages/cache/src/interceptors/cache.interceptor.ts#L232)
 
 Generates a cache key for the current request.
 
@@ -171,6 +171,6 @@ The cache key or undefined if not cacheable.
 | Property | Modifier | Type | Description | Defined in |
 | ------ | ------ | ------ | ------ | ------ |
 | <a id="allowedmethods"></a> `allowedMethods` | `readonly` | readonly `string`[] | List of HTTP methods that are allowed to be cached. | [packages/cache/src/interceptors/cache.interceptor.ts:100](https://github.com/nestelia/nestelia/blob/main/packages/cache/src/interceptors/cache.interceptor.ts#L100) |
-| <a id="cachemanager"></a> `cacheManager` | `readonly` | [`Cache`](Cache.md) | The cache manager instance. | [packages/cache/src/interceptors/cache.interceptor.ts:108](https://github.com/nestelia/nestelia/blob/main/packages/cache/src/interceptors/cache.interceptor.ts#L108) |
-| <a id="httpadapterhost"></a> `httpAdapterHost?` | `readonly` | [`HttpAdapterHost`](../../../../index/classes/HttpAdapterHost.md) | Optional HTTP adapter host; absent in non-HTTP contexts. | [packages/cache/src/interceptors/cache.interceptor.ts:112](https://github.com/nestelia/nestelia/blob/main/packages/cache/src/interceptors/cache.interceptor.ts#L112) |
-| <a id="reflector"></a> `reflector` | `readonly` | [`Reflector`](../../../../index/classes/Reflector.md) | The reflector for reading metadata. | [packages/cache/src/interceptors/cache.interceptor.ts:109](https://github.com/nestelia/nestelia/blob/main/packages/cache/src/interceptors/cache.interceptor.ts#L109) |
+| <a id="cachemanager"></a> `cacheManager` | `readonly` | [`Cache`](Cache.md) | The cache manager instance. | [packages/cache/src/interceptors/cache.interceptor.ts:117](https://github.com/nestelia/nestelia/blob/main/packages/cache/src/interceptors/cache.interceptor.ts#L117) |
+| <a id="httpadapterhost"></a> `httpAdapterHost?` | `readonly` | [`HttpAdapterHost`](../../../../index/classes/HttpAdapterHost.md) | Optional HTTP adapter host; absent in non-HTTP contexts. | [packages/cache/src/interceptors/cache.interceptor.ts:121](https://github.com/nestelia/nestelia/blob/main/packages/cache/src/interceptors/cache.interceptor.ts#L121) |
+| <a id="reflector"></a> `reflector` | `readonly` | [`Reflector`](../../../../index/classes/Reflector.md) | The reflector for reading metadata. | [packages/cache/src/interceptors/cache.interceptor.ts:118](https://github.com/nestelia/nestelia/blob/main/packages/cache/src/interceptors/cache.interceptor.ts#L118) |

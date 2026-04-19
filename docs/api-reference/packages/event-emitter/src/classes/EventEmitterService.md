@@ -98,7 +98,7 @@ Returns an array of values resolved by each handler.
 listenerCount(event): number;
 ```
 
-Defined in: [packages/event-emitter/src/event-emitter.service.ts:185](https://github.com/nestelia/nestelia/blob/main/packages/event-emitter/src/event-emitter.service.ts#L185)
+Defined in: [packages/event-emitter/src/event-emitter.service.ts:186](https://github.com/nestelia/nestelia/blob/main/packages/event-emitter/src/event-emitter.service.ts#L186)
 
 Returns the number of handlers registered for `event`.
 
@@ -120,7 +120,7 @@ Returns the number of handlers registered for `event`.
 off<T>(event, handler?): this;
 ```
 
-Defined in: [packages/event-emitter/src/event-emitter.service.ts:150](https://github.com/nestelia/nestelia/blob/main/packages/event-emitter/src/event-emitter.service.ts#L150)
+Defined in: [packages/event-emitter/src/event-emitter.service.ts:151](https://github.com/nestelia/nestelia/blob/main/packages/event-emitter/src/event-emitter.service.ts#L151)
 
 Remove a specific handler (or all handlers for an event when omitted).
 
@@ -149,7 +149,7 @@ Remove a specific handler (or all handlers for an event when omitted).
 on<T>(event, handler): this;
 ```
 
-Defined in: [packages/event-emitter/src/event-emitter.service.ts:128](https://github.com/nestelia/nestelia/blob/main/packages/event-emitter/src/event-emitter.service.ts#L128)
+Defined in: [packages/event-emitter/src/event-emitter.service.ts:129](https://github.com/nestelia/nestelia/blob/main/packages/event-emitter/src/event-emitter.service.ts#L129)
 
 Register a persistent event handler.
 
@@ -178,7 +178,7 @@ Register a persistent event handler.
 once<T>(event, handler): this;
 ```
 
-Defined in: [packages/event-emitter/src/event-emitter.service.ts:139](https://github.com/nestelia/nestelia/blob/main/packages/event-emitter/src/event-emitter.service.ts#L139)
+Defined in: [packages/event-emitter/src/event-emitter.service.ts:140](https://github.com/nestelia/nestelia/blob/main/packages/event-emitter/src/event-emitter.service.ts#L140)
 
 Register a one-time event handler.
 
@@ -207,7 +207,7 @@ Register a one-time event handler.
 removeAllListeners(event?): this;
 ```
 
-Defined in: [packages/event-emitter/src/event-emitter.service.ts:169](https://github.com/nestelia/nestelia/blob/main/packages/event-emitter/src/event-emitter.service.ts#L169)
+Defined in: [packages/event-emitter/src/event-emitter.service.ts:170](https://github.com/nestelia/nestelia/blob/main/packages/event-emitter/src/event-emitter.service.ts#L170)
 
 Remove all listeners, optionally scoped to a specific event.
 
