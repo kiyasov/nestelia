@@ -1,6 +1,6 @@
 # Class: RedisPubSub
 
-Defined in: [packages/graphql-pubsub/src/redis-pubsub.ts:42](https://github.com/nestelia/nestelia/blob/main/packages/graphql-pubsub/src/redis-pubsub.ts#L42)
+Defined in: [packages/graphql-pubsub/src/redis-pubsub.ts:43](https://github.com/nestelia/nestelia/blob/main/packages/graphql-pubsub/src/redis-pubsub.ts#L43)
 
 Redis-backed implementation of the [PubSubEngine](../interfaces/PubSubEngine.md) contract.
 
@@ -34,6 +34,47 @@ await pubsub.close();
 
 - [`PubSubEngine`](../interfaces/PubSubEngine.md)
 
+## Accessors
+
+### channelCount
+
+#### Get Signature
+
+```ts
+get channelCount(): number;
+```
+
+Defined in: [packages/graphql-pubsub/src/redis-pubsub.ts:343](https://github.com/nestelia/nestelia/blob/main/packages/graphql-pubsub/src/redis-pubsub.ts#L343)
+
+Number of distinct Redis channels (after `triggerTransform`) that
+this instance is currently subscribed to.
+
+##### Returns
+
+`number`
+
+***
+
+### subscriptionCount
+
+#### Get Signature
+
+```ts
+get subscriptionCount(): number;
+```
+
+Defined in: [packages/graphql-pubsub/src/redis-pubsub.ts:335](https://github.com/nestelia/nestelia/blob/main/packages/graphql-pubsub/src/redis-pubsub.ts#L335)
+
+Number of active per-iterator subscriptions currently held in memory.
+
+Useful for exporting as a metric — steady growth here when client
+churn is normal is a sign that subscription iterators aren't being
+returned on disconnect (typically a dirty-WebSocket-close issue).
+
+##### Returns
+
+`number`
+
 ## Constructors
 
 ### Constructor
@@ -42,7 +83,7 @@ await pubsub.close();
 new RedisPubSub(options?): RedisPubSub;
 ```
 
-Defined in: [packages/graphql-pubsub/src/redis-pubsub.ts:70](https://github.com/nestelia/nestelia/blob/main/packages/graphql-pubsub/src/redis-pubsub.ts#L70)
+Defined in: [packages/graphql-pubsub/src/redis-pubsub.ts:71](https://github.com/nestelia/nestelia/blob/main/packages/graphql-pubsub/src/redis-pubsub.ts#L71)
 
 #### Parameters
 
@@ -59,10 +100,10 @@ Defined in: [packages/graphql-pubsub/src/redis-pubsub.ts:70](https://github.com/
 ### asyncIterator()
 
 ```ts
-asyncIterator<T>(triggers): AsyncIterator<T>;
+asyncIterator<T>(triggers, options?): AsyncIterator<T>;
 ```
 
-Defined in: [packages/graphql-pubsub/src/redis-pubsub.ts:304](https://github.com/nestelia/nestelia/blob/main/packages/graphql-pubsub/src/redis-pubsub.ts#L304)
+Defined in: [packages/graphql-pubsub/src/redis-pubsub.ts:305](https://github.com/nestelia/nestelia/blob/main/packages/graphql-pubsub/src/redis-pubsub.ts#L305)
 
 Creates an `AsyncIterator` over the given `triggers` for use in
 GraphQL subscription resolvers.
@@ -78,6 +119,7 @@ GraphQL subscription resolvers.
 | Parameter | Type |
 | ------ | ------ |
 | `triggers` | `string` \| `string`[] |
+| `options?` | [`AsyncIteratorOptions`](../interfaces/AsyncIteratorOptions.md) |
 
 #### Returns
 
@@ -104,7 +146,7 @@ subscribe() {
 close(): Promise<void>;
 ```
 
-Defined in: [packages/graphql-pubsub/src/redis-pubsub.ts:329](https://github.com/nestelia/nestelia/blob/main/packages/graphql-pubsub/src/redis-pubsub.ts#L329)
+Defined in: [packages/graphql-pubsub/src/redis-pubsub.ts:376](https://github.com/nestelia/nestelia/blob/main/packages/graphql-pubsub/src/redis-pubsub.ts#L376)
 
 Gracefully closes both Redis connections.
 
@@ -116,13 +158,56 @@ Call this during application shutdown to allow open sockets to drain.
 
 ***
 
+### debug()
+
+```ts
+debug(): {
+  channelCount: number;
+  channels: {
+     subscribers: number;
+     trigger: string;
+  }[];
+  subscriptionCount: number;
+};
+```
+
+Defined in: [packages/graphql-pubsub/src/redis-pubsub.ts:355](https://github.com/nestelia/nestelia/blob/main/packages/graphql-pubsub/src/redis-pubsub.ts#L355)
+
+Snapshot of the subscription state for observability.
+
+The returned structure is a copy — mutating it does not affect the
+internal maps. Intended for `/health` endpoints, metric collectors,
+and regression tests for leak detection. Preferable to reaching into
+`subscriptionMap` via `as unknown as { subscriptionMap }`.
+
+#### Returns
+
+```ts
+{
+  channelCount: number;
+  channels: {
+     subscribers: number;
+     trigger: string;
+  }[];
+  subscriptionCount: number;
+}
+```
+
+| Name | Type | Defined in |
+| ------ | ------ | ------ |
+| `channelCount` | `number` | [packages/graphql-pubsub/src/redis-pubsub.ts:357](https://github.com/nestelia/nestelia/blob/main/packages/graphql-pubsub/src/redis-pubsub.ts#L357) |
+| `channels` | \{ `subscribers`: `number`; `trigger`: `string`; \}[] | [packages/graphql-pubsub/src/redis-pubsub.ts:358](https://github.com/nestelia/nestelia/blob/main/packages/graphql-pubsub/src/redis-pubsub.ts#L358) |
+| `subscriptionCount` | `number` | [packages/graphql-pubsub/src/redis-pubsub.ts:356](https://github.com/nestelia/nestelia/blob/main/packages/graphql-pubsub/src/redis-pubsub.ts#L356) |
+
+***
+
 ### getPublisher()
 
 ```ts
 getPublisher(): Redis;
 ```
 
-Defined in: [packages/graphql-pubsub/src/redis-pubsub.ts:320](https://github.com/nestelia/nestelia/blob/main/packages/graphql-pubsub/src/redis-pubsub.ts#L320)
+Defined in: [packages/graphql-pubsub/src/redis-pubsub.ts:324](https://github.com/nestelia/nestelia/blob/main/packages/graphql-pubsub/src/redis-pubsub.ts#L324)
 
 Returns the underlying publisher Redis client.
 
@@ -138,7 +223,7 @@ Returns the underlying publisher Redis client.
 getSubscriber(): Redis;
 ```
 
-Defined in: [packages/graphql-pubsub/src/redis-pubsub.ts:315](https://github.com/nestelia/nestelia/blob/main/packages/graphql-pubsub/src/redis-pubsub.ts#L315)
+Defined in: [packages/graphql-pubsub/src/redis-pubsub.ts:319](https://github.com/nestelia/nestelia/blob/main/packages/graphql-pubsub/src/redis-pubsub.ts#L319)
 
 Returns the underlying subscriber Redis client.
 
@@ -159,7 +244,7 @@ Do **not** issue regular Redis commands on this client — it is
 publish(trigger, payload): Promise<void>;
 ```
 
-Defined in: [packages/graphql-pubsub/src/redis-pubsub.ts:141](https://github.com/nestelia/nestelia/blob/main/packages/graphql-pubsub/src/redis-pubsub.ts#L141)
+Defined in: [packages/graphql-pubsub/src/redis-pubsub.ts:142](https://github.com/nestelia/nestelia/blob/main/packages/graphql-pubsub/src/redis-pubsub.ts#L142)
 
 Publishes `payload` to the Redis channel derived from `trigger`.
 
@@ -192,7 +277,7 @@ subscribe<T>(
 options?): Promise<number>;
 ```
 
-Defined in: [packages/graphql-pubsub/src/redis-pubsub.ts:158](https://github.com/nestelia/nestelia/blob/main/packages/graphql-pubsub/src/redis-pubsub.ts#L158)
+Defined in: [packages/graphql-pubsub/src/redis-pubsub.ts:159](https://github.com/nestelia/nestelia/blob/main/packages/graphql-pubsub/src/redis-pubsub.ts#L159)
 
 Subscribes to `trigger` and invokes `onMessage` for every incoming message.
 
@@ -232,7 +317,7 @@ A numeric subscription ID used with [unsubscribe](#unsubscribe).
 unsubscribe(subId): void;
 ```
 
-Defined in: [packages/graphql-pubsub/src/redis-pubsub.ts:256](https://github.com/nestelia/nestelia/blob/main/packages/graphql-pubsub/src/redis-pubsub.ts#L256)
+Defined in: [packages/graphql-pubsub/src/redis-pubsub.ts:257](https://github.com/nestelia/nestelia/blob/main/packages/graphql-pubsub/src/redis-pubsub.ts#L257)
 
 Cancels the subscription identified by `subId`.
 

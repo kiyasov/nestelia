@@ -20,6 +20,7 @@
 
 | Interface | Description |
 | ------ | ------ |
+| [AsyncIteratorOptions](interfaces/AsyncIteratorOptions.md) | Options for [RedisPubSub.asyncIterator](classes/RedisPubSub.md#asynciterator) / [PubSubAsyncIterator](classes/PubSubAsyncIterator.md). |
 | [GraphQLPubSubModuleOptions](interfaces/GraphQLPubSubModuleOptions.md) | Options accepted by [GraphQLPubSubModule.forRoot](classes/GraphQLPubSubModule.md#forroot). |
 | [PubSubEngine](interfaces/PubSubEngine.md) | Core PubSub contract that [RedisPubSub](classes/RedisPubSub.md) implements. |
 | [RedisPubSubOptions](interfaces/RedisPubSubOptions.md) | Options for creating a [RedisPubSub](classes/RedisPubSub.md) instance. |

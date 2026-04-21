@@ -1,4 +1,8 @@
-import type { PubSubEngine, SubscriptionOptions } from "./interfaces";
+import type {
+  AsyncIteratorOptions,
+  PubSubEngine,
+  SubscriptionOptions,
+} from "./interfaces";
 
 /** Maximum number of unconsumed messages queued before oldest are dropped. */
 const MAX_QUEUE_SIZE = 1_000;
@@ -38,21 +42,37 @@ export class PubSubAsyncIterator<T> implements AsyncIterator<T> {
   private listening = true;
   /** Resolves once all triggers have been subscribed. */
   private readonly subscribePromise: Promise<void>;
+  /**
+   * Defensive auto-close timer. When `idleTimeoutMs` is configured and no
+   * message arrives within the window, the iterator self-returns, releasing
+   * its pubsub subscriptions. Undefined when the feature is disabled.
+   */
+  private readonly idleTimeoutMs: number;
+  private idleTimer: ReturnType<typeof setTimeout> | undefined;
 
   constructor(
     pubsub: PubSubEngine,
     triggers: string[],
-    options?: SubscriptionOptions,
+    options?: AsyncIteratorOptions,
   ) {
     this.pubsub = pubsub;
     this.triggers = triggers;
-    this.options = options;
+    // Strip the iterator-only `idleTimeoutMs` before forwarding to the
+    // engine, which only understands `SubscriptionOptions`.
+    this.options = options
+      ? ({ pattern: options.pattern } satisfies SubscriptionOptions)
+      : undefined;
+    this.idleTimeoutMs =
+      options?.idleTimeoutMs && options.idleTimeoutMs > 0
+        ? options.idleTimeoutMs
+        : 0;
 
     // Begin subscribing immediately. The promise is awaited in `next()` to
     // guarantee the underlying pubsub is ready before the first value is
     // consumed — preventing a race where published messages are lost because
     // the subscription hasn't been established yet.
     this.subscribePromise = this.subscribeAll();
+    this.armIdleTimer();
   }
 
   /** Returns the next message, waiting if none is buffered yet. */
@@ -75,12 +95,14 @@ export class PubSubAsyncIterator<T> implements AsyncIterator<T> {
 
   /** Terminates the iterator and unsubscribes from all triggers. */
   public async return(): Promise<IteratorResult<T>> {
+    this.clearIdleTimer();
     await this.unsubscribeAll();
     return { value: undefined as unknown as T, done: true };
   }
 
   /** Terminates the iterator, unsubscribes, then re-throws `error`. */
   public async throw(error: unknown): Promise<IteratorResult<T>> {
+    this.clearIdleTimer();
     await this.unsubscribeAll();
     return Promise.reject(error);
   }
@@ -99,6 +121,8 @@ export class PubSubAsyncIterator<T> implements AsyncIterator<T> {
   private pushValue(value: T): void {
     if (!this.listening) return;
 
+    this.armIdleTimer();
+
     if (this.pullQueue.length > 0) {
       const resolve = this.pullQueue.shift()!;
       resolve({ value, done: false });
@@ -108,6 +132,31 @@ export class PubSubAsyncIterator<T> implements AsyncIterator<T> {
         this.pushQueue.shift();
       }
       this.pushQueue.push(value);
+    }
+  }
+
+  /**
+   * Resets the idle watchdog. Called on every inbound message and at
+   * construction time. No-op when `idleTimeoutMs` is not configured.
+   */
+  private armIdleTimer(): void {
+    if (this.idleTimeoutMs === 0) return;
+    if (this.idleTimer) clearTimeout(this.idleTimer);
+    this.idleTimer = setTimeout(() => {
+      this.idleTimer = undefined;
+      // Fire-and-forget — errors from unsubscribeAll() are already
+      // handled inside it, and there is no caller to await us here.
+      void this.return();
+    }, this.idleTimeoutMs);
+    // Node-only API; in Bun this is a no-op. Prevents an idle iterator
+    // from keeping the event loop alive on server shutdown.
+    (this.idleTimer as unknown as { unref?: () => void }).unref?.();
+  }
+
+  private clearIdleTimer(): void {
+    if (this.idleTimer) {
+      clearTimeout(this.idleTimer);
+      this.idleTimer = undefined;
     }
   }
 

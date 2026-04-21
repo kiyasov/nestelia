@@ -4,7 +4,7 @@
 type MessageHandler<T> = (message) => void;
 ```
 
-Defined in: [packages/graphql-pubsub/src/interfaces.ts:51](https://github.com/nestelia/nestelia/blob/main/packages/graphql-pubsub/src/interfaces.ts#L51)
+Defined in: [packages/graphql-pubsub/src/interfaces.ts:73](https://github.com/nestelia/nestelia/blob/main/packages/graphql-pubsub/src/interfaces.ts#L73)
 
 Callback invoked whenever a message arrives on a subscribed trigger.
 

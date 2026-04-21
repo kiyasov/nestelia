@@ -101,6 +101,39 @@ export interface GraphQLWsSubscriptionsOptions {
    * Set to `0` or `false` to disable. @default 12000
    */
   keepAlive?: number | false;
+  /**
+   * Inactivity timeout in milliseconds. When the client stops responding
+   * (no pong, no messages) for longer than this window, the server
+   * force-closes the socket — triggering cleanup of all of the
+   * connection's subscription iterators.
+   *
+   * Protects against dirty TCP disconnects (mobile hibernation,
+   * half-open connections, rapid reconnect under flaky Wi-Fi) where
+   * the kernel would otherwise take minutes to detect the dead peer,
+   * causing `pubSub.asyncIterator()` instances to leak in
+   * `subscriptionMap`.
+   *
+   * When unset, defaults to `2 × keepAlive`. Set to `0` or `false`
+   * to disable entirely.
+   */
+  keepAliveTimeout?: number | false;
+  /**
+   * Transport-level idle timeout, in **seconds**, forwarded to Bun's
+   * `ws.idleTimeout`. When the WebSocket is silent for this many seconds
+   * in both directions, uWebSockets closes the connection at the
+   * transport layer, guaranteeing cleanup even if the application-level
+   * watchdog is disabled.
+   *
+   * Prefer this over `keepAliveTimeout` when possible — it's handled
+   * natively and doesn't require a JS timer per connection. Values are
+   * in seconds to match Bun's API.
+   *
+   * When unset, derived from `keepAliveTimeout` (+ 5s grace) so the
+   * transport closes shortly after the app-level watchdog would fire.
+   * Falls back to Bun's 120s default when neither is set. Maximum: 960
+   * (Bun hard limit).
+   */
+  transportIdleTimeout?: number;
   /** Callback when a client connects. */
   onConnect?: (
     context: GraphQLWsContext,

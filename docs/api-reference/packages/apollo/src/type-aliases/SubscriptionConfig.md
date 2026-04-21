@@ -9,7 +9,7 @@ type SubscriptionConfig = {
 };
 ```
 
-Defined in: [packages/apollo/src/interfaces/apollo-options.interface.ts:151](https://github.com/nestelia/nestelia/blob/main/packages/apollo/src/interfaces/apollo-options.interface.ts#L151)
+Defined in: [packages/apollo/src/interfaces/apollo-options.interface.ts:184](https://github.com/nestelia/nestelia/blob/main/packages/apollo/src/interfaces/apollo-options.interface.ts#L184)
 
 Subscription configuration supporting multiple protocols.
 
@@ -17,5 +17,5 @@ Subscription configuration supporting multiple protocols.
 
 | Property | Type | Defined in |
 | ------ | ------ | ------ |
-| <a id="graphql-ws"></a> `graphql-ws?` | \| [`GraphQLWsSubscriptionsOptions`](../interfaces/GraphQLWsSubscriptionsOptions.md) \| `boolean` | [packages/apollo/src/interfaces/apollo-options.interface.ts:152](https://github.com/nestelia/nestelia/blob/main/packages/apollo/src/interfaces/apollo-options.interface.ts#L152) |
-| <a id="subscriptions-transport-ws"></a> `subscriptions-transport-ws?` | \| [`GraphQLSubscriptionTransportWsOptions`](../interfaces/GraphQLSubscriptionTransportWsOptions.md) \| `boolean` | [packages/apollo/src/interfaces/apollo-options.interface.ts:153](https://github.com/nestelia/nestelia/blob/main/packages/apollo/src/interfaces/apollo-options.interface.ts#L153) |
+| <a id="graphql-ws"></a> `graphql-ws?` | \| [`GraphQLWsSubscriptionsOptions`](../interfaces/GraphQLWsSubscriptionsOptions.md) \| `boolean` | [packages/apollo/src/interfaces/apollo-options.interface.ts:185](https://github.com/nestelia/nestelia/blob/main/packages/apollo/src/interfaces/apollo-options.interface.ts#L185) |
+| <a id="subscriptions-transport-ws"></a> `subscriptions-transport-ws?` | \| [`GraphQLSubscriptionTransportWsOptions`](../interfaces/GraphQLSubscriptionTransportWsOptions.md) \| `boolean` | [packages/apollo/src/interfaces/apollo-options.interface.ts:186](https://github.com/nestelia/nestelia/blob/main/packages/apollo/src/interfaces/apollo-options.interface.ts#L186) |

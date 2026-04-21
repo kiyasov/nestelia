@@ -4,7 +4,7 @@
 GqlExecutionContext: GqlExecutionContextStatic;
 ```
 
-Defined in: [packages/apollo/src/interfaces/apollo-options.interface.ts:211](https://github.com/nestelia/nestelia/blob/main/packages/apollo/src/interfaces/apollo-options.interface.ts#L211)
+Defined in: [packages/apollo/src/interfaces/apollo-options.interface.ts:244](https://github.com/nestelia/nestelia/blob/main/packages/apollo/src/interfaces/apollo-options.interface.ts#L244)
 
 Utility for creating GraphQL execution contexts.
 Provides access to resolver arguments, context, and GraphQL-specific information.

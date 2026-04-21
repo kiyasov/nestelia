@@ -1,6 +1,6 @@
 # Class: PubSubAsyncIterator\<T\>
 
-Defined in: [packages/graphql-pubsub/src/pubsub-async-iterator.ts:26](https://github.com/nestelia/nestelia/blob/main/packages/graphql-pubsub/src/pubsub-async-iterator.ts#L26)
+Defined in: [packages/graphql-pubsub/src/pubsub-async-iterator.ts:30](https://github.com/nestelia/nestelia/blob/main/packages/graphql-pubsub/src/pubsub-async-iterator.ts#L30)
 
 Async iterator for GraphQL subscriptions backed by a [PubSubEngine](../interfaces/PubSubEngine.md).
 
@@ -40,7 +40,7 @@ new PubSubAsyncIterator<T>(
 options?): PubSubAsyncIterator<T>;
 ```
 
-Defined in: [packages/graphql-pubsub/src/pubsub-async-iterator.ts:42](https://github.com/nestelia/nestelia/blob/main/packages/graphql-pubsub/src/pubsub-async-iterator.ts#L42)
+Defined in: [packages/graphql-pubsub/src/pubsub-async-iterator.ts:53](https://github.com/nestelia/nestelia/blob/main/packages/graphql-pubsub/src/pubsub-async-iterator.ts#L53)
 
 #### Parameters
 
@@ -48,7 +48,7 @@ Defined in: [packages/graphql-pubsub/src/pubsub-async-iterator.ts:42](https://gi
 | ------ | ------ |
 | `pubsub` | [`PubSubEngine`](../interfaces/PubSubEngine.md) |
 | `triggers` | `string`[] |
-| `options?` | [`SubscriptionOptions`](../interfaces/SubscriptionOptions.md) |
+| `options?` | [`AsyncIteratorOptions`](../interfaces/AsyncIteratorOptions.md) |
 
 #### Returns
 
@@ -62,7 +62,7 @@ Defined in: [packages/graphql-pubsub/src/pubsub-async-iterator.ts:42](https://gi
 asyncIterator: AsyncIterator<T>;
 ```
 
-Defined in: [packages/graphql-pubsub/src/pubsub-async-iterator.ts:89](https://github.com/nestelia/nestelia/blob/main/packages/graphql-pubsub/src/pubsub-async-iterator.ts#L89)
+Defined in: [packages/graphql-pubsub/src/pubsub-async-iterator.ts:111](https://github.com/nestelia/nestelia/blob/main/packages/graphql-pubsub/src/pubsub-async-iterator.ts#L111)
 
 Makes this object usable in `for await…of` loops.
 
@@ -78,7 +78,7 @@ Makes this object usable in `for await…of` loops.
 next(): Promise<IteratorResult<T, any>>;
 ```
 
-Defined in: [packages/graphql-pubsub/src/pubsub-async-iterator.ts:59](https://github.com/nestelia/nestelia/blob/main/packages/graphql-pubsub/src/pubsub-async-iterator.ts#L59)
+Defined in: [packages/graphql-pubsub/src/pubsub-async-iterator.ts:79](https://github.com/nestelia/nestelia/blob/main/packages/graphql-pubsub/src/pubsub-async-iterator.ts#L79)
 
 Returns the next message, waiting if none is buffered yet.
 
@@ -100,7 +100,7 @@ AsyncIterator.next
 return(): Promise<IteratorResult<T, any>>;
 ```
 
-Defined in: [packages/graphql-pubsub/src/pubsub-async-iterator.ts:77](https://github.com/nestelia/nestelia/blob/main/packages/graphql-pubsub/src/pubsub-async-iterator.ts#L77)
+Defined in: [packages/graphql-pubsub/src/pubsub-async-iterator.ts:97](https://github.com/nestelia/nestelia/blob/main/packages/graphql-pubsub/src/pubsub-async-iterator.ts#L97)
 
 Terminates the iterator and unsubscribes from all triggers.
 
@@ -122,7 +122,7 @@ AsyncIterator.return
 throw(error): Promise<IteratorResult<T, any>>;
 ```
 
-Defined in: [packages/graphql-pubsub/src/pubsub-async-iterator.ts:83](https://github.com/nestelia/nestelia/blob/main/packages/graphql-pubsub/src/pubsub-async-iterator.ts#L83)
+Defined in: [packages/graphql-pubsub/src/pubsub-async-iterator.ts:104](https://github.com/nestelia/nestelia/blob/main/packages/graphql-pubsub/src/pubsub-async-iterator.ts#L104)
 
 Terminates the iterator, unsubscribes, then re-throws `error`.
 

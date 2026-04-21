@@ -47,6 +47,28 @@ export interface SubscriptionOptions {
   pattern?: boolean;
 }
 
+/**
+ * Options for {@link RedisPubSub.asyncIterator} / {@link PubSubAsyncIterator}.
+ *
+ * Extends {@link SubscriptionOptions} with iterator-level defensive
+ * knobs that are not propagated to the pubsub engine itself.
+ */
+export interface AsyncIteratorOptions extends SubscriptionOptions {
+  /**
+   * When set to a positive number, the iterator auto-returns (unsubscribing
+   * and releasing its entry from the pubsub's `subscriptionMap`) if no
+   * message is received for this many milliseconds.
+   *
+   * Defensive guardrail for edge cases where the WebSocket handler fails
+   * to call `iter.return()` on client disconnect. Disabled by default so
+   * existing semantics are preserved.
+   *
+   * Typical value: `5 * 60 * 1000` (5 minutes) for long-lived but not
+   * truly eternal subscriptions.
+   */
+  idleTimeoutMs?: number;
+}
+
 /** Callback invoked whenever a message arrives on a subscribed trigger. */
 export type MessageHandler<T = unknown> = (message: T) => void;
 
@@ -59,7 +81,10 @@ export interface PubSubEngine {
     options?: SubscriptionOptions,
   ): Promise<number>;
   unsubscribe(subId: number): void;
-  asyncIterator<T>(triggers: string | string[]): AsyncIterator<T>;
+  asyncIterator<T>(
+    triggers: string | string[],
+    options?: AsyncIteratorOptions,
+  ): AsyncIterator<T>;
 }
 
 /** Metadata stored per active subscription. */

@@ -444,10 +444,16 @@ describe("GraphQL WS handler subscription stress", () => {
       close() {}
     }
 
-    // Enable keepalive with short interval
+    // Enable keepalive with short interval. Disable the pong watchdog
+    // explicitly — the mock socket does not pong, and the test is
+    // isolating ping-interleave behavior from dead-peer detection.
     const handler = new GraphQLWsHandler(
       schema,
-      { connectionInitWaitTimeout: 5000, keepAlive: 15 } as any,
+      {
+        connectionInitWaitTimeout: 5000,
+        keepAlive: 15,
+        keepAliveTimeout: false,
+      } as any,
       {} as any,
       app as any,
     );

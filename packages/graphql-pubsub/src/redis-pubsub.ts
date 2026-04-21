@@ -1,6 +1,7 @@
 import type { Redis } from "ioredis";
 
 import {
+  type AsyncIteratorOptions,
   type MessageHandler,
   type PubSubEngine,
   type RedisPubSubOptions,
@@ -301,9 +302,12 @@ export class RedisPubSub implements PubSubEngine {
    * }
    * ```
    */
-  public asyncIterator<T>(triggers: string | string[]): AsyncIterator<T> {
+  public asyncIterator<T>(
+    triggers: string | string[],
+    options?: AsyncIteratorOptions,
+  ): AsyncIterator<T> {
     const triggersArray = Array.isArray(triggers) ? triggers : [triggers];
-    return new PubSubAsyncIterator<T>(this, triggersArray);
+    return new PubSubAsyncIterator<T>(this, triggersArray, options);
   }
 
   /**
@@ -319,6 +323,49 @@ export class RedisPubSub implements PubSubEngine {
   /** Returns the underlying publisher Redis client. */
   public getPublisher(): Redis {
     return this.redisPublisher;
+  }
+
+  /**
+   * Number of active per-iterator subscriptions currently held in memory.
+   *
+   * Useful for exporting as a metric — steady growth here when client
+   * churn is normal is a sign that subscription iterators aren't being
+   * returned on disconnect (typically a dirty-WebSocket-close issue).
+   */
+  public get subscriptionCount(): number {
+    return this.subscriptionMap.size;
+  }
+
+  /**
+   * Number of distinct Redis channels (after `triggerTransform`) that
+   * this instance is currently subscribed to.
+   */
+  public get channelCount(): number {
+    return this.subsRefsMap.size;
+  }
+
+  /**
+   * Snapshot of the subscription state for observability.
+   *
+   * The returned structure is a copy — mutating it does not affect the
+   * internal maps. Intended for `/health` endpoints, metric collectors,
+   * and regression tests for leak detection. Preferable to reaching into
+   * `subscriptionMap` via `as unknown as { subscriptionMap }`.
+   */
+  public debug(): {
+    subscriptionCount: number;
+    channelCount: number;
+    channels: Array<{ trigger: string; subscribers: number }>;
+  } {
+    const channels: Array<{ trigger: string; subscribers: number }> = [];
+    for (const [trigger, refs] of this.subsRefsMap.entries()) {
+      channels.push({ trigger, subscribers: refs.length });
+    }
+    return {
+      subscriptionCount: this.subscriptionMap.size,
+      channelCount: this.subsRefsMap.size,
+      channels,
+    };
   }
 
   /**

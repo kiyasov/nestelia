@@ -1,6 +1,6 @@
 # Interface: GqlExecutionContext\<TContext\>
 
-Defined in: [packages/apollo/src/interfaces/apollo-options.interface.ts:211](https://github.com/nestelia/nestelia/blob/main/packages/apollo/src/interfaces/apollo-options.interface.ts#L211)
+Defined in: [packages/apollo/src/interfaces/apollo-options.interface.ts:244](https://github.com/nestelia/nestelia/blob/main/packages/apollo/src/interfaces/apollo-options.interface.ts#L244)
 
 Context accessor for GraphQL resolvers - mirrors the GqlExecutionContext API.
 
@@ -18,7 +18,7 @@ Context accessor for GraphQL resolvers - mirrors the GqlExecutionContext API.
 getArgs<T>(): T;
 ```
 
-Defined in: [packages/apollo/src/interfaces/apollo-options.interface.ts:213](https://github.com/nestelia/nestelia/blob/main/packages/apollo/src/interfaces/apollo-options.interface.ts#L213)
+Defined in: [packages/apollo/src/interfaces/apollo-options.interface.ts:246](https://github.com/nestelia/nestelia/blob/main/packages/apollo/src/interfaces/apollo-options.interface.ts#L246)
 
 Gets the resolver arguments.
 
@@ -40,7 +40,7 @@ Gets the resolver arguments.
 getContext(): TContext;
 ```
 
-Defined in: [packages/apollo/src/interfaces/apollo-options.interface.ts:221](https://github.com/nestelia/nestelia/blob/main/packages/apollo/src/interfaces/apollo-options.interface.ts#L221)
+Defined in: [packages/apollo/src/interfaces/apollo-options.interface.ts:254](https://github.com/nestelia/nestelia/blob/main/packages/apollo/src/interfaces/apollo-options.interface.ts#L254)
 
 Gets the GraphQL context.
 
@@ -56,7 +56,7 @@ Gets the GraphQL context.
 getFieldName(): string;
 ```
 
-Defined in: [packages/apollo/src/interfaces/apollo-options.interface.ts:215](https://github.com/nestelia/nestelia/blob/main/packages/apollo/src/interfaces/apollo-options.interface.ts#L215)
+Defined in: [packages/apollo/src/interfaces/apollo-options.interface.ts:248](https://github.com/nestelia/nestelia/blob/main/packages/apollo/src/interfaces/apollo-options.interface.ts#L248)
 
 Gets the name of the current field being resolved.
 
@@ -72,7 +72,7 @@ Gets the name of the current field being resolved.
 getInfo(): GraphQLResolveInfo;
 ```
 
-Defined in: [packages/apollo/src/interfaces/apollo-options.interface.ts:225](https://github.com/nestelia/nestelia/blob/main/packages/apollo/src/interfaces/apollo-options.interface.ts#L225)
+Defined in: [packages/apollo/src/interfaces/apollo-options.interface.ts:258](https://github.com/nestelia/nestelia/blob/main/packages/apollo/src/interfaces/apollo-options.interface.ts#L258)
 
 Gets the GraphQL resolve info.
 
@@ -88,7 +88,7 @@ Gets the GraphQL resolve info.
 getOperation(): string | undefined;
 ```
 
-Defined in: [packages/apollo/src/interfaces/apollo-options.interface.ts:217](https://github.com/nestelia/nestelia/blob/main/packages/apollo/src/interfaces/apollo-options.interface.ts#L217)
+Defined in: [packages/apollo/src/interfaces/apollo-options.interface.ts:250](https://github.com/nestelia/nestelia/blob/main/packages/apollo/src/interfaces/apollo-options.interface.ts#L250)
 
 Gets the operation type (query, mutation, subscription).
 
@@ -104,7 +104,7 @@ Gets the operation type (query, mutation, subscription).
 getParent<T>(): T;
 ```
 
-Defined in: [packages/apollo/src/interfaces/apollo-options.interface.ts:223](https://github.com/nestelia/nestelia/blob/main/packages/apollo/src/interfaces/apollo-options.interface.ts#L223)
+Defined in: [packages/apollo/src/interfaces/apollo-options.interface.ts:256](https://github.com/nestelia/nestelia/blob/main/packages/apollo/src/interfaces/apollo-options.interface.ts#L256)
 
 Gets the parent object (for field resolvers).
 
@@ -126,7 +126,7 @@ Gets the parent object (for field resolvers).
 getVariables<T>(): T;
 ```
 
-Defined in: [packages/apollo/src/interfaces/apollo-options.interface.ts:219](https://github.com/nestelia/nestelia/blob/main/packages/apollo/src/interfaces/apollo-options.interface.ts#L219)
+Defined in: [packages/apollo/src/interfaces/apollo-options.interface.ts:252](https://github.com/nestelia/nestelia/blob/main/packages/apollo/src/interfaces/apollo-options.interface.ts#L252)
 
 Gets the GraphQL variables.
 

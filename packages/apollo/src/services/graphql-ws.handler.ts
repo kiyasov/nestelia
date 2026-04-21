@@ -35,7 +35,7 @@ interface WsContext {
 
 type WsSocket = ElysiaWS<WsContext>;
 
-/** WebSocket handler options. */
+/** WebSocket handler options forwarded to Elysia's `ws()`. */
 interface WsHandlerOptions {
   /** Callback when a connection is opened. */
   open?: (socket: WsSocket) => void;
@@ -43,6 +43,12 @@ interface WsHandlerOptions {
   message?: (socket: WsSocket, message: unknown) => void | Promise<void>;
   /** Callback when a connection is closed. */
   close?: (socket: WsSocket) => void;
+  /**
+   * Transport-level idle timeout in seconds. Bun's uWS closes the socket
+   * when both directions are silent for this duration — the native
+   * dead-peer detector.
+   */
+  idleTimeout?: number;
 }
 
 /** Handle for a single active subscription within a connection. */
@@ -67,6 +73,14 @@ interface ConnectionState {
   initTimer?: ReturnType<typeof setTimeout>;
   /** Interval for server-side keepalive pings (cleared on close). */
   keepAliveInterval?: ReturnType<typeof setInterval>;
+  /**
+   * Last time we saw any message from the client (ms since epoch).
+   * Used by the keepAlive watchdog to detect dirty disconnects where
+   * the TCP layer hasn't torn down the socket yet.
+   */
+  lastActivityAt: number;
+  /** Whether the connection has been torn down (prevents double-cleanup). */
+  closed: boolean;
 }
 
 /** Default timeout to wait for connection_init before closing (ms). */
@@ -74,6 +88,15 @@ const DEFAULT_INIT_TIMEOUT_MS = 3_000;
 
 /** Default server-side keep-alive interval (ms). */
 const DEFAULT_KEEP_ALIVE_MS = 12_000;
+
+/**
+ * Multiplier applied to `keepAlive` to derive the default pong watchdog
+ * timeout. Two missed pings = assume dead peer.
+ */
+const DEFAULT_KEEP_ALIVE_TIMEOUT_MULTIPLIER = 2;
+
+/** Close code used when the keep-alive watchdog detects a dead peer. */
+const KEEP_ALIVE_TIMEOUT_CLOSE_CODE = 4408;
 
 /**
  * Handler for GraphQL WebSocket subscriptions using the graphql-ws protocol.
@@ -110,11 +133,50 @@ export class GraphQLWsHandler {
    * @param path - WebSocket endpoint path.
    */
   register(path: string): void {
+    const idleTimeout = this.resolveTransportIdleTimeout();
     this.elysiaApp.ws(path, {
       open: (socket) => this.handleOpen(socket),
       message: (socket, message) => this.handleMessage(socket, message),
       close: (socket) => this.handleClose(socket),
+      ...(idleTimeout !== undefined && { idleTimeout }),
     });
+  }
+
+  /**
+   * Resolves the transport-level idle timeout (in seconds) that is
+   * forwarded to Bun's `ws.idleTimeout`. Derives a sensible default from
+   * the app-level `keepAliveTimeout` so the transport closes shortly
+   * after our watchdog would have fired — defense-in-depth against a
+   * broken app-level timer. Returns `undefined` to keep Bun's default.
+   */
+  private resolveTransportIdleTimeout(): number | undefined {
+    const explicit = this.wsOptions.transportIdleTimeout;
+    if (typeof explicit === "number") {
+      return Math.max(0, Math.min(explicit, 960));
+    }
+    const keepAlive = this.wsOptions.keepAlive;
+    const keepAliveMs =
+      keepAlive === false || keepAlive === 0
+        ? 0
+        : typeof keepAlive === "number"
+          ? keepAlive
+          : DEFAULT_KEEP_ALIVE_MS;
+    if (keepAliveMs === 0) return undefined;
+
+    const configuredTimeout = this.wsOptions.keepAliveTimeout;
+    if (configuredTimeout === false || configuredTimeout === 0) {
+      return undefined;
+    }
+    const appTimeoutMs =
+      typeof configuredTimeout === "number"
+        ? configuredTimeout
+        : keepAliveMs * DEFAULT_KEEP_ALIVE_TIMEOUT_MULTIPLIER;
+
+    // Add a 5 s grace so the app-level watchdog fires *first*, giving us
+    // a clean close + cleanup path; the transport timeout is the safety
+    // net for environments where the app-level timer is disabled.
+    const derivedSeconds = Math.ceil(appTimeoutMs / 1000) + 5;
+    return Math.min(Math.max(derivedSeconds, 10), 960);
   }
 
   /**
@@ -124,19 +186,31 @@ export class GraphQLWsHandler {
    */
   dispose(): void {
     for (const state of this.connections.values()) {
-      clearTimeout(state.initTimer);
-      clearInterval(state.keepAliveInterval);
-      for (const handle of state.subscriptions.values()) {
-        handle.abortController.abort();
-        try {
-          handle.iterator?.return?.();
-        } catch {
-          // iterator already closed or errored
-        }
-      }
-      state.subscriptions.clear();
+      this.cleanupConnection(state);
     }
     this.connections.clear();
+  }
+
+  /**
+   * Tears down a connection's subscriptions and timers. Safe to call
+   * more than once on the same state — subsequent calls are no-ops.
+   */
+  private cleanupConnection(state: ConnectionState): void {
+    if (state.closed) return;
+    state.closed = true;
+    clearTimeout(state.initTimer);
+    clearInterval(state.keepAliveInterval);
+    state.initTimer = undefined;
+    state.keepAliveInterval = undefined;
+    for (const handle of state.subscriptions.values()) {
+      handle.abortController.abort();
+      try {
+        handle.iterator?.return?.();
+      } catch {
+        // iterator already closed or errored
+      }
+    }
+    state.subscriptions.clear();
   }
 
   private handleOpen(socket: WsSocket): void {
@@ -160,6 +234,8 @@ export class GraphQLWsHandler {
       isInitialized: false,
       subscriptions: new Map(),
       initTimer,
+      lastActivityAt: Date.now(),
+      closed: false,
     });
   }
 
@@ -171,6 +247,11 @@ export class GraphQLWsHandler {
     if (!state) {
       return;
     }
+
+    // Any message — including pong — counts as liveness. Update BEFORE
+    // parsing so malformed messages from a live client still reset the
+    // watchdog.
+    state.lastActivityAt = Date.now();
 
     const message = this.parseMessage(rawMessage);
     if (!message) {
@@ -184,19 +265,7 @@ export class GraphQLWsHandler {
   private handleClose(socket: WsSocket): void {
     const state = this.connections.get(socket.id);
     if (state) {
-      clearTimeout(state.initTimer);
-      clearInterval(state.keepAliveInterval);
-      for (const handle of state.subscriptions.values()) {
-        handle.abortController.abort();
-        // Call return() directly — don't rely on the async finally chain
-        // which can silently fail or race with GC.
-        try {
-          handle.iterator?.return?.();
-        } catch {
-          // iterator already closed or errored
-        }
-      }
-      state.subscriptions.clear();
+      this.cleanupConnection(state);
       this.wsOptions.onDisconnect?.(state.context);
       this.connections.delete(socket.id);
     }
@@ -314,9 +383,40 @@ export class GraphQLWsHandler {
       return;
     }
     const ms = typeof intervalMs === "number" ? intervalMs : DEFAULT_KEEP_ALIVE_MS;
+    const timeoutMs = this.resolveKeepAliveTimeout(ms);
+
     state.keepAliveInterval = setInterval(() => {
+      // Dead-peer detection: if the client hasn't sent ANY message
+      // (pong, ping, complete, subscribe, …) within `timeoutMs`, assume
+      // the TCP connection is half-open and force-close. This triggers
+      // handleClose() which releases every subscription iterator held by
+      // this connection — the primary defense against subscriptionMap
+      // growth under dirty disconnects.
+      if (
+        timeoutMs > 0 &&
+        Date.now() - state.lastActivityAt > timeoutMs
+      ) {
+        try {
+          state.socket.close(KEEP_ALIVE_TIMEOUT_CLOSE_CODE);
+        } catch {
+          // socket already closed
+        }
+        // Some transports don't fire the `close` callback when the
+        // server initiates the close. Run cleanup proactively; the
+        // subsequent handleClose() (if any) is a no-op thanks to
+        // cleanupConnection()'s idempotency guard.
+        this.handleClose(state.socket);
+        return;
+      }
       this.safeSend(state.socket, JSON.stringify({ type: "ping" }));
     }, ms);
+  }
+
+  private resolveKeepAliveTimeout(intervalMs: number): number {
+    const configured = this.wsOptions.keepAliveTimeout;
+    if (configured === false || configured === 0) return 0;
+    if (typeof configured === "number") return configured;
+    return intervalMs * DEFAULT_KEEP_ALIVE_TIMEOUT_MULTIPLIER;
   }
 
   private async handleSubscribe(
@@ -470,12 +570,18 @@ export class GraphQLWsHandler {
         this.sendError(state.socket, id, [{ message: String(err) }]);
       }
     } finally {
-      // Signal the upstream publisher to release resources.
+      // Signal the upstream publisher to release resources, but bound
+      // the wait — a misbehaving iterator whose return() never resolves
+      // would otherwise pin this frame (and its captured `subscribeArgs`
+      // / `contextValue`) alive forever.
       try {
-        await iter.return?.();
+        await this.callReturnWithTimeout(iter);
       } catch {
         // ignore errors from iterator cleanup
       }
+      // Drop references held by the handle so they can be GC'd even if
+      // another caller still retains the handle reference.
+      handle.iterator = undefined;
       // Only delete if this is still OUR handle (guards against a race
       // where the client sent "complete" + re-subscribed with the same
       // ID before our finally block ran).
@@ -483,6 +589,27 @@ export class GraphQLWsHandler {
         state.subscriptions.delete(id);
       }
     }
+  }
+
+  /**
+   * Calls `iter.return()` with a hard timeout. Prevents a hung
+   * upstream publisher from pinning the caller's closure alive.
+   */
+  private async callReturnWithTimeout(
+    iter: AsyncIterator<unknown>,
+  ): Promise<void> {
+    if (!iter.return) return;
+    const timeoutMs = 5_000;
+    const returnPromise = iter.return().then(
+      () => undefined,
+      () => undefined,
+    );
+    const timeoutPromise = new Promise<void>((resolve) => {
+      const t = setTimeout(resolve, timeoutMs);
+      // Don't keep the event loop alive just for the timeout.
+      (t as unknown as { unref?: () => void }).unref?.();
+    });
+    await Promise.race([returnPromise, timeoutPromise]);
   }
 
   /**

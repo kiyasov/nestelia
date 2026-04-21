@@ -1264,7 +1264,11 @@ describe("safeSend", () => {
 
 describe("keepAlive", () => {
   it("sends periodic ping messages after connection_init", async () => {
-    const { callbacks } = setup({ wsOptions: { keepAlive: 20 } });
+    // Disable the pong watchdog so a non-ponging mock client isn't
+    // force-closed before multiple pings can fire.
+    const { callbacks } = setup({
+      wsOptions: { keepAlive: 20, keepAliveTimeout: false },
+    });
     const socket = await connect(callbacks);
 
     // Wait for at least 2 keepalive pings
@@ -1275,7 +1279,9 @@ describe("keepAlive", () => {
   });
 
   it("stops pings after connection closes", async () => {
-    const { callbacks } = setup({ wsOptions: { keepAlive: 20 } });
+    const { callbacks } = setup({
+      wsOptions: { keepAlive: 20, keepAliveTimeout: false },
+    });
     const socket = await connect(callbacks);
 
     await wait(30);
@@ -1304,5 +1310,176 @@ describe("keepAlive", () => {
     callbacks.close!(socket);
 
     expect(socket.messages("ping")).toHaveLength(0);
+  });
+});
+
+// ─── Dead-peer detection (watchdog) ───────────────────────────────────────────
+
+describe("keepAlive watchdog", () => {
+  it("cleans up iterator on keepAlive timeout when client stops ponging", async () => {
+    let returnCalled = false;
+    let resolveHang: (() => void) | undefined;
+
+    const iter: AsyncIterator<number> = {
+      async next() {
+        await new Promise<void>((r) => { resolveHang = r; });
+        return { value: undefined as unknown as number, done: true };
+      },
+      return() {
+        returnCalled = true;
+        resolveHang?.();
+        return Promise.resolve({ value: undefined as unknown as number, done: true });
+      },
+    };
+
+    const schema = makeSchema(() => ({
+      [Symbol.asyncIterator]: () => iter,
+    }));
+
+    const { callbacks } = setup({
+      schema,
+      wsOptions: { keepAlive: 20, keepAliveTimeout: 40 },
+    });
+    const socket = await connect(callbacks);
+
+    callbacks.message!(socket, {
+      type: "subscribe",
+      id: "dead",
+      payload: { query: "subscription { count }" },
+    });
+    await wait(10);
+
+    // Client never responds with pong — watchdog must close the socket
+    // and clean up the subscription iterator within keepAliveTimeout.
+    await wait(100);
+
+    expect(returnCalled).toBe(true);
+    expect(socket.closedWith).toBe(4408);
+  });
+
+  it("does not close when client actively pongs within the timeout window", async () => {
+    const { callbacks } = setup({
+      wsOptions: { keepAlive: 20, keepAliveTimeout: 60 },
+    });
+    const socket = await connect(callbacks);
+
+    // Simulate a live client: reply with pong for every ping the server sent.
+    for (let i = 0; i < 5; i++) {
+      await wait(20);
+      await callbacks.message!(socket, { type: "pong" });
+    }
+
+    // Still open — watchdog must not have fired.
+    expect(socket.closedWith).toBeUndefined();
+    callbacks.close!(socket);
+  });
+
+  it("does not install a watchdog when keepAlive is disabled", async () => {
+    const { callbacks } = setup({
+      wsOptions: { keepAlive: false },
+    });
+    const socket = await connect(callbacks);
+
+    // With no keepAlive, there is nothing to drive the watchdog.
+    // The socket must stay open indefinitely even without activity.
+    await wait(100);
+    expect(socket.closedWith).toBeUndefined();
+    callbacks.close!(socket);
+  });
+
+  it("keepAliveTimeout: false disables the watchdog explicitly", async () => {
+    const { callbacks } = setup({
+      wsOptions: { keepAlive: 20, keepAliveTimeout: false },
+    });
+    const socket = await connect(callbacks);
+
+    // Even after many missed pongs, the socket stays up.
+    await wait(120);
+    expect(socket.closedWith).toBeUndefined();
+    callbacks.close!(socket);
+  });
+
+  it("cleans up iterator on abrupt socket destroy (dirty disconnect)", async () => {
+    // Simulates a "dirty" TCP close: the WS transport eventually notices
+    // the peer is gone and fires close() — our handler must release the
+    // iterator on that single close callback with no further messages.
+    let returnCalled = false;
+    let resolveHang: (() => void) | undefined;
+
+    const iter: AsyncIterator<number> = {
+      async next() {
+        await new Promise<void>((r) => { resolveHang = r; });
+        return { value: undefined as unknown as number, done: true };
+      },
+      return() {
+        returnCalled = true;
+        resolveHang?.();
+        return Promise.resolve({ value: undefined as unknown as number, done: true });
+      },
+    };
+
+    const schema = makeSchema(() => ({
+      [Symbol.asyncIterator]: () => iter,
+    }));
+
+    const { callbacks } = setup({ schema });
+    const socket = await connect(callbacks);
+
+    callbacks.message!(socket, {
+      type: "subscribe",
+      id: "dirty",
+      payload: { query: "subscription { count }" },
+    });
+    await wait(10);
+
+    // Abrupt close — no `complete` frame from the client, just the
+    // transport noticing the socket died.
+    callbacks.close!(socket);
+    await wait(10);
+
+    expect(returnCalled).toBe(true);
+  });
+
+  it("does not leak iterators across 100 rapid reconnect cycles", async () => {
+    const active = new Set<number>();
+    let nextId = 0;
+
+    function makeIter(): AsyncIterator<number> {
+      const id = nextId++;
+      active.add(id);
+      let resolveHang: (() => void) | undefined;
+      return {
+        async next() {
+          await new Promise<void>((r) => { resolveHang = r; });
+          return { value: undefined as unknown as number, done: true };
+        },
+        return() {
+          active.delete(id);
+          resolveHang?.();
+          return Promise.resolve({ value: undefined as unknown as number, done: true });
+        },
+      };
+    }
+
+    const schema = makeSchema(() => ({
+      [Symbol.asyncIterator]: () => makeIter(),
+    }));
+
+    const { callbacks } = setup({ schema });
+
+    for (let i = 0; i < 100; i++) {
+      const sock = new MockSocket(`rapid-${i}`);
+      await connect(callbacks, sock);
+      callbacks.message!(sock, {
+        type: "subscribe",
+        id: "s1",
+        payload: { query: "subscription { count }" },
+      });
+      await wait(1);
+      callbacks.close!(sock);
+    }
+
+    await wait(30);
+    expect(active.size).toBe(0);
   });
 });

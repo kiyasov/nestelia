@@ -4,6 +4,10 @@ Defined in: [packages/graphql-pubsub/src/interfaces.ts:45](https://github.com/ne
 
 Options passed when subscribing to a trigger.
 
+## Extended by
+
+- [`AsyncIteratorOptions`](AsyncIteratorOptions.md)
+
 ## Properties
 
 | Property | Type | Description | Defined in |
