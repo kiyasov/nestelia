@@ -600,6 +600,7 @@ export class ElysiaNestApplication<TApp extends AnyElysia = Elysia> {
     this.httpServer?.stop();
 
     getLifecycleManager().triggerOnApplicationShutdown();
+    getLifecycleManager().clear();
 
     this.isListening = false;
   }

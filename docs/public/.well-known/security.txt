@@ -1,0 +1,4 @@
+Contact: https://github.com/nestelia/nestelia/security/advisories/new
+Expires: 2027-05-01T00:00:00.000Z
+Preferred-Languages: en, ru
+Canonical: https://nestelia.dev/.well-known/security.txt

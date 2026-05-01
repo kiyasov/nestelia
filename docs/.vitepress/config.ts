@@ -1,5 +1,7 @@
 import { defineConfig } from "vitepress";
 import { fileURLToPath } from "node:url";
+import { statSync, writeFileSync } from "node:fs";
+import type MarkdownIt from "markdown-it";
 import tailwindcss from "@tailwindcss/vite";
 import pkg from "../../package.json";
 import { enLocale, ruLocale, zhLocale, jaLocale, ptLocale, koLocale, esLocale } from "./locales";
@@ -7,6 +9,36 @@ import { enLocale, ruLocale, zhLocale, jaLocale, ptLocale, koLocale, esLocale } 
 const SITE_URL  = "https://nestelia.dev";
 const SITE_DESC = "A modular, decorator-driven framework built on top of Elysia and Bun";
 const OG_IMAGE  = `${SITE_URL}/og.png`;
+
+function externalLinkPlugin(md: MarkdownIt) {
+  const defaultRender = md.renderer.rules.link_open || function(tokens, idx, options, env, self) {
+    return self.renderToken(tokens, idx, options);
+  };
+
+  md.renderer.rules.link_open = function(tokens, idx, options, env, self) {
+    const token = tokens[idx];
+    const hrefAttr = token.attrGet("href");
+    if (hrefAttr && /^https?:\/\//.test(hrefAttr)) {
+      token.attrSet("rel", "nofollow noopener noreferrer");
+      token.attrSet("target", "_blank");
+    }
+    return defaultRender(tokens, idx, options, env, self);
+  };
+}
+
+interface RssItem {
+  title: string;
+  url: string;
+  description: string;
+  date: string;
+}
+
+const rssItems: RssItem[] = [];
+const sitemapLastmod = new Map<string, string>();
+
+function toRfc822(date: Date): string {
+  return date.toUTCString();
+}
 
 export default defineConfig({
   title: "Nestelia",
@@ -18,7 +50,12 @@ export default defineConfig({
   sitemap: {
     hostname: SITE_URL,
     transformItems(items) {
-      return items.map(item => ({ ...item, lastmod: new Date().toISOString() }));
+      return items.map((item) => {
+        const urlPath = item.url.replace(`${SITE_URL}/`, "").replace(/\.html$/, "");
+        const relPath = urlPath ? `${urlPath}.md` : "index.md";
+        const lastmod = sitemapLastmod.get(relPath);
+        return lastmod ? { ...item, lastmod } : item;
+      });
     },
   },
 
@@ -67,6 +104,14 @@ export default defineConfig({
     ["link", { rel: "sitemap",    type: "application/xml", title: "Sitemap", href: "/sitemap.xml" }],
     ["link", { rel: "alternate",  type: "text/plain",      title: "llms.txt",      href: "/llms.txt" }],
     ["link", { rel: "alternate",  type: "text/plain",      title: "llms-full.txt", href: "/llms-full.txt" }],
+
+    // RSS feed
+    ["link", { rel: "alternate", type: "application/rss+xml", title: "Nestelia Documentation RSS", href: "/rss.xml" }],
+
+    // Preconnect / DNS-prefetch for external domains
+    ["link", { rel: "preconnect", href: "https://github.com" }],
+    ["link", { rel: "dns-prefetch", href: "https://elysiajs.com" }],
+    ["link", { rel: "dns-prefetch", href: "https://bun.sh" }],
 
     // JSON-LD: Organization
     ["script", { type: "application/ld+json" }, JSON.stringify({
@@ -135,6 +180,16 @@ export default defineConfig({
     const pageDesc  = pageData.frontmatter.description ?? SITE_DESC;
     const locale    = pageData.frontmatter.lang ?? "en";
 
+    // Real file modification time for sitemap lastmod
+    let mtime: string;
+    try {
+      mtime = statSync(pageData.filePath).mtime.toISOString();
+    } catch {
+      mtime = new Date().toISOString();
+    }
+    pageData.frontmatter.lastmod = mtime;
+    sitemapLastmod.set(pageData.relativePath, mtime);
+
     pageData.frontmatter.head.push(
       ["link", { rel: "canonical", href: canonical }],
       ["meta", { property: "og:url",         content: canonical }],
@@ -201,6 +256,33 @@ export default defineConfig({
         itemListElement: items,
       })]);
     }
+
+    // TechArticle JSON-LD for documentation pages
+    if (basePath !== "" && basePath !== "404") {
+      pageData.frontmatter.head.push(["script", { type: "application/ld+json" }, JSON.stringify({
+        "@context": "https://schema.org",
+        "@type": "TechArticle",
+        headline: pageData.title || "Nestelia",
+        description: pageDesc,
+        url: canonical,
+        author: { "@type": "Organization", name: "Nestelia" },
+        publisher: {
+          "@type": "Organization",
+          name: "Nestelia",
+          logo: { "@type": "ImageObject", url: `${SITE_URL}/logo/light.svg` },
+        },
+        dateModified: mtime,
+        inLanguage: locale === "zh" ? "zh-CN" : locale,
+      })]);
+    }
+
+    // Collect data for RSS feed
+    rssItems.push({
+      title: pageData.title || "Nestelia",
+      url: canonical,
+      description: pageDesc,
+      date: mtime,
+    });
   },
 
   locales: {
@@ -237,5 +319,47 @@ export default defineConfig({
 
   markdown: {
     theme: { light: "github-light", dark: "github-dark" },
+    config(md) {
+      md.use(externalLinkPlugin);
+    },
+  },
+
+  buildEnd() {
+    const now = new Date();
+    const itemsXml = rssItems
+      .sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime())
+      .slice(0, 100)
+      .map(item => `    <item>
+      <title>${escapeXml(item.title)}</title>
+      <link>${item.url}</link>
+      <guid isPermaLink="true">${item.url}</guid>
+      <description>${escapeXml(item.description)}</description>
+      <pubDate>${toRfc822(new Date(item.date))}</pubDate>
+    </item>`)
+      .join("\n");
+
+    const rss = `<?xml version="1.0" encoding="UTF-8"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Nestelia Documentation</title>
+    <link>${SITE_URL}</link>
+    <description>${escapeXml(SITE_DESC)}</description>
+    <language>en</language>
+    <lastBuildDate>${toRfc822(now)}</lastBuildDate>
+    <atom:link href="${SITE_URL}/rss.xml" rel="self" type="application/rss+xml" />
+${itemsXml}
+  </channel>
+</rss>`;
+
+    writeFileSync(".vitepress/dist/rss.xml", rss, "utf-8");
   },
 });
+
+function escapeXml(unsafe: string): string {
+  return unsafe
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;")
+    .replace(/'/g, "&apos;");
+}

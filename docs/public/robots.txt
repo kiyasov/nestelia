@@ -4,5 +4,7 @@ Allow: /llms.txt
 Allow: /llms-full.txt
 Allow: /.well-known/
 
+Crawl-delay: 1
+
 Host: https://nestelia.dev
 Sitemap: https://nestelia.dev/sitemap.xml

@@ -65,12 +65,12 @@ function compileResolver(meta: ParamMetadata): ParamResolver | null {
  * Returns null if any param requires async resolution.
  */
 function compileResolvers(
-  paramDefs: ParamMetadata[],
+  paramDefsByIndex: Map<number, ParamMetadata>,
   paramTypes: any[],
 ): ParamResolver[] | null {
   const resolvers: ParamResolver[] = [];
   for (let i = 0; i < paramTypes.length; i++) {
-    const meta = paramDefs.find((p) => p.index === i);
+    const meta = paramDefsByIndex.get(i);
     if (!meta) {
       if (paramTypes[i] && paramTypes[i] !== Object) return null;
       resolvers.push(() => undefined);
@@ -189,11 +189,11 @@ function collectMetadata(controllerClass: Type, method: string): RouteMetadata {
   const paramTypes: any[] =
     Reflect.getMetadata("design:paramtypes", controllerClass.prototype, method) || [];
 
-  const compiledResolvers =
-    paramTypes.length > 0 ? compileResolvers(paramDefinitions, paramTypes) : null;
-
   const paramDefsByIndex = new Map<number, ParamMetadata>();
   for (const def of paramDefinitions) paramDefsByIndex.set(def.index, def);
+
+  const compiledResolvers =
+    paramTypes.length > 0 ? compileResolvers(paramDefsByIndex, paramTypes) : null;
 
   return {
     guards: [...classGuards, ...methodGuards],

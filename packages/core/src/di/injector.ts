@@ -103,15 +103,19 @@ export class Injector {
       const optionalParams: number[] =
         Reflect.getMetadata(OPTIONAL_METADATA, metatype) || [];
 
+      const injectionByIndex = new Map<number, unknown>();
+      for (const { index, token } of injectionMetadata) {
+        injectionByIndex.set(index, token);
+      }
+      const optionalSet = new Set(optionalParams);
+
       for (let i = 0; i < paramTypes.length; i++) {
         const paramType = paramTypes[i];
-        const customInjection = injectionMetadata.find(
-          (meta) => meta.index === i,
-        );
+        const customInjection = injectionByIndex.get(i);
         const token = customInjection
-          ? customInjection.token
+          ? customInjection
           : (paramType as ProviderToken);
-        const isOptional = optionalParams.includes(i);
+        const isOptional = optionalSet.has(i);
 
         if (token === undefined) {
           if (isOptional) {
