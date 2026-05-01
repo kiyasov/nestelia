@@ -1,6 +1,6 @@
 # Class: RabbitMQModule
 
-Defined in: [packages/rabbitmq/src/rabbitmq.module.ts:135](https://github.com/nestelia/nestelia/blob/main/packages/rabbitmq/src/rabbitmq.module.ts#L135)
+Defined in: [packages/rabbitmq/src/rabbitmq.module.ts:125](https://github.com/nestelia/nestelia/blob/main/packages/rabbitmq/src/rabbitmq.module.ts#L125)
 
 ## Constructors
 
@@ -22,7 +22,7 @@ new RabbitMQModule(): RabbitMQModule;
 static AmqpConnectionFactory(config): Promise<AmqpConnection | undefined>;
 ```
 
-Defined in: [packages/rabbitmq/src/rabbitmq.module.ts:139](https://github.com/nestelia/nestelia/blob/main/packages/rabbitmq/src/rabbitmq.module.ts#L139)
+Defined in: [packages/rabbitmq/src/rabbitmq.module.ts:129](https://github.com/nestelia/nestelia/blob/main/packages/rabbitmq/src/rabbitmq.module.ts#L129)
 
 #### Parameters
 
@@ -42,7 +42,7 @@ Defined in: [packages/rabbitmq/src/rabbitmq.module.ts:139](https://github.com/ne
 static attach(connection): DynamicModule;
 ```
 
-Defined in: [packages/rabbitmq/src/rabbitmq.module.ts:251](https://github.com/nestelia/nestelia/blob/main/packages/rabbitmq/src/rabbitmq.module.ts#L251)
+Defined in: [packages/rabbitmq/src/rabbitmq.module.ts:241](https://github.com/nestelia/nestelia/blob/main/packages/rabbitmq/src/rabbitmq.module.ts#L241)
 
 #### Parameters
 
@@ -62,7 +62,7 @@ Defined in: [packages/rabbitmq/src/rabbitmq.module.ts:251](https://github.com/ne
 static forFeature(handlers): DynamicModule;
 ```
 
-Defined in: [packages/rabbitmq/src/rabbitmq.module.ts:243](https://github.com/nestelia/nestelia/blob/main/packages/rabbitmq/src/rabbitmq.module.ts#L243)
+Defined in: [packages/rabbitmq/src/rabbitmq.module.ts:233](https://github.com/nestelia/nestelia/blob/main/packages/rabbitmq/src/rabbitmq.module.ts#L233)
 
 #### Parameters
 
@@ -82,7 +82,7 @@ Defined in: [packages/rabbitmq/src/rabbitmq.module.ts:243](https://github.com/ne
 static forRoot(options): DynamicModule;
 ```
 
-Defined in: [packages/rabbitmq/src/rabbitmq.module.ts:161](https://github.com/nestelia/nestelia/blob/main/packages/rabbitmq/src/rabbitmq.module.ts#L161)
+Defined in: [packages/rabbitmq/src/rabbitmq.module.ts:151](https://github.com/nestelia/nestelia/blob/main/packages/rabbitmq/src/rabbitmq.module.ts#L151)
 
 #### Parameters
 
@@ -102,7 +102,7 @@ Defined in: [packages/rabbitmq/src/rabbitmq.module.ts:161](https://github.com/ne
 static forRootAsync(options): DynamicModule;
 ```
 
-Defined in: [packages/rabbitmq/src/rabbitmq.module.ts:196](https://github.com/nestelia/nestelia/blob/main/packages/rabbitmq/src/rabbitmq.module.ts#L196)
+Defined in: [packages/rabbitmq/src/rabbitmq.module.ts:186](https://github.com/nestelia/nestelia/blob/main/packages/rabbitmq/src/rabbitmq.module.ts#L186)
 
 #### Parameters
 

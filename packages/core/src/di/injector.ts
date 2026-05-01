@@ -7,6 +7,7 @@ import type { Module } from "./module";
 import { ModuleRef } from "./module-ref";
 import type { ProviderToken, Type } from "./provider.interface";
 import { isForwardRef } from "./provider.interface";
+import { createClassMetadataCache } from "../utils/metadata-cache";
 
 /**
  * Error thrown when the DI container cannot resolve a dependency.
@@ -17,6 +18,10 @@ export class DIError extends Error {
     this.name = "DIError";
   }
 }
+
+const paramTypesCache = createClassMetadataCache<(Type | undefined)[]>();
+const injectMetadataCache = createClassMetadataCache<Array<{ index: number; token: unknown }>>();
+const optionalMetadataCache = createClassMetadataCache<number[]>();
 
 export class Injector {
   private readonly _resolutionChain: InstanceWrapper[] = [];
@@ -94,14 +99,17 @@ export class Injector {
     }
     if (!wrapper.inject) {
       // Standard class with design:paramtypes
-      const paramTypes: (Type | undefined)[] =
-        Reflect.getMetadata("design:paramtypes", metatype) || [];
+      const paramTypes = paramTypesCache.get(metatype, () =>
+        Reflect.getMetadata("design:paramtypes", metatype) || [],
+      );
 
       const dependencies: unknown[] = [];
-      const injectionMetadata: Array<{ index: number; token: unknown }> =
-        Reflect.getMetadata(INJECT_METADATA, metatype) || [];
-      const optionalParams: number[] =
-        Reflect.getMetadata(OPTIONAL_METADATA, metatype) || [];
+      const injectionMetadata = injectMetadataCache.get(metatype, () =>
+        Reflect.getMetadata(INJECT_METADATA, metatype) || [],
+      );
+      const optionalParams = optionalMetadataCache.get(metatype, () =>
+        Reflect.getMetadata(OPTIONAL_METADATA, metatype) || [],
+      );
 
       const injectionByIndex = new Map<number, unknown>();
       for (const { index, token } of injectionMetadata) {

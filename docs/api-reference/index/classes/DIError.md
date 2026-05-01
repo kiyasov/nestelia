@@ -1,6 +1,6 @@
 # Class: DIError
 
-Defined in: [packages/core/src/di/injector.ts:14](https://github.com/nestelia/nestelia/blob/main/packages/core/src/di/injector.ts#L14)
+Defined in: [packages/core/src/di/injector.ts:15](https://github.com/nestelia/nestelia/blob/main/packages/core/src/di/injector.ts#L15)
 
 Error thrown when the DI container cannot resolve a dependency.
 
@@ -16,7 +16,7 @@ Error thrown when the DI container cannot resolve a dependency.
 new DIError(message, options?): DIError;
 ```
 
-Defined in: [packages/core/src/di/injector.ts:15](https://github.com/nestelia/nestelia/blob/main/packages/core/src/di/injector.ts#L15)
+Defined in: [packages/core/src/di/injector.ts:16](https://github.com/nestelia/nestelia/blob/main/packages/core/src/di/injector.ts#L16)
 
 #### Parameters
 

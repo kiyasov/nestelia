@@ -5,6 +5,7 @@ import { DIContainer, type Type } from "../../core/src/di";
 import type { ExceptionContext, ExceptionFilter } from "../../core/src/exceptions";
 import { HttpException } from "../../core/src/exceptions/http-exception";
 import { getLifecycleManager } from "../../core/src/lifecycle";
+import { createClassMetadataCache } from "../../core/src/utils/metadata-cache";
 import {
   CATCH_EXCEPTIONS_METADATA,
   EVENT_PATTERN_METADATA,
@@ -650,14 +651,20 @@ async function resolveFilterInstance(
   return filter;
 }
 
+const _msFilterCache = createClassMetadataCache<
+  Array<new (...args: unknown[]) => Error> | undefined
+>();
+
 /**
  * Returns `true` when `filterInstance` should handle `exception`.
  * A filter with no registered exception types catches everything.
  */
 function filterCatches(filterInstance: ExceptionFilter, exception: Error): boolean {
-  const types = Reflect.getMetadata(CATCH_EXCEPTIONS_METADATA, filterInstance.constructor) as
-    | Array<new (...args: unknown[]) => Error>
-    | undefined;
+  const types = _msFilterCache.get(filterInstance.constructor, () =>
+    Reflect.getMetadata(CATCH_EXCEPTIONS_METADATA, filterInstance.constructor) as
+      | Array<new (...args: unknown[]) => Error>
+      | undefined,
+  );
 
   return !types || types.length === 0 || types.some((T) => exception instanceof T);
 }

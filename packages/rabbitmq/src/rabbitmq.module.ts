@@ -1,6 +1,6 @@
 import { Module, Injectable, Inject, Container } from "nestelia";
 import type { DynamicModule, Provider, ProviderToken, LoggerService } from "nestelia";
-import { Logger } from "nestelia";
+import { Logger, createMethodMetadataCache } from "nestelia";
 import { AmqpConnection } from "./amqp/connection";
 import { AmqpConnectionManager } from "./amqp/connectionManager";
 import { convertUriConfigObjectsToUris, validateRabbitMqUris } from "./amqp/utils";
@@ -51,6 +51,22 @@ interface ParamMeta {
   type: number;
 }
 
+interface CachedRabbitParams {
+  payload: ParamMeta[];
+  header: ParamMeta[];
+  request: ParamMeta[];
+}
+
+const rabbitParamCache = createMethodMetadataCache<CachedRabbitParams>();
+
+function getCachedParams(proto: object, methodName: string | symbol): CachedRabbitParams {
+  return rabbitParamCache.get(proto, methodName, () => ({
+    payload: Reflect.getMetadata(RABBIT_PAYLOAD_METADATA, proto, methodName) || [],
+    header: Reflect.getMetadata(RABBIT_HEADER_METADATA, proto, methodName) || [],
+    request: Reflect.getMetadata(RABBIT_REQUEST_METADATA, proto, methodName) || [],
+  }));
+}
+
 function resolveHandlerArgs(
   instance: object,
   methodName: string | symbol,
@@ -59,12 +75,8 @@ function resolveHandlerArgs(
   headers: unknown,
 ): unknown[] {
   const proto = Object.getPrototypeOf(instance);
-  const payloadMeta: ParamMeta[] =
-    Reflect.getMetadata(RABBIT_PAYLOAD_METADATA, proto, methodName) || [];
-  const headerMeta: ParamMeta[] =
-    Reflect.getMetadata(RABBIT_HEADER_METADATA, proto, methodName) || [];
-  const requestMeta: ParamMeta[] =
-    Reflect.getMetadata(RABBIT_REQUEST_METADATA, proto, methodName) || [];
+  const { payload: payloadMeta, header: headerMeta, request: requestMeta } =
+    getCachedParams(proto, methodName);
 
   const allMeta = [...payloadMeta, ...headerMeta, ...requestMeta];
 
