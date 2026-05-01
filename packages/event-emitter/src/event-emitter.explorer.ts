@@ -13,14 +13,25 @@ import type { OnEventMetadata } from "./interfaces";
  *
  * @internal
  */
+interface RegisteredHandler {
+  event: string | symbol;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  handler: (payload: any) => any;
+}
+
 @Injectable()
 export class EventEmitterExplorer
   implements OnApplicationBootstrap, OnModuleDestroy
 {
+  private readonly registeredHandlers: RegisteredHandler[] = [];
+
   constructor(private readonly eventEmitter: EventEmitterService) {}
 
   onModuleDestroy(): void {
-    this.eventEmitter.removeAllListeners();
+    for (const { event, handler } of this.registeredHandlers) {
+      this.eventEmitter.off(event, handler);
+    }
+    this.registeredHandlers.length = 0;
   }
 
   onApplicationBootstrap(): void {
@@ -50,6 +61,8 @@ export class EventEmitterExplorer
           } else {
             this.eventEmitter.on(event, handler);
           }
+
+          this.registeredHandlers.push({ event, handler });
         }
       }
     }

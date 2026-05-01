@@ -17,6 +17,7 @@ export class Logger implements LoggerService {
   protected static staticInstanceRef?: LoggerService = DEFAULT_LOGGER;
   protected static logLevels?: LogLevel[];
   private static isBufferAttached: boolean;
+  private static readonly MAX_LOG_BUFFER_SIZE = 1000;
 
   protected localInstanceRef?: LoggerService;
 
@@ -42,6 +43,9 @@ export class Logger implements LoggerService {
 
   private static runOrBuffer(fn: () => void): void {
     if (Logger.isBufferAttached) {
+      if (Logger.logBuffer.length >= Logger.MAX_LOG_BUFFER_SIZE) {
+        Logger.logBuffer.shift();
+      }
       Logger.logBuffer.push({
         methodRef: fn,
         arguments: [],

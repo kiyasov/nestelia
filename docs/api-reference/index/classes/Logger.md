@@ -16,7 +16,7 @@ Defined in: [packages/core/src/logger/logger.service.ts:15](https://github.com/n
 get localInstance(): LoggerService;
 ```
 
-Defined in: [packages/core/src/logger/logger.service.ts:31](https://github.com/nestelia/nestelia/blob/main/packages/core/src/logger/logger.service.ts#L31)
+Defined in: [packages/core/src/logger/logger.service.ts:32](https://github.com/nestelia/nestelia/blob/main/packages/core/src/logger/logger.service.ts#L32)
 
 ##### Returns
 
@@ -30,7 +30,7 @@ Defined in: [packages/core/src/logger/logger.service.ts:31](https://github.com/n
 new Logger(): Logger;
 ```
 
-Defined in: [packages/core/src/logger/logger.service.ts:23](https://github.com/nestelia/nestelia/blob/main/packages/core/src/logger/logger.service.ts#L23)
+Defined in: [packages/core/src/logger/logger.service.ts:24](https://github.com/nestelia/nestelia/blob/main/packages/core/src/logger/logger.service.ts#L24)
 
 #### Returns
 
@@ -42,7 +42,7 @@ Defined in: [packages/core/src/logger/logger.service.ts:23](https://github.com/n
 new Logger(context): Logger;
 ```
 
-Defined in: [packages/core/src/logger/logger.service.ts:24](https://github.com/nestelia/nestelia/blob/main/packages/core/src/logger/logger.service.ts#L24)
+Defined in: [packages/core/src/logger/logger.service.ts:25](https://github.com/nestelia/nestelia/blob/main/packages/core/src/logger/logger.service.ts#L25)
 
 #### Parameters
 
@@ -60,7 +60,7 @@ Defined in: [packages/core/src/logger/logger.service.ts:24](https://github.com/n
 new Logger(context, options): Logger;
 ```
 
-Defined in: [packages/core/src/logger/logger.service.ts:25](https://github.com/nestelia/nestelia/blob/main/packages/core/src/logger/logger.service.ts#L25)
+Defined in: [packages/core/src/logger/logger.service.ts:26](https://github.com/nestelia/nestelia/blob/main/packages/core/src/logger/logger.service.ts#L26)
 
 #### Parameters
 
@@ -82,7 +82,7 @@ Defined in: [packages/core/src/logger/logger.service.ts:25](https://github.com/n
 debug(message, ...optionalParams): void;
 ```
 
-Defined in: [packages/core/src/logger/logger.service.ts:83](https://github.com/nestelia/nestelia/blob/main/packages/core/src/logger/logger.service.ts#L83)
+Defined in: [packages/core/src/logger/logger.service.ts:87](https://github.com/nestelia/nestelia/blob/main/packages/core/src/logger/logger.service.ts#L87)
 
 #### Parameters
 
@@ -107,7 +107,7 @@ Defined in: [packages/core/src/logger/logger.service.ts:83](https://github.com/n
 error(message, ...optionalParams): void;
 ```
 
-Defined in: [packages/core/src/logger/logger.service.ts:54](https://github.com/nestelia/nestelia/blob/main/packages/core/src/logger/logger.service.ts#L54)
+Defined in: [packages/core/src/logger/logger.service.ts:58](https://github.com/nestelia/nestelia/blob/main/packages/core/src/logger/logger.service.ts#L58)
 
 #### Parameters
 
@@ -132,7 +132,7 @@ Defined in: [packages/core/src/logger/logger.service.ts:54](https://github.com/n
 fatal(message, ...optionalParams): void;
 ```
 
-Defined in: [packages/core/src/logger/logger.service.ts:101](https://github.com/nestelia/nestelia/blob/main/packages/core/src/logger/logger.service.ts#L101)
+Defined in: [packages/core/src/logger/logger.service.ts:105](https://github.com/nestelia/nestelia/blob/main/packages/core/src/logger/logger.service.ts#L105)
 
 #### Parameters
 
@@ -157,7 +157,7 @@ Defined in: [packages/core/src/logger/logger.service.ts:101](https://github.com/
 log(message, ...optionalParams): void;
 ```
 
-Defined in: [packages/core/src/logger/logger.service.ts:65](https://github.com/nestelia/nestelia/blob/main/packages/core/src/logger/logger.service.ts#L65)
+Defined in: [packages/core/src/logger/logger.service.ts:69](https://github.com/nestelia/nestelia/blob/main/packages/core/src/logger/logger.service.ts#L69)
 
 #### Parameters
 
@@ -182,7 +182,7 @@ Defined in: [packages/core/src/logger/logger.service.ts:65](https://github.com/n
 verbose(message, ...optionalParams): void;
 ```
 
-Defined in: [packages/core/src/logger/logger.service.ts:92](https://github.com/nestelia/nestelia/blob/main/packages/core/src/logger/logger.service.ts#L92)
+Defined in: [packages/core/src/logger/logger.service.ts:96](https://github.com/nestelia/nestelia/blob/main/packages/core/src/logger/logger.service.ts#L96)
 
 #### Parameters
 
@@ -207,7 +207,7 @@ Defined in: [packages/core/src/logger/logger.service.ts:92](https://github.com/n
 warn(message, ...optionalParams): void;
 ```
 
-Defined in: [packages/core/src/logger/logger.service.ts:74](https://github.com/nestelia/nestelia/blob/main/packages/core/src/logger/logger.service.ts#L74)
+Defined in: [packages/core/src/logger/logger.service.ts:78](https://github.com/nestelia/nestelia/blob/main/packages/core/src/logger/logger.service.ts#L78)
 
 #### Parameters
 
@@ -232,7 +232,7 @@ Defined in: [packages/core/src/logger/logger.service.ts:74](https://github.com/n
 static attachBuffer(): void;
 ```
 
-Defined in: [packages/core/src/logger/logger.service.ts:154](https://github.com/nestelia/nestelia/blob/main/packages/core/src/logger/logger.service.ts#L154)
+Defined in: [packages/core/src/logger/logger.service.ts:158](https://github.com/nestelia/nestelia/blob/main/packages/core/src/logger/logger.service.ts#L158)
 
 #### Returns
 
@@ -246,7 +246,7 @@ Defined in: [packages/core/src/logger/logger.service.ts:154](https://github.com/
 static debug(message, ...optionalParams): void;
 ```
 
-Defined in: [packages/core/src/logger/logger.service.ts:128](https://github.com/nestelia/nestelia/blob/main/packages/core/src/logger/logger.service.ts#L128)
+Defined in: [packages/core/src/logger/logger.service.ts:132](https://github.com/nestelia/nestelia/blob/main/packages/core/src/logger/logger.service.ts#L132)
 
 #### Parameters
 
@@ -267,7 +267,7 @@ Defined in: [packages/core/src/logger/logger.service.ts:128](https://github.com/
 static detachBuffer(): void;
 ```
 
-Defined in: [packages/core/src/logger/logger.service.ts:158](https://github.com/nestelia/nestelia/blob/main/packages/core/src/logger/logger.service.ts#L158)
+Defined in: [packages/core/src/logger/logger.service.ts:162](https://github.com/nestelia/nestelia/blob/main/packages/core/src/logger/logger.service.ts#L162)
 
 #### Returns
 
@@ -281,7 +281,7 @@ Defined in: [packages/core/src/logger/logger.service.ts:158](https://github.com/
 static error(message, ...optionalParams): void;
 ```
 
-Defined in: [packages/core/src/logger/logger.service.ts:110](https://github.com/nestelia/nestelia/blob/main/packages/core/src/logger/logger.service.ts#L110)
+Defined in: [packages/core/src/logger/logger.service.ts:114](https://github.com/nestelia/nestelia/blob/main/packages/core/src/logger/logger.service.ts#L114)
 
 #### Parameters
 
@@ -302,7 +302,7 @@ Defined in: [packages/core/src/logger/logger.service.ts:110](https://github.com/
 static fatal(message, ...optionalParams): void;
 ```
 
-Defined in: [packages/core/src/logger/logger.service.ts:140](https://github.com/nestelia/nestelia/blob/main/packages/core/src/logger/logger.service.ts#L140)
+Defined in: [packages/core/src/logger/logger.service.ts:144](https://github.com/nestelia/nestelia/blob/main/packages/core/src/logger/logger.service.ts#L144)
 
 #### Parameters
 
@@ -323,7 +323,7 @@ Defined in: [packages/core/src/logger/logger.service.ts:140](https://github.com/
 static flush(): void;
 ```
 
-Defined in: [packages/core/src/logger/logger.service.ts:146](https://github.com/nestelia/nestelia/blob/main/packages/core/src/logger/logger.service.ts#L146)
+Defined in: [packages/core/src/logger/logger.service.ts:150](https://github.com/nestelia/nestelia/blob/main/packages/core/src/logger/logger.service.ts#L150)
 
 #### Returns
 
@@ -337,7 +337,7 @@ Defined in: [packages/core/src/logger/logger.service.ts:146](https://github.com/
 static getTimestamp(): string;
 ```
 
-Defined in: [packages/core/src/logger/logger.service.ts:163](https://github.com/nestelia/nestelia/blob/main/packages/core/src/logger/logger.service.ts#L163)
+Defined in: [packages/core/src/logger/logger.service.ts:167](https://github.com/nestelia/nestelia/blob/main/packages/core/src/logger/logger.service.ts#L167)
 
 #### Returns
 
@@ -351,7 +351,7 @@ Defined in: [packages/core/src/logger/logger.service.ts:163](https://github.com/
 static isLevelEnabled(level): boolean;
 ```
 
-Defined in: [packages/core/src/logger/logger.service.ts:184](https://github.com/nestelia/nestelia/blob/main/packages/core/src/logger/logger.service.ts#L184)
+Defined in: [packages/core/src/logger/logger.service.ts:188](https://github.com/nestelia/nestelia/blob/main/packages/core/src/logger/logger.service.ts#L188)
 
 #### Parameters
 
@@ -371,7 +371,7 @@ Defined in: [packages/core/src/logger/logger.service.ts:184](https://github.com/
 static log(message, ...optionalParams): void;
 ```
 
-Defined in: [packages/core/src/logger/logger.service.ts:116](https://github.com/nestelia/nestelia/blob/main/packages/core/src/logger/logger.service.ts#L116)
+Defined in: [packages/core/src/logger/logger.service.ts:120](https://github.com/nestelia/nestelia/blob/main/packages/core/src/logger/logger.service.ts#L120)
 
 #### Parameters
 
@@ -392,7 +392,7 @@ Defined in: [packages/core/src/logger/logger.service.ts:116](https://github.com/
 static overrideLogger(logger): void;
 ```
 
-Defined in: [packages/core/src/logger/logger.service.ts:167](https://github.com/nestelia/nestelia/blob/main/packages/core/src/logger/logger.service.ts#L167)
+Defined in: [packages/core/src/logger/logger.service.ts:171](https://github.com/nestelia/nestelia/blob/main/packages/core/src/logger/logger.service.ts#L171)
 
 #### Parameters
 
@@ -412,7 +412,7 @@ Defined in: [packages/core/src/logger/logger.service.ts:167](https://github.com/
 static verbose(message, ...optionalParams): void;
 ```
 
-Defined in: [packages/core/src/logger/logger.service.ts:134](https://github.com/nestelia/nestelia/blob/main/packages/core/src/logger/logger.service.ts#L134)
+Defined in: [packages/core/src/logger/logger.service.ts:138](https://github.com/nestelia/nestelia/blob/main/packages/core/src/logger/logger.service.ts#L138)
 
 #### Parameters
 
@@ -433,7 +433,7 @@ Defined in: [packages/core/src/logger/logger.service.ts:134](https://github.com/
 static warn(message, ...optionalParams): void;
 ```
 
-Defined in: [packages/core/src/logger/logger.service.ts:122](https://github.com/nestelia/nestelia/blob/main/packages/core/src/logger/logger.service.ts#L122)
+Defined in: [packages/core/src/logger/logger.service.ts:126](https://github.com/nestelia/nestelia/blob/main/packages/core/src/logger/logger.service.ts#L126)
 
 #### Parameters
 
@@ -450,10 +450,10 @@ Defined in: [packages/core/src/logger/logger.service.ts:122](https://github.com/
 
 | Property | Modifier | Type | Default value | Defined in |
 | ------ | ------ | ------ | ------ | ------ |
-| <a id="context"></a> `context?` | `protected` | `string` | `undefined` | [packages/core/src/logger/logger.service.ts:27](https://github.com/nestelia/nestelia/blob/main/packages/core/src/logger/logger.service.ts#L27) |
-| <a id="localinstanceref"></a> `localInstanceRef?` | `protected` | [`LoggerService`](../interfaces/LoggerService.md) | `undefined` | [packages/core/src/logger/logger.service.ts:21](https://github.com/nestelia/nestelia/blob/main/packages/core/src/logger/logger.service.ts#L21) |
-| <a id="options"></a> `options` | `protected` | \{ `timestamp?`: `boolean`; \} | `{}` | [packages/core/src/logger/logger.service.ts:28](https://github.com/nestelia/nestelia/blob/main/packages/core/src/logger/logger.service.ts#L28) |
-| `options.timestamp?` | `public` | `boolean` | `undefined` | [packages/core/src/logger/logger.service.ts:28](https://github.com/nestelia/nestelia/blob/main/packages/core/src/logger/logger.service.ts#L28) |
+| <a id="context"></a> `context?` | `protected` | `string` | `undefined` | [packages/core/src/logger/logger.service.ts:28](https://github.com/nestelia/nestelia/blob/main/packages/core/src/logger/logger.service.ts#L28) |
+| <a id="localinstanceref"></a> `localInstanceRef?` | `protected` | [`LoggerService`](../interfaces/LoggerService.md) | `undefined` | [packages/core/src/logger/logger.service.ts:22](https://github.com/nestelia/nestelia/blob/main/packages/core/src/logger/logger.service.ts#L22) |
+| <a id="options"></a> `options` | `protected` | \{ `timestamp?`: `boolean`; \} | `{}` | [packages/core/src/logger/logger.service.ts:29](https://github.com/nestelia/nestelia/blob/main/packages/core/src/logger/logger.service.ts#L29) |
+| `options.timestamp?` | `public` | `boolean` | `undefined` | [packages/core/src/logger/logger.service.ts:29](https://github.com/nestelia/nestelia/blob/main/packages/core/src/logger/logger.service.ts#L29) |
 | <a id="logbuffer"></a> `logBuffer` | `static` | `LogBufferRecord`[] | `undefined` | [packages/core/src/logger/logger.service.ts:16](https://github.com/nestelia/nestelia/blob/main/packages/core/src/logger/logger.service.ts#L16) |
 | <a id="loglevels"></a> `logLevels?` | `static` | (`"error"` \| `"verbose"` \| `"debug"` \| `"log"` \| `"warn"` \| `"fatal"`)[] | `undefined` | [packages/core/src/logger/logger.service.ts:18](https://github.com/nestelia/nestelia/blob/main/packages/core/src/logger/logger.service.ts#L18) |
 | <a id="staticinstanceref"></a> `staticInstanceRef?` | `static` | [`LoggerService`](../interfaces/LoggerService.md) | `DEFAULT_LOGGER` | [packages/core/src/logger/logger.service.ts:17](https://github.com/nestelia/nestelia/blob/main/packages/core/src/logger/logger.service.ts#L17) |
