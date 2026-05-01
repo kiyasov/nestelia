@@ -33,9 +33,11 @@
 | [Catch](functions/Catch.md) | Decorator that marks a class as an exception filter. The decorated class must implement the `ExceptionFilter` interface. |
 | [Controller](functions/Controller.md) | Controller decorator that defines a controller with a route prefix. |
 | [Cookies](functions/Cookies.md) | - |
+| [createClassMetadataCache](functions/createClassMetadataCache.md) | Lazily-populated WeakMap cache for class-level Reflect metadata. Automatically garbage-collects entries when the class is collected. |
 | [createElysiaApplication](functions/createElysiaApplication.md) | Creates an Elysia-Nest application with microservices support. |
 | [createElysiaPlugin](functions/createElysiaPlugin.md) | Helper function to create the Elysia plugin from module metadata. |
 | [createLoggerOptionsProvider](functions/createLoggerOptionsProvider.md) | Factory to create logger options provider with custom options |
+| [createMethodMetadataCache](functions/createMethodMetadataCache.md) | Lazily-populated cache for method-level Reflect metadata. Two-level lookup: WeakMap<object, Map<string | symbol, T>>. |
 | [createParamDecorator](functions/createParamDecorator.md) | - |
 | [forwardRef](functions/forwardRef.md) | - |
 | [getCatchExceptionsMetadata](functions/getCatchExceptionsMetadata.md) | Get the exception types that a filter catches |

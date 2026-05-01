@@ -1,6 +1,6 @@
 # Interface: RabbitMQModuleOptions
 
-Defined in: [packages/rabbitmq/src/rabbitmq.module.ts:105](https://github.com/nestelia/nestelia/blob/main/packages/rabbitmq/src/rabbitmq.module.ts#L105)
+Defined in: [packages/rabbitmq/src/rabbitmq.module.ts:127](https://github.com/nestelia/nestelia/blob/main/packages/rabbitmq/src/rabbitmq.module.ts#L127)
 
 ## Extends
 
@@ -25,7 +25,7 @@ Defined in: [packages/rabbitmq/src/rabbitmq.module.ts:105](https://github.com/ne
 | <a id="exchangebindings"></a> `exchangeBindings?` | [`RabbitMQExchangeBindingConfig`](RabbitMQExchangeBindingConfig.md)[] | [`RabbitMQConfig`](RabbitMQConfig.md).[`exchangeBindings`](RabbitMQConfig.md#exchangebindings) | [packages/rabbitmq/src/interfaces/rabbitmq.interface.ts:130](https://github.com/nestelia/nestelia/blob/main/packages/rabbitmq/src/interfaces/rabbitmq.interface.ts#L130) |
 | <a id="exchanges"></a> `exchanges?` | [`RabbitMQExchangeConfig`](RabbitMQExchangeConfig.md)[] | [`RabbitMQConfig`](RabbitMQConfig.md).[`exchanges`](RabbitMQConfig.md#exchanges) | [packages/rabbitmq/src/interfaces/rabbitmq.interface.ts:129](https://github.com/nestelia/nestelia/blob/main/packages/rabbitmq/src/interfaces/rabbitmq.interface.ts#L129) |
 | <a id="handlers"></a> `handlers?` | [`RabbitMQHandlers`](../type-aliases/RabbitMQHandlers.md) | [`RabbitMQConfig`](RabbitMQConfig.md).[`handlers`](RabbitMQConfig.md#handlers) | [packages/rabbitmq/src/interfaces/rabbitmq.interface.ts:142](https://github.com/nestelia/nestelia/blob/main/packages/rabbitmq/src/interfaces/rabbitmq.interface.ts#L142) |
-| <a id="isglobal"></a> `isGlobal?` | `boolean` | - | [packages/rabbitmq/src/rabbitmq.module.ts:106](https://github.com/nestelia/nestelia/blob/main/packages/rabbitmq/src/rabbitmq.module.ts#L106) |
+| <a id="isglobal"></a> `isGlobal?` | `boolean` | - | [packages/rabbitmq/src/rabbitmq.module.ts:128](https://github.com/nestelia/nestelia/blob/main/packages/rabbitmq/src/rabbitmq.module.ts#L128) |
 | <a id="logger"></a> `logger?` | [`LoggerService`](../../../../index/interfaces/LoggerService.md) | [`RabbitMQConfig`](RabbitMQConfig.md).[`logger`](RabbitMQConfig.md#logger) | [packages/rabbitmq/src/interfaces/rabbitmq.interface.ts:144](https://github.com/nestelia/nestelia/blob/main/packages/rabbitmq/src/interfaces/rabbitmq.interface.ts#L144) |
 | <a id="name"></a> `name?` | `string` | [`RabbitMQConfig`](RabbitMQConfig.md).[`name`](RabbitMQConfig.md#name) | [packages/rabbitmq/src/interfaces/rabbitmq.interface.ts:126](https://github.com/nestelia/nestelia/blob/main/packages/rabbitmq/src/interfaces/rabbitmq.interface.ts#L126) |
 | <a id="prefetchcount"></a> `prefetchCount?` | `number` | [`RabbitMQConfig`](RabbitMQConfig.md).[`prefetchCount`](RabbitMQConfig.md#prefetchcount) | [packages/rabbitmq/src/interfaces/rabbitmq.interface.ts:128](https://github.com/nestelia/nestelia/blob/main/packages/rabbitmq/src/interfaces/rabbitmq.interface.ts#L128) |
